@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <!-- META DATA -->
+    <title>Una Cosa de Locos</title>
+    <meta name="description" content="Una Cosa de Locos" />
+    <meta property="og:title" content="Una Cosa de Locos" />
+    <meta property="og:description" content="Una Cosa de Locos" />
+    <meta
+      name="viewport"
+      content="width=device-width,minimum-scale=1,initial-scale=1"
+    />
+    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+    <!-- FAVICON -->
+    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon" />
+    <!-- STYLESHEETS -->
+    <link rel="stylesheet" href="/static/rifas/bootstrap.min.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="/static/rifas/style_rifarito.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com/" />
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link href="/static/rifas/style2.css" rel="stylesheet" />
+    <style>
+      .header .header-title,
+      .header .header-subtitle,
+      .header pre,
+      .header p {
+        color: #fff9f9;
+      }
+
+      .navbar {
+        border-top: 8px solid #d62828;
+        border-bottom: 8px solid #d62828;
+      }
+
+      .header-scrolled {
+        -webkit-box-shadow: 0 5px 6px 0 #d628286b;
+        box-shadow: 0 5px 6px 0 #d628286b;
+      }
+
+      a.link {
+        color: #d62828;
+      }
+
+      .nav-item .nav-link:hover .nav-link-menu {
+        color: #9c1010 !important;
+      }
+
+      .nav-item .nav-link:hover .nav-link-number {
+        color: #d62828 !important;
+      }
+
+      .nav-item .nav-link:hover .nav-link-menu {
+        color: #000000 !important;
+      }
+
+      .navbar-toggler:not(:disabled):not(.disabled) {
+        color: #d62828;
+      }
+
+      .learn-more-btn,
+      button {
+        background-color: #d62828;
+      }
+
+      .learn-more-btn,
+      .btn-large {
+        box-shadow: 0 0 18px #d628284a;
+      }
+
+      .learn-more-btn:hover,
+      button:hover {
+        background-color: #000000;
+        color: #000000;
+      }
+
+      .learn-more-btn:hover,
+      .btn-large:hover {
+        box-shadow: 0 0 18px #0000008a;
+      }
+
+      .card .card-body .payment-type .types .type.selected::after {
+        color: #9c1010;
+        border: 2px solid #9c1010;
+      }
+
+      .btn-invert {
+        background-color: #d62828 !important;
+      }
+
+      .services-accordion .accordion {
+        background-color: #d62828;
+      }
+
+      .accordion:active,
+      .accordion:hover {
+        background-color: #000000 !important;
+      }
+
+      .btn-invert:hover {
+        background-color: #000000 !important;
+      }
+
+      .header-img-section img {
+        box-shadow: 0 0 18px #d6282869;
+      }
+
+      .header-title,
+      .pricing-head h4,
+      .clients-title,
+      .contact-title,
+      .pricing-title h2,
+      .blog-title,
+      .services-title {
+        color: #9c1010;
+      }
+
+      input[type="range"] + .thumb,
+      .btn,
+      .btn-large,
+      .btn-small,
+      .btn:focus,
+      .btn-large:focus,
+      .btn-small:focus,
+      .btn-floating:focus {
+        background-color: #d62828;
+      }
+
+      input[type="range"] + .thumb .value,
+      .input-field .prefix.active,
+      .dropdown-content li > a,
+      .dropdown-content li > span {
+        color: #000000;
+      }
+
+      button.btn-large,
+      button.btn-small,
+      a.btn-large,
+      a.btn-small {
+        border: 2px solid transparent;
+      }
+
+      .poppuler .btn {
+        color: #9c1010;
+      }
+
+      .learn-more-btn,
+      button {
+        color: #000000;
+      }
+
+      .learn-more-btn:hover,
+      button.btn-large:hover {
+        color: #000000;
+      }
+
+      .teal,
+      .teal.lighten-1 {
+        background-color: #d62828 !important;
+      }
+
+      .teal.lighten-2 {
+        background-color: #d62828 !important;
+      }
+
+      .sidenav-trigger,
+      .teal-text.text-lighten-2 {
+        color: #d62828 !important;
+      }
+
+      .btn:hover,
+      .btn-large:hover,
+      .btn-small:hover {
+        background-color: #000000;
+      }
+
+      .bandname.-bold {
+        border-top: 4px solid #000000;
+        color: #9c1010;
+      }
+
+      #buttfixed {
+        background: #d62828;
+      }
+
+      #buttfixed:hover {
+        background: #000000;
+      }
+
+      #buttfixed > span {
+        color: #9c1010;
+      }
+
+      .footer-section {
+        background-color: #d62828;
+      }
+
+      .footer-social-media-icon .fa:hover {
+        color: #000000;
+      }
+    </style>
+    <style>
+      .ticket-opcion {
+        border: none;
+        width: 50px;
+        height: 50px;
+        padding: 0 !important;
+      }
+
+      .ticket-opcion.seleccionado {
+        background: #817ed5;
+      }
+
+      .ticket-opcion:hover {
+        cursor: pointer;
+      }
+
+      #lista {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin-top: 20px;
+      }
+
+      @media screen and (max-width: 499.98px) {
+        .header-container {
+          padding-top: 40px;
+        }
+
+        .footer-container {
+          text-align: center;
+        }
+
+        .footer-subsection {
+          padding: 0 !important;
+        }
+
+        .footer-logo {
+          align-items: center;
+        }
+
+        .footer-subsection-list li {
+          width: fit-content !important;
+          margin: auto;
+          display: block !important;
+        }
+
+        .footer-section {
+          padding-top: 0px !important;
+        }
+
+        .pricing-container .card {
+          padding-bottom: 32px !important;
+        }
+
+        .contact-section {
+          padding-top: 20px !important;
+        }
+
+        #cuentaPago {
+          margin-bottom: 10px;
+        }
+      }
+      .wrapper {
+        background-image: url("/static/img/loco2.jpeg");
+        background-repeat: no-repeat; /* Evita que la imagen se repita */
+        background-attachment: fixed; /* Fija la imagen para que no se desplace con el contenido */
+        background-position: center; /* Centra la imagen horizontal y verticalmente */
+        background-size: cover; /* Asegura que la imagen cubra todo el fondo, manteniendo su relación de aspecto */
+        height: 100vh; /* Asegura que el contenedor tenga al menos la altura de la pantalla */
+        width: 100%; /* Asegura que el contenedor ocupe todo el ancho */
+        overflow: hidden; /* Evita que el contenido se desborde */
+      }
+
+      /* Media query para pantallas más pequeñas (teléfonos) */
+      @media (max-width: 768px) {
+        .wrapper {
+          background-size: cover; /* Asegura que la imagen cubra todo el fondo */
+          background-position: center; /* Mantiene la imagen centrada */
+          height: 100vh; /* Mantiene la altura al 100% de la pantalla */
+          padding: 0; /* Elimina el padding para ocupar toda la pantalla */
+        }
+      }
+      .wrapper::after {
+        background-color: #00000020;
+      }
+      .card,
+      .blog-post-card,
+      .navbar,
+      .header-scrolled {
+        background-color: #222222 !important;
+        color: white;
+      }
+      .btn-invert {
+        background-color: #6f1212 !important;
+      }
+      .clients-subtitle {
+        color: white;
+      }
+      .monto-total-compra > h3,
+      #datosBanco div > h3 {
+        background: unset !important;
+      }
+      .nav-link-menu {
+        color: white !important;
+      }
+      .navbar {
+        border-color: #222222 !important;
+      }
+      #telefonoInput,
+      .plusminus.horiz input[type="number"],
+      .ticket_name,
+      .text_selected_ticket {
+        color: white !important;
+      }
+      @media screen and (max-width: 991.98px) {
+        .header-title-section .card {
+          padding-top: 20px !important;
+        }
+        .navbar-collapse {
+          background-color: #222222 !important;
+        }
+        select[name="country_code"] {
+          font-size: 14px !important;
+        }
+        .verificar-box {
+          padding-right: 0;
+        }
+        .wrapper {
+          overflow: auto !important;
+          height: 100vh !important;
+          background-attachment: scroll !important;
+        }
+      }
+      input[type="file"],
+      input[type="text"],
+      input[type="tel"] {
+        color: white;
+      }
+      #btnMinus,
+      #btnPlus {
+        touch-action: manipulation;
+      }
+      #btnMinus:hover,
+      #btnPlus:hover {
+        background-color: #6f1212;
+      }
+      #btnMinus:focus,
+      #btnPlus:focus {
+        background-color: #d62828;
+      }
+      .blog-post-title {
+        color: #d62828 !important;
+      }
+      .quantity_multiplier h3 {
+        background-color: unset !important;
+        color: red;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- NAVBAR -->
+    {% include 'rifa/nav.html' %}
+    <!-- SECTION LABEL -->
+    <div id="top"></div>
+    <!-- WRAPPER -->
+    <div class="wrapper">
+      {% include 'rifa/header.html' %}
+      <!-- CLIENTS -->
+      {% include 'rifa/disponible.html' %}
+      <!-- CONTACT -->
+
+      <!-- LISTA BOLETOS -->
+      {% include 'rifa/lista_boletos.html' %}
+      <!-- VERIFICADOR -->
+      {% include 'rifa/verificar_pago.html' %}
+      <!-- FOOTER -->
+      {% include 'rifa/footer.html' %}
+
+      <!-- FOOTER CREDITS -->
+      {% include 'rifa/footer_credits.html' %}
+      <style>
+        .btn-invert {
+          background-color: #6f1212 !important;
+        }
+        .navbar,
+        .header-scrolled {
+          background-color: #222222 !important;
+        }
+      </style>
+    </div>
+
+    <div class="container_btn_help">
+      <div id="buttfixed">
+        <div><i class="fa fa-commenting"></i><span>Chat</span></div>
+        <div id="linksfixed" style="display: none" class="activehelp">
+          <a
+            href="https://wa.me/+584125630480"
+            rel="nofollow noopener noreferrer"
+            target="_blank"
+            class="whatsapp"
+          >
+            <i class="fab fa-whatsapp"></i>
+            <!-- Cambié fa a fab para el icono de WhatsApp -->
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <script src="/static/rifas/jquery.min.js"></script>
+    <script src="/static/rifas/popper.min.js"></script>
+    <script src="/static/rifas/bootstrap.min.js"></script>
+    <script src="/static/rifas/owl.carousel.min.js"></script>
+
+    <script type="text/javascript">
+      $("#buttfixed").on("click", function () {
+        $("#linksfixed").toggle();
+      });
+      $(window).scroll(function () {
+        if ($(this).scrollTop() > 20) {
+          $("#navbar").addClass("header-scrolled");
+        } else {
+          $("#navbar").removeClass("header-scrolled");
+        }
+      });
+
+      $("#navbarNav").on("click", "a", function () {
+        $(".navbar-toggle").click();
+      });
+      $(".nav-item").on("click", "a", function () {
+        $("#navbarNav").removeClass("show");
+      });
+      $(document).ready(function () {
+        $("#owl-carousel-clients").owlCarousel({
+          items: 3,
+          loop: false,
+          nav: true,
+          autoplay: true,
+          autoplayTimeout: 3000,
+          autoplayHoverPause: true,
+          responsiveClass: true,
+          responsive: {
+            0: {
+              items: 1,
+            },
+            600: {
+              items: 2,
+            },
+            1000: {
+              items: 3,
+            },
+          },
+        });
+      });
+      $(document).ready(function () {
+        $("#owl-carousel-raffles").owlCarousel({
+          items: 3,
+          loop: false,
+          nav: false,
+          autoplay: false,
+          autoplayTimeout: 3000,
+          autoplayHoverPause: true,
+          responsiveClass: true,
+          responsive: {
+            0: {
+              items: 1,
+            },
+            600: {
+              items: 2,
+            },
+            1000: {
+              items: 3,
+            },
+          },
+        });
+      });
+
+      function actionButtonAccounts(action_type, elemnt, text) {
+        if (action_type == "copy") {
+          $(elemnt).addClass("copied");
+          setTimeout(function () {
+            $(elemnt).removeClass("copied");
+          }, 1200);
+          var sampleTextarea = document.createElement("textarea");
+          document.body.appendChild(sampleTextarea);
+          sampleTextarea.value = text;
+          // sampleTextarea.value = text.replace(/ /g,'');
+          sampleTextarea.select();
+          document.execCommand("copy");
+          document.body.removeChild(sampleTextarea);
+        } else if (action_type == "link") {
+          window.open(text, "_blank").focus();
+        }
+      }
+    </script>
+    <script></script>
+    <link rel="stylesheet" href="/static/rifas/fontawesome.css" />
+    <link rel="stylesheet" href="/static/rifas/owl.carousel.min.css" />
+    <link rel="stylesheet" href="/static/rifas/owl.theme.default.min.css" />
+  </body>
+</html>

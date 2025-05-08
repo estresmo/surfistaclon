@@ -1,0 +1,332 @@
+{% extends 'base.html' %} {% load l10n %} {% block content %}
+<div class="pagetitle">
+  <h1>Registros</h1>
+</div>
+<!-- End Page Title -->
+
+<section class="section">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          {{ form.errors }}
+          <p></p>
+          <!-- Button trigger modal  -->
+          <button
+            title="Agregar"
+            class="btn btn-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#myModal"
+          >
+            <i class="fas fa-plus"></i>
+          </button>
+          <div class="table-responsive">
+            <!-- Table with stripped rows -->
+            <table class="table datatable" id="tablaDeudas">
+              <thead>
+                <tr>
+                  <th>Nº</th>
+                  <th>Nombre</th>
+                  <th>Apellido</th>
+                  <th>Telefono</th>
+                  <th>Cedula</th>
+                  <th>Fecha Nacimiento</th>
+                  <th>Correo Electronico</th>
+                  <th>Foto</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for operador in object_list %}
+                <tr>
+                  <td>{{ operador.caravana }}</td>
+                  <td>{{ operador.nombre }}</td>
+                  <td>{{ operador.apellido }}</td>
+                  <td>{{ operador.telefono }}</td>
+                  <td>{{ operador.cedula }}</td>
+                  <td>{{ operador.fechaNacimiento }}</td>
+                  <td>{{ operador.conppass }}</td>
+                  <td>
+                    <img
+                      src="{{ operador.foto.url }}"
+                      alt="Foto"
+                      style="width: 100px; height: 100px"
+                    />
+                  </td>
+                  <td>
+                    <a
+                      href="#"
+                      class="btn btn-outline-warning"
+                      data-bs-toggle="modal"
+                      data-bs-target="#myModal"
+                      data-id="{{ deuda.id }}"
+                      data-caravana="{{ operador.caravana }}"
+                      data-nombre="{{ operador.nombre }}"
+                      data-apellido="{{ operador.apellido }}"
+                      data-telefono="{{ operador.telefono }}"
+                      data-cedula="{{ operador.cedula }}"
+                      data-fechaNacimiento="{{ operador.fechaNacimiento }}"
+                      data-conppass="{{ operador.conppass }}"
+                      data-foto="{{ operador.foto }}"
+                    >
+                      <i class="fas fa-edit"></i>
+                    </a>
+                    <a
+                      href="#"
+                      onclick="deleteItem('{{ operador.id }}')"
+                      class="btn btn-outline-danger"
+                    >
+                      <i class="fas fa-trash"></i>
+                    </a>
+                    <a
+                      href="{% url 'operador_pdf' operador.id %}"
+                      class="btn btn-outline-info"
+                    >
+                      <i class="fas fa-file-pdf"></i>
+                    </a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <!-- End Table with stripped rows -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  function deleteItem(id) {
+    if (confirm("¿Está seguro de eliminar este registro?")) {
+      fetch("/operador/" + id + "/", {
+        method: "DELETE",
+        headers: {
+          "X-CSRFToken": "{{ csrf_token }}",
+        },
+      }).then(() => {
+        location.reload();
+      });
+    }
+  }
+</script>
+
+<!-- Modal Agregar Entrada-->
+<div
+  class="modal fade"
+  id="myModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          {% if edit_form %}Editar Operador{% else %}Nuevo Registro{% endif %}
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <form
+            method="POST"
+            id="operadorForm"
+            action="{% url 'operador' %}"
+            enctype="multipart/form-data"
+          >
+            {% csrf_token %}
+            <input type="hidden" id="edit_id" name="edit_id" value="" />
+            {{ form.errors }}
+
+            <div class="mb-3">
+              <label for="caravana" class="form-label">Nº</label>
+              <input
+                type="text"
+                class="form-control"
+                id="caravanaName"
+                name="caravana"
+                value=""
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="nombre" class="form-label">Nombre</label>
+              <input
+                type="text"
+                class="form-control"
+                id="nombreName"
+                name="nombre"
+                value=""
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="apellido" class="form-label">Apellido</label>
+              <input
+                type="text"
+                class="form-control"
+                id="apellidoName"
+                name="apellido"
+                value=""
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="telefono" class="form-label">Teléfono</label>
+              <input
+                type="text"
+                class="form-control"
+                id="telefonoName"
+                name="telefono"
+                value=""
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="cedula" class="form-label">Cédula</label>
+              <input
+                type="text"
+                class="form-control"
+                id="cedulaName"
+                name="cedula"
+                value=""
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="fechaNacimiento" class="form-label"
+                >Fecha Nacimiento</label
+              >
+              <input
+                type="date"
+                class="form-control"
+                id="fechaNacimientoName"
+                name="fechaNacimiento"
+                value=""
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="conppass" class="form-label"
+                >Correo Electronico</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="conppassName"
+                name="conppass"
+                value=""
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="foto" class="form-label">Foto</label>
+              <input
+                type="file"
+                class="form-control"
+                id="fotoName"
+                name="foto"
+                required
+              />
+            </div>
+            <button
+              type="button"
+              class="btn btn-outline-danger"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button type="submit" class="btn btn-outline-success">
+              Guardar
+            </button>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Script para llenar el modal con los datos del área a editar
+  const editModal = document.getElementById("myModal");
+  editModal.addEventListener("show.bs.modal", function (event) {
+    const button = event.relatedTarget; // Botón que abrió el modal
+    const id = button.getAttribute("data-id"); // Extraer el ID
+    const caravana = button.getAttribute("data-caravana");
+    const nombre = button.getAttribute("data-nombre");
+    const apellido = button.getAttribute("data-apellido");
+    const telefono = button.getAttribute("data-telefono");
+    const cedula = button.getAttribute("data-cedula");
+    const fechaNacimiento = button.getAttribute("data-fechaNacimiento");
+    const conppass = button.getAttribute("data-conppass");
+    const foto = button.getAttribute("data-foto");
+    const form = editModal.querySelector("#operadorForm");
+
+    if (id) {
+      form.action = "{% url 'edit_operador' 0 %}".replace("0", id); // Cambiar la acción del formulario
+      form.querySelector("#edit_id").value = id; // Establecer el ID en un campo oculto
+    } else {
+      form.action = "{% url 'operador' %}"; // Acción para nuevo registro
+      form.querySelector("#edit_id").value = ""; // Limpiar el campo oculto
+    }
+    form.querySelector("#caravanaName").value = caravana || "";
+    form.querySelector("#nombreName").value = nombre || "";
+    form.querySelector("#apellidoName").value = apellido || "";
+    form.querySelector("#telefonoName").value = telefono || "";
+    form.querySelector("#cedulaName").value = cedula || "";
+    form.querySelector("#fechaNacimientoName").value = fechaNacimiento || "";
+    form.querySelector("#conppassName").value = conppass || "";
+    form.querySelector("#fotoName").value = foto || "";
+  });
+</script>
+
+{% if edit_form %}
+<script>
+  $(document).ready(function () {
+    $("#myModal").modal("show");
+  });
+</script>
+{% endif %} {% endblock %} {% block javascript %}
+<script>
+  $(document).ready(function () {
+    $("#tablaDeudas").DataTable({
+      order: [[0, "DESC"]],
+      columnDefs: [
+        {
+          defaultContent: "-",
+          targets: "_all",
+        },
+      ],
+      dom: "Bfrtip",
+      language: {
+        decimal: "",
+        emptyTable: "No hay información",
+        info: "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+        infoEmpty: "Mostrando 0 to 0 of 0 Entradas",
+        infoFiltered: "(Filtrado de _MAX_ total entradas)",
+        infoPostFix: "",
+        thousands: ",",
+        lengthMenu: "Mostrar _MENU_ Entradas",
+        loadingRecords: "Cargando...",
+        processing: "Procesando...",
+        search: "Buscar:",
+        zeroRecords: "Sin resultados encontrados",
+        paginate: {
+          first: "Primero",
+          last: "Ultimo",
+          next: "Siguiente",
+          previous: "Anterior",
+        },
+      },
+    });
+  });
+</script>
+{% endblock javascript %}

@@ -1,0 +1,18 @@
+<div id="lista" class="input-field col s12 containtickets">
+  {% for numero in tickets %}
+  <!-- si ya esta agarrado -->
+  {% if numero in agarrados %}
+  <button type="button" class="ticket-opcion" disabled>{{numero}}</button>
+  {% else %}
+  <button
+    type="button"
+    class="ticket-opcion"
+    onclick="seleccionarTicket(this)"
+    data-ticket="{{numero}}"
+  >
+    {{numero}}
+  </button>
+  {% endif %}
+  <!-- Fin si ya esta agarrado -->
+  {% endfor %}
+</div>

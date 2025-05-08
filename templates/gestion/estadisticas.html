@@ -1,0 +1,102 @@
+{% extends 'base.html' %} {% block content %}
+<h1 style="text-align: center; color: #333">
+  Ventas y Participantes del Evento: {{ evento.nombre }}
+</h1>
+
+<h2 style="color: #555">Porcentaje de Tickets Vendidos</h2>
+<p style="font-size: 18px">
+  Tickets Vendidos: <strong>{{ tickets_vendidos }}</strong> /
+  <strong>{{ total_tickets }}</strong>
+</p>
+<p style="font-size: 18px">
+  Porcentaje: <strong>{{ porcentaje|floatformat:2 }}%</strong>
+</p>
+
+<!-- Gráfica de tipo torta con tamaño reducido -->
+<div style="max-width: 300px">
+  <canvas id="porcentajeTicketsChart" width="300" height="300"></canvas>
+</div>
+
+<h2 style="color: #555">Personas con Más Tickets Comprados</h2>
+{% if personas %}
+<table style="width: 100%; border-collapse: collapse; margin-top: 20px">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #ddd; padding: 8px">Nombre</th>
+      <th style="border: 1px solid #ddd; padding: 8px">Teléfono</th>
+      <th style="border: 1px solid #ddd; padding: 8px">Cantidad de Tickets</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for persona in personas %}
+    <tr>
+      <td style="border: 1px solid #ddd; padding: 8px">{{ persona.nombre }}</td>
+      <td style="border: 1px solid #ddd; padding: 8px">
+        {{ persona.telefono }}
+      </td>
+      <td style="border: 1px solid #ddd; padding: 8px">
+        {{ persona.num_tickets }}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>No hay datos disponibles sobre compradores de tickets.</p>
+{% endif %}
+
+<h2 style="color: #555">Visualizaciones de la Página</h2>
+<p>Total de Visualizaciones: <strong>{{ total_visualizaciones }}</strong></p>
+{{ total_tickets }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+<script>
+  const ctx = document
+    .getElementById("porcentajeTicketsChart")
+    .getContext("2d");
+  const porcentajeTicketsChart = new Chart(ctx, {
+    type: "pie",
+    data: {
+      labels: ["Tickets Vendidos", "Tickets Disponibles"],
+      datasets: [
+        {
+          label: "Porcentaje de Tickets",
+          data: [
+            "{{ tickets_vendidos }}",
+            '{{ tickets_restantes }}',
+          ],
+          backgroundColor: [
+            "rgba(75, 192, 192, 0.6)",
+            "rgba(255, 99, 132, 0.6)",
+          ],
+          borderColor: ["rgba(75, 192, 192, 1)", "rgba(255, 99, 132, 1)"],
+          borderWidth: 1,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: "top",
+        },
+        title: {
+          display: true,
+          text: "Distribución de Tickets Vendidos",
+        },
+        datalabels: {
+          color: "#fff",
+          formatter: (value, context) => {
+            const total = context.dataset.data.reduce(
+              (acc, val) => acc + val,
+              0
+            );
+            const percentage = ((value / total) * 100).toFixed(2) + "%";
+            return percentage;
+          },
+        },
+      },
+    },
+  });
+</script>
+{% endblock %}

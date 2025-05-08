@@ -1,0 +1,101 @@
+<div class="contact-section">
+  <div class="container contact-container text-center">
+    <div class="col-md-6 contact-title-section text-center card">
+      <h2 class="contact-title mt-4">VERIFICADOR</h2>
+      <p class="contact-subtitle mb-2">DE BOLETOS</p>
+      <div id="boxsearchcel" class="row">
+        <div class="input-field col-4 s12 m6 verificar-box">
+          {% include 'components/country_code_select.html' %}
+        </div>
+        <div class="input-field col-8 s12 m6">
+          <input
+            type="text"
+            id="telefonoInput"
+            placeholder="Ingrese su número de teléfono"
+            class="px-3"
+            style="box-sizing: inherit"
+          />
+
+          <label for="findPhone" class="active">Número de Teléfono</label>
+        </div>
+
+        <div class="input-field col s12 m6">
+          <button
+            class="btn-large"
+            onclick="searchBuyer()"
+            data-toggle="modal"
+            data-target="#modalVerificar"
+          >
+            <i class="fa fa-search" aria-hidden="true"></i> Buscar
+          </button>
+        </div>
+      </div>
+      <div class="learn-more-btn-section"></div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="modalVerificar" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Verificación de Boleto</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modalVerificarBody">
+        <div id="verificarData"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  async function searchBuyer() {
+    const telefono = document.querySelector("#telefonoInput").value;
+    const country_code = document.querySelector(
+      ".verificar-box #country_code"
+    ).value;
+    const formData = new FormData();
+    formData.append("celular", telefono);
+    formData.append("country_code", country_code);
+    const response = await fetch("/verificar/", {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": "{{ csrf_token }}",
+      },
+      body: formData,
+    });
+    const data = await response.json();
+    let html = "";
+    if (data.result.length == 0) {
+      html = `<h5 class="mx-auto mb-3">No se han encontrado boletos asociados</h5>`;
+    }
+    let cont = 0;
+    for (let comprobante of data.result) {
+      cont++;
+      html += `
+      <h5 class="mx-auto mb-3 text-center">Comprobante ${cont}</h5>
+      <div class="row">
+          <div class="col-lg-6 text-center"><b>Nombre</b><br />${
+            comprobante.nombre
+          }</div>
+          <div class="col-lg-6 text-center"><b>Fecha</b><br />${
+            comprobante.fecha
+          }</div>
+          <div class="col-lg-6 text-center">
+            <b>Estatus</b> <br />${comprobante.status}
+          </div>
+          <div class="col-lg-6 text-center">
+            <b>Boletos</b> <br />${comprobante.boletos.join(", ")}
+          </div>
+        </div>`;
+    }
+    document.querySelector("#modalVerificarBody").innerHTML = html;
+  }
+</script>

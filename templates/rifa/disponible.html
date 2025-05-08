@@ -1,0 +1,58 @@
+<div class="clients-section mb-5" id="disponible">
+  <div class="container clients-container pt-5">
+    <div class="clients-slider">
+      <div
+        id="owl-carousel-clients"
+        class="owl-carousel owl-theme clients-slider-section owl-loaded owl-drag"
+      >
+        <div class="owl-stage-outer">
+          <div
+            class="owl-stage"
+            style="
+              transform: translate3d(0px, 0px, 0px);
+              transition: all;
+              width: 370px;
+            "
+          >
+            <div class="owl-item active" style="width: 370px">
+              <div class="col-lg-4 col-md-8 col-xs-10 blog-post-card-container">
+                <div class="blog-post-card">
+                  <p class="clients-subtitle">¡ Participa !</p>
+                  <h2 class="clients-title">Disponible</h2>
+                  <div class="blog-post-icon container-img-rifa">
+                    <img
+                      src="{{evento.foto.url}}"
+                      width="250%"
+                      height="180%"
+                      alt=""
+                    />
+                  </div>
+                  <h3 class="blog-post-title" style="color: white;">{{evento.nombre}}</h3>
+                  <h4 class="blog-post-subtitle">
+                    {{evento.fecha_fin|date:"F Y"}}
+                  </h4>
+                  <p class="blog-post-text"></p>
+                  <!-- <a class="nav-link learn-more-btn" href="#lista_boletos"
+                    >Lista de boletos
+                  </a> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="owl-nav disabled">
+          <button type="button" role="presentation" class="owl-prev disabled">
+            <span aria-label="Previous">‹</span></button
+          ><button type="button" role="presentation" class="owl-next disabled">
+            <span aria-label="Next">›</span>
+          </button>
+        </div>
+        <div class="owl-dots disabled">
+          <button role="button" class="owl-dot active">
+            <span></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
