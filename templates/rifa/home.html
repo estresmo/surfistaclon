@@ -1,10 +1,11 @@
+{% load l10n %}
 <!DOCTYPE html>
 <html lang="es">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
     <!-- META DATA -->
-    <title>mundobikelife_vzl 🌍</title>
+    <title>Mundobikelife_vzl 🌍</title>
     <meta name="description" content="Mundobikelife_vzl" />
     <meta property="og:title" content="Mundobikelife_vzl" />
     <meta property="og:description" content="Mundobikelife_vzl" />
@@ -14,7 +15,7 @@
     />
     <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
     <!-- FAVICON -->
-    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon" />
+    <link rel="icon" type="image/png" href="/static/img/logo.png" />
     <!-- STYLESHEETS -->
     <link rel="stylesheet" href="/static/rifas/bootstrap.min.css" />
     <link
@@ -85,7 +86,6 @@
         box-shadow: 0 0 18px #9c27b0;
       }
       .pixel-font {
-        font-family: "Courier New", Courier, monospace; /* Fuente tipo pixel */
         color: yellow; /* Color amarillo */
         font-size: 48px; /* Tamaño de la fuente */
         text-align: center; /* Centrar el texto */
@@ -289,16 +289,14 @@
         }
       }
     </style>
-    <style>
-      .pixeleado{
-        font-family: "Pixelify Sans", sans-serif;
-
-      }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
   </head>
 
   <body>
     <!-- NAVBAR -->
+    {% localize off %}
     {% include 'rifa/nav.html' %}
     <!-- SECTION LABEL -->
     <div id="top"></div>
@@ -306,15 +304,13 @@
     <div
       class="wrapper"
       style="
-        background: url(/static/img/5438748.jpg) no-repeat center center fixed;
+        background: url(/static/img/loco2.jpeg) no-repeat center center fixed;
         background-size: cover;
       "
     >
       {% include 'rifa/header.html' %}
       <!-- CLIENTS -->
       {% include 'rifa/disponible.html' %}
-      <!-- CONTACT -->
-
       <!-- LISTA BOLETOS -->
       {% include 'rifa/lista_boletos.html' %}
       <!-- VERIFICADOR -->
@@ -324,23 +320,15 @@
 
       <!-- FOOTER CREDITS -->
       {% include 'rifa/footer_credits.html' %}
-      <style>
-        .btn-invert {
-          background-color: #6f1212 !important;
-        }
-        .navbar,
-        .header-scrolled {
-          background-color: #222222 !important;
-        }
-      </style>
     </div>
+    {% endlocalize %}
 
     <div class="container_btn_help">
       <div id="buttfixed">
         <div><i class="fa fa-commenting"></i><span>Chat</span></div>
         <div id="linksfixed" style="display: none" class="activehelp">
           <a
-            href="https://wa.me/+584124454046"
+            href="https://wa.me/+525549326806"
             rel="nofollow noopener noreferrer"
             target="_blank"
             class="whatsapp"

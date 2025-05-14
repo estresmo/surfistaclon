@@ -1,12 +1,13 @@
 <nav
   id="navbar"
   class="navbar fixed-top navbar-expand-lg navbar-header navbar-mobile header-scrolled"
+  style="background: #f7f2f21c; border: none"
 >
   <div class="navbar-container container">
     <!-- LOGO -->
     <div class="navbar-brand">
       <a class="navbar-brand-logo" href="#">
-        <img src="/static/img/logo.png" style="width: 130px" />
+        <img src="/static/img/logo.png" />
       </a>
     </div>
     <button
@@ -20,29 +21,66 @@
     >
       <i class="fa fa-th-large" aria-hidden="true"></i>
     </button>
-    <div class="collapse navbar-collapse justify-content-around" id="navbarNav">
-      <ul class="navbar-nav menu-navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link" href="#">
-            <p class="nav-link-menu">INICIO</p>
+    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+      <ul
+        class="navbar-nav menu-navbar-nav"
+        style="display: flex; justify-content: center; padding: 0"
+      >
+        <li class="nav-item" style="margin: 0 15px">
+          <!-- Espacio lateral -->
+          <a class="header-title pixeleado" style="color: yellow" href="#">
+            <p
+              class="header-title pixeleado"
+              style="color: #9c27b0; font-size: 30px"
+            >
+              INICIO
+            </p>
           </a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#sectionAllPayments">
-            <p class="nav-link-menu">CUENTAS DE PAGO</p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#contacto">
-            <p class="nav-link-menu">CONTACTO</p>
-          </a>
-        </li>
-      </ul>
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link learn-more-btn btn-invert" href="#disponible"
-            >Eventos</a
+        <li class="nav-item" style="margin: 0 15px">
+          <!-- Espacio lateral -->
+          <a
+            class="header-title pixeleado"
+            style="color: yellow"
+            href="#cuentaPago"
           >
+            <p
+              class="header-title pixeleado"
+              style="color: #9c27b0; font-size: 30px"
+            >
+              CUENTAS DE PAGO
+            </p>
+          </a>
+        </li>
+        <li class="nav-item" style="margin: 0 15px">
+          <!-- Espacio lateral -->
+          <a
+            class="header-title pixeleado"
+            style="color: yellow"
+            href="#footer"
+          >
+            <p
+              class="header-title pixeleado"
+              style="color: #9c27b0; font-size: 30px"
+            >
+              CONTACTO
+            </p>
+          </a>
+        </li>
+        <li class="nav-item" style="margin: 0 15px">
+          <!-- Espacio lateral -->
+          <a
+            class="header-title pixeleado"
+            style="color: yellow"
+            href="#disponible"
+          >
+            <p
+              class="header-title pixeleado"
+              style="color: #9c27b0; font-size: 30px"
+            >
+              EVENTOS
+            </p>
+          </a>
         </li>
       </ul>
     </div>

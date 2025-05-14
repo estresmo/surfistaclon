@@ -1,5 +1,9 @@
 <div class="clients-section mb-5" id="disponible">
   <div class="container clients-container pt-5">
+    <div class="clients-title-section">
+      <p class="contact-text link text-white">¡ Participa !</p>
+      <h2 class="clients-title">Disponibles</h2>
+    </div>
     <div class="clients-slider">
       <div
         id="owl-carousel-clients"
@@ -17,24 +21,15 @@
             <div class="owl-item active" style="width: 370px">
               <div class="col-lg-4 col-md-8 col-xs-10 blog-post-card-container">
                 <div class="blog-post-card">
-                  <p class="clients-subtitle">¡ Participa !</p>
-                  <h2 class="clients-title">Disponible</h2>
                   <div class="blog-post-icon container-img-rifa">
-                    <img
-                      src="{{evento.foto.url}}"
-                      width="250%"
-                      height="180%"
-                      alt=""
-                    />
+                    <img src="{{evento.foto.url}}" width="250%" height="180%"  alt="">
                   </div>
-                  <h3 class="blog-post-title" style="color: white;">{{evento.nombre}}</h3>
-                  <h4 class="blog-post-subtitle">
-                    {{evento.fecha_fin|date:"F Y"}}
-                  </h4>
+                  <h3 class="blog-post-title">Gana {{evento.nombre}} por participar</h3>
+                  <h4 class="blog-post-title">{{evento.fecha_fin|date:"F Y"}}</h4>
                   <p class="blog-post-text"></p>
-                  <!-- <a class="nav-link learn-more-btn" href="#lista_boletos"
+                  <a class="nav-link learn-more-btn" href="#lista_boletos"
                     >Lista de boletos
-                  </a> -->
+                  </a>
                 </div>
               </div>
             </div>
