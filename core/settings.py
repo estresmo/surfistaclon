@@ -83,7 +83,7 @@ WSGI_APPLICATION = "core.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "rifa_endry",
+        "NAME": "mundobike",
         "USER": "postgres",
         "PASSWORD": "1234",
         "HOST": "127.0.0.1",
