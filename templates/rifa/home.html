@@ -287,6 +287,15 @@
         #cuentaPago {
           margin-bottom: 10px;
         }
+        .footer-title{
+          padding-top: 20px;
+          font-size: 30px!important;
+        }
+      }
+      @media screen and (min-width: 499.98px) {
+        .footer-title{
+          font-size: 24px!important;
+        }
       }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -304,7 +313,7 @@
     <div
       class="wrapper"
       style="
-        background: url(/static/img/loco2.jpeg) no-repeat center center fixed;
+        background: url(/static/rifas/fondo.jpeg) no-repeat center 30% fixed;
         background-size: cover;
       "
     >
@@ -319,7 +328,6 @@
       {% include 'rifa/footer.html' %}
 
       <!-- FOOTER CREDITS -->
-      {% include 'rifa/footer_credits.html' %}
     </div>
     {% endlocalize %}
 
