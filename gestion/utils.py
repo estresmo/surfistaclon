@@ -2,7 +2,7 @@ import requests
 import re
 
 
-WHATSAPP_URL = "http://localhost:5000/send"
+WHATSAPP_URL = "http://localhost:5001/send"
 WHATSAPP_AUTH = ("user", "secret")
 
 

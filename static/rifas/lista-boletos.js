@@ -19,13 +19,13 @@ obtenerPromociones();
 
 function addTicket() {
   /* @type {HTMLInputElement} */
-  ticketQty.value = parseInt(ticketQty.value) + 2;
+  ticketQty.value = parseInt(ticketQty.value) + 1;
   actualizarPrecios();
 }
 
 function removeTicket() {
   /* @type {HTMLInputElement} */
-  ticketQty.value = parseInt(ticketQty.value) - 2;
+  ticketQty.value = parseInt(ticketQty.value) - 1;
   actualizarPrecios();
 }
 
@@ -105,6 +105,7 @@ function cambiarPago(elemento) {
 document.querySelectorAll(".type.option-payment").forEach(function (elemento) {
   elemento.onclick = function () {
     cambiarPago(elemento);
+    document.querySelector("#metodo-value").value = elemento.dataset.id;
     document.querySelector("#metodo-titulo").innerHTML =
       elemento.querySelector(".text").innerHTML;
     document.querySelector("#contenido-pago").innerHTML =
@@ -179,8 +180,6 @@ async function confirmarTickets(form, event) {
   tickets_seleccionados.forEach((ticket) => {
     formData.append("boletos", ticket);
   });
-  const metodo = document.querySelector("#metodo-titulo").innerHTML;
-  formData.append("metodo", metodo);
 
   const response = await fetch("/comprobantes/", {
     method: "POST",

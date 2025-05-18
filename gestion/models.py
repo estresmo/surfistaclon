@@ -11,6 +11,12 @@ class StatusChoices(models.TextChoices):
     RECHAZADO = "Rechazado"
 
 
+class MetodosChoices(models.IntegerChoices):
+    BANCOLOMBIA = 1
+    PAGO_MOVIL = 2
+    BINANCE = 3
+
+
 class Evento(models.Model):
     fecha_inicio = models.DateTimeField()
     fecha_fin = models.DateTimeField()
@@ -28,7 +34,7 @@ class Evento(models.Model):
     def obtener_actual(self):
         hoy = timezone.now()
         return Evento.objects.filter(fecha_inicio__lte=hoy, fecha_fin__gte=hoy).first()
-    
+
     @property
     def vendidos(self):
         return NumeroRifa.objects.filter(comprobante__evento=self).count()
@@ -49,7 +55,7 @@ class Comprobante(models.Model):
         choices=StatusChoices.choices,
         default=StatusChoices.NO_VERIFICADO,
     )
-    metodo = models.CharField(max_length=500)
+    metodo = models.IntegerField(choices=MetodosChoices.choices, null=True)
     dolar = models.ForeignKey(Dolar, on_delete=models.CASCADE, null=True)
     historial = HistoricalRecords()
     evento = models.ForeignKey(Evento, models.RESTRICT, null=True)

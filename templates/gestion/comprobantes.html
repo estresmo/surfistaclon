@@ -55,16 +55,27 @@
                 {% endfor %}
               </select>
             </div>
+            <div style="display:inline-block;">
+              <select name="metodo" class="form-select" style="width: 150px;">
+                <option value="">Todos</option>
+                {% for id, metodo in metodos %}
+                  <option value="{{id}}" {% if id|stringformat:"s" == metodo_actual %}
+                    selected
+                  {% endif %}>{{metodo}}</option>
+                {% endfor %}
+              </select>
+            </div>
             <button class="btn btn-primary">Buscar</button>
           </form>
           <div class="table-responsive">
+            Pendientes por verificar: {{ pendientes }}
             <!-- Table with stripped rows -->
             <table class="table datatable" id="tablaDeudas">
               <thead>
                 <tr>
                   <th>Nombre</th>
-                  <th>Telefono</th>
-                  <th>Metodo</th>
+                  <th>Teléfono</th>
+                  <th>Método</th>
                   <th>Boletos</th>
                   <th>Fecha</th>
                   <th>Foto</th>
@@ -77,7 +88,7 @@
                 <tr>
                   <td>{{ comprobante.nombre }}</td>
                   <td>{{ comprobante.telefono }}</td>
-                  <td>{{ comprobante.metodo }}</td>
+                  <td>{{ comprobante.get_metodo_display }}</td>
                   <td>
                     {% if comprobante.status == 'Rechazado' %}
                     <!---->
@@ -231,14 +242,15 @@
               </div>
               <div class="mb-3">
                 <label for="metodo" class="form-label">Metodo de Pago</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="metodoName"
-                  name="metodo"
-                  value=""
-                  required
-                />
+                <select id="metodoName"
+                name="metodo" class="form-control" required>
+                <option value="">Elige un metodo</option>
+                  {% for id, metodo in metodos %}
+                    <option value="{{id}}" {% if id == metodo_actual %}
+                      selected
+                    {% endif %}>{{metodo}}</option>
+                  {% endfor %}
+                </select>
               </div>
               <div class="mb-3">
                 <label for="">Estatus</label>

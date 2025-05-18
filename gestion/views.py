@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .models import (
     Comprobante,
+    MetodosChoices,
     NumeroRifa,
     StatusChoices,
     Evento,
@@ -126,17 +127,22 @@ class ComprobanteView(View, LoginRequiredMixin):
     def get(self, request, pk=None):
         evento = Evento.obtener_actual()
         filtro_evento = request.GET.get("evento")
+        metodo_actual = request.GET.get("metodo")
         if not filtro_evento and evento:
             filtro_evento = evento.pk
         if filtro_evento == "0" or not filtro_evento:
             filtro_evento = None
         queryset = Comprobante.objects.filter(evento=filtro_evento)
+        if metodo_actual:
+            queryset = queryset.filter(metodo=metodo_actual)
+        pendientes = queryset.filter(status=StatusChoices.NO_VERIFICADO).count()
         form = self.form_class()
         edit_form = None
         edit_id = None
         agarrados = NumeroRifa.objects.values_list("numero", flat=True)
         eventos = Evento.objects.all()
         tickets = []
+        metodos = MetodosChoices.choices
         if evento:
             tickets = list(range(evento.total_tickets))
         if pk:
@@ -155,6 +161,9 @@ class ComprobanteView(View, LoginRequiredMixin):
                 "tickets": tickets,
                 "eventos": eventos,
                 "evento_actual": evento,
+                "metodos":metodos,
+                "metodo_actual":metodo_actual,
+                "pendientes":pendientes
             },
         )
 
