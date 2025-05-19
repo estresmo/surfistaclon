@@ -251,8 +251,9 @@ def ventas_y_participantes(request):
 
     personas = (
         Comprobante.objects.filter(evento=evento)
+        .values("telefono", "nombre")
         .annotate(num_tickets=Count("numerorifa"))
-        .order_by("-num_tickets")
+        .order_by("-num_tickets")[:10]
     )
 
     # Obtener el total de visualizaciones de la página
@@ -266,7 +267,9 @@ def ventas_y_participantes(request):
             total=Sum("monto"),
             pagado=Sum("monto", filter=Q(status=StatusChoices.VERIFICADO)),
             cantidad_pagado=Count("metodo", filter=Q(status=StatusChoices.VERIFICADO)),
-            cantidad_faltante=Count("metodo", filter=Q(status=StatusChoices.NO_VERIFICADO)),
+            cantidad_faltante=Count(
+                "metodo", filter=Q(status=StatusChoices.NO_VERIFICADO)
+            ),
             faltante=Sum("monto", filter=Q(status=StatusChoices.NO_VERIFICADO)),
         )
         .order_by("metodo")
@@ -277,12 +280,12 @@ def ventas_y_participantes(request):
         "porcentaje": porcentaje,
         "evento": evento,
         "tickets_vendidos": tickets_vendidos,
-        "metodos":dict(MetodosChoices.choices),
+        "metodos": dict(MetodosChoices.choices),
         "total_tickets": total_tickets,
         "tickets_restantes": tickets_restantes,
         "personas": personas,
         "total_visualizaciones": total_visualizaciones,
-        "comprobante_por_metodos":comprobante_por_metodos
+        "comprobante_por_metodos": comprobante_por_metodos,
     }
 
     return render(request, "gestion/estadisticas.html", context)
