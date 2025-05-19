@@ -31,7 +31,7 @@ class Evento(models.Model):
         return Promocion.objects.filter(evento=self)
 
     @classmethod
-    def obtener_actual(self):
+    def obtener_actual(cls):
         hoy = timezone.now()
         return Evento.objects.filter(fecha_inicio__lte=hoy, fecha_fin__gte=hoy).first()
 
@@ -58,7 +58,7 @@ class Comprobante(models.Model):
     metodo = models.IntegerField(choices=MetodosChoices.choices, null=True)
     dolar = models.ForeignKey(Dolar, on_delete=models.CASCADE, null=True)
     historial = HistoricalRecords()
-    evento = models.ForeignKey(Evento, models.RESTRICT, null=True)
+    evento = models.ForeignKey(Evento, models.RESTRICT, null=False)
     monto = models.FloatField(default=0)
 
     @property
@@ -83,7 +83,7 @@ class NumeroRifa(models.Model):
         return str(self.numero)
 
     @classmethod
-    def obtener_random(self, evento: Evento):
+    def obtener_random(cls, evento: Evento):
         agarrados = list(
             NumeroRifa.objects.filter(evento=evento).values_list("numero", flat=True)
         )

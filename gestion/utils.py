@@ -1,10 +1,13 @@
 import requests
 import re
-from typing import TypedDict, Optional
+from typing import TypedDict, cast
 
 from gestion.models import Comprobante, Evento, Promocion
+import logging
 
-WHATSAPP_URL = "http://localhost:5001/send"
+logger = logging.getLogger(__name__)
+
+WHATSAPP_URL = "http://localhost:5008/send"
 WHATSAPP_AUTH = ("user", "secret")
 
 
@@ -15,9 +18,11 @@ def send_whatsapp(num: str, msg: str):
             "number": number,
             "message": msg,
         }
-        requests.post(WHATSAPP_URL, auth=WHATSAPP_AUTH, json=data)
+        r = requests.post(WHATSAPP_URL, auth=WHATSAPP_AUTH, json=data)
+        if r.status_code == 503:
+            logger.warning("No se pudo mandar el Whatsapp")
     except Exception as e:
-        print(f"Error al enviar whatsapp: {str(e)}")
+        logger.warning("No se pudo mandar el Whatsapp")
 
 
 class PromocionDict(TypedDict):
@@ -33,15 +38,17 @@ class PromocionDict(TypedDict):
 
 
 def calcular_monto(comprobante: Comprobante):
-    evento = Evento.objects.get(pk=comprobante.evento.id)
+    if comprobante.evento is None:
+        raise ValueError("Comprobante necesita estar asociado a un evento")
+    evento = Evento.objects.get(pk=comprobante.evento.pk)
     precio_unidad = evento.precio_unidad
     boletos = comprobante.boletos.count()
-    promociones = (
-        Promocion.objects.filter(evento=evento).values(
-            "cantidad_tickets", "precio"
-        )
+    promociones = cast(
+        list[PromocionDict],
+        list(
+            Promocion.objects.filter(evento=evento).values("cantidad_tickets", "precio")
+        ),
     )
-    print(promociones)
     index = len(promociones) - 1
     total = 0
     return calcular_precio(boletos, precio_unidad, promociones, index, total)
@@ -52,7 +59,7 @@ def calcular_precio(
     precio_unidad: float,
     promociones: list[PromocionDict],
     index: int,
-    total: int,
+    total: float,
 ) -> float:
     """Calcula el precio total de los boletos aplicando promociones disponibles.
 
@@ -66,11 +73,10 @@ def calcular_precio(
     Returns:
         El precio total después de aplicar las mejores promociones posibles
     """
-    print(total, boletos, precio_unidad)
     # Caso base: no hay más promociones que chequear
     if index < 0:
         return total + boletos * precio_unidad
-    
+
     promocion = promociones[index]
 
     # Caso 1: Promocion actual puede ser aplicada

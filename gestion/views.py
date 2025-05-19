@@ -10,7 +10,6 @@ from .models import (
 )
 from django.views.generic import View
 from django.shortcuts import redirect, get_object_or_404
-from xhtml2pdf import pisa
 from django.template.loader import render_to_string
 from django.http import HttpResponse, HttpRequest
 import base64
@@ -206,6 +205,7 @@ class ComprobanteView(View, LoginRequiredMixin):
 
 class ComprobantePDF(View):
     def get(self, request, pk):
+        from xhtml2pdf import pisa
         comprobante = get_object_or_404(Comprobante, pk=pk)
         foto = ""
         logo = ""
@@ -235,7 +235,7 @@ class ComprobantePDF(View):
 
 
 @login_required
-def ventas_y_participantes(request):
+def ventas_y_participantes(request:HttpRequest):
     evento = Evento.obtener_actual()
     if not evento:
         return render(request, "gestion/inicio.html", {"evento": None})
