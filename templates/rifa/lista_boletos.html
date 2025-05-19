@@ -776,15 +776,17 @@
                       <div>
                         <img src="/static/rifas/bancolombia-qr.jpeg" alt="QR Code" width="200" height="200">
                       </div>
-                      <div  class="titularBank">
-                        <span>TITULAR</span>Jose Gregorio Delgado
-                      </div> 
-                      <div class="titularBank">
-                        <span>Documento Pasaporte</span>2338844
-                      </div>
-                      <div class="titularBank">
-                        <span>Cuenta Ahorro</span>72500004376
-                      </div>
+                      <div class="titularBank" onclick="copyToClipboard('Jose Gregorio Delgado')">
+    <span>TITULAR</span>Jose Gregorio Delgado
+</div>
+<div class="titularBank" onclick="copyToClipboard('2338844')">
+    <span>Documento Pasaporte</span>2338844
+</div>
+<div class="titularBank" onclick="copyToClipboard('72500004376')">
+    <span>Cuenta Ahorro</span>72500004376
+</div>
+
+
                   </div>
                 </div>
                 <div
@@ -804,19 +806,20 @@
                   <div class="content" hidden>
                     <div>
                       <div>
-                        <span class="nameAccountNumber"> Teléfono</span>
-                        <h3>04127319422 </h3>
-                      </div>
-                      <div>
-                        <span class="nameAccountNumber"> Banco</span>
-                        <h3>0102</h3>
-                      </div>
-                      <div>
-                        <span class="nameAccountNumber"> Cédula</span>
-                        <h3>26498112</h3>
-                      </div>
-                      <div class="titularBank">
-                        <span>TITULAR</span>Johny López
+    <span class="nameAccountNumber"> Teléfono</span>
+    <h3 onclick="copyToClipboard('04127319422')">04127319422</h3>
+</div>
+<div>
+    <span class="nameAccountNumber"> Banco</span>
+    <h3 onclick="copyToClipboard('0102')">0102</h3>
+</div>
+<div>
+    <span class="nameAccountNumber"> Cédula</span>
+    <h3 onclick="copyToClipboard('26498112')">26498112</h3>
+</div>
+<div class="titularBank" onclick="copyToClipboard('Johny López')">
+    <span>TITULAR</span>Johny López
+</div>
                       </div>
                     </div>
                   </div>
@@ -981,3 +984,25 @@
   </p>
 </div>
 <script src="/static/rifas/lista-boletos.js"></script>
+<script>
+function copyToClipboard(text) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        alert('¡Copiado al portapapeles!'); // Opcional: mostrar una confirmación
+      })
+      .catch(err => {
+        console.error('Error al copiar al portapapeles: ', err);
+      });
+  } else {
+    // Para navegadores más antiguos
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+    alert('¡Copiado al portapapeles!'); // Opcional: mostrar una confirmación
+  }
+}
+</script>

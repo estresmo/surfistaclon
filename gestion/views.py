@@ -311,4 +311,4 @@ def tu_vista(request):
         'chart_labels': json.dumps(labels),
         'chart_data': json.dumps(data),
     }
-    return render(request, 'tu_template.html', context)
+    return render(request, "gestion/estadisticas.html", context)
