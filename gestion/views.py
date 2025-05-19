@@ -20,7 +20,6 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from .utils import send_whatsapp, calcular_monto
 from django.db.models import Sum, Q
-import json
 from typing import Optional
 
 

@@ -36,11 +36,12 @@ def calcular_monto(comprobante: Comprobante):
     evento = Evento.objects.get(pk=comprobante.evento.id)
     precio_unidad = evento.precio_unidad
     boletos = comprobante.boletos.count()
-    promociones = list(
-        Promocion.objects.filter(evento=evento).values_list(
+    promociones = (
+        Promocion.objects.filter(evento=evento).values(
             "cantidad_tickets", "precio"
         )
     )
+    print(promociones)
     index = len(promociones) - 1
     total = 0
     return calcular_precio(boletos, precio_unidad, promociones, index, total)
