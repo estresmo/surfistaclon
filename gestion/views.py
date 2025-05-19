@@ -14,54 +14,26 @@ from xhtml2pdf import pisa
 from django.template.loader import render_to_string
 from django.http import HttpResponse, HttpRequest
 import base64
-from .forms import FormEvento, FormComprobante
+from .forms import FormComprobante, FormEvento
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
 from django.db.models import Count
-from .utils import send_whatsapp
-from django.db.models import Sum
-from django.shortcuts import render
+from .utils import send_whatsapp, calcular_monto
+from django.db.models import Sum, Q
 import json
+from typing import Optional
 
 
-# Create your views here.
 @login_required
-def inicioView(request):
+def inicioView(request: HttpRequest):
     return render(request, "gestion/inicio.html")
-
-
-def obtener_comprobante(request):
-    telefono = request.GET.get(
-        "telefono"
-    )  # Obtener el número de teléfono de la solicitud
-
-    try:
-        # Suponiendo que tienes un modelo Comprobante que tiene un campo telefono
-        comprobante = Comprobante.objects.get(telefono=telefono)
-
-        # Crear un diccionario con la información del comprobante
-        data = {
-            "nombre": comprobante.nombre,
-            "apellido": comprobante.apellido,
-            "telefono": comprobante.telefono,
-            "numero_ticket": comprobante.numero_ticket,
-            "fecha": comprobante.fecha,
-            "hora": comprobante.hora,
-            "numeros_asociados": comprobante.numeros_asociados,  # Asegúrate de que este campo exista
-        }
-
-        return JsonResponse(data, status=200)  # Devolver la información como JSON
-
-    except Comprobante.DoesNotExist:
-        return JsonResponse({"error": "Comprobante no encontrado"}, status=404)
 
 
 class EventoView(View, LoginRequiredMixin):
     template_name = "gestion/eventos.html"
     form_class = FormEvento
 
-    def get(self, request, pk=None):
+    def get(self, request: HttpRequest, pk: Optional[int] = None):
         queryset = Evento.objects.all()
         form = self.form_class()
         edit_form = None
@@ -69,19 +41,22 @@ class EventoView(View, LoginRequiredMixin):
         if pk:
             evento = get_object_or_404(Evento, pk=pk)
             edit_form = self.form_class(instance=evento)
-            edit_id = evento.id
+            edit_id = evento.pk
+        context = {  # type: ignore
+            "object_list": queryset,
+            "form": form,
+            "edit_form": edit_form,
+            "edit_id": edit_id,
+        }
+
         return render(
             request,
             self.template_name,
-            {
-                "object_list": queryset,
-                "form": form,
-                "edit_form": edit_form,
-                "edit_id": edit_id,
-            },
+            context,  # type: ignore
         )
 
-    def post(self, request, pk=None):
+    def post(self, request: HttpRequest, pk: Optional[int] = None):
+        evento = None
         if pk:
             evento = get_object_or_404(Evento, pk=pk)
             form = self.form_class(request.POST, request.FILES, instance=evento)
@@ -91,7 +66,7 @@ class EventoView(View, LoginRequiredMixin):
 
         if form.is_valid():
             form.save()
-            if pk:
+            if evento:
                 Promocion.objects.filter(evento=evento).delete()
             promociones = request.POST.getlist("promocionCantidad")
             precios = request.POST.getlist("promocionPrecio")
@@ -117,7 +92,7 @@ class EventoView(View, LoginRequiredMixin):
             },
         )
 
-    def delete(self, request, pk=None):
+    def delete(self, request: HttpRequest, pk: Optional[int] = None):
         evento = get_object_or_404(Evento, pk=pk)
         evento.delete()
         return HttpResponse("ok")
@@ -127,7 +102,7 @@ class ComprobanteView(View, LoginRequiredMixin):
     template_name = "gestion/comprobantes.html"
     form_class = FormComprobante
 
-    def get(self, request, pk=None):
+    def get(self, request: HttpRequest, pk: Optional[int] = None):
         evento = Evento.obtener_actual()
         filtro_evento = request.GET.get("evento")
         metodo_actual = request.GET.get("metodo")
@@ -151,7 +126,7 @@ class ComprobanteView(View, LoginRequiredMixin):
         if pk:
             _Comprobante = get_object_or_404(Comprobante, pk=pk)
             edit_form = self.form_class(instance=_Comprobante)
-            edit_id = _Comprobante.id
+            edit_id = _Comprobante.pk
         return render(
             request,
             self.template_name,
@@ -164,15 +139,17 @@ class ComprobanteView(View, LoginRequiredMixin):
                 "tickets": tickets,
                 "eventos": eventos,
                 "evento_actual": evento,
-                "metodos":metodos,
-                "metodo_actual":metodo_actual,
-                "pendientes":pendientes
+                "metodos": metodos,
+                "metodo_actual": metodo_actual,
+                "pendientes": pendientes,
             },
         )
 
     def post(self, request: HttpRequest, pk=None):
+        ultimo_status = None
         if pk:
             _Comprobante = get_object_or_404(Comprobante, pk=pk)
+            ultimo_status = _Comprobante.status
             form = self.form_class(request.POST, request.FILES, instance=_Comprobante)
             print(form.errors)
         else:
@@ -184,7 +161,7 @@ class ComprobanteView(View, LoginRequiredMixin):
             comprobante.evento = evento
             comprobante.telefono = comprobante.telefono.replace(" ", "")
             comprobante.save()
-            boletos = request.POST.get("boletos").strip(",").split(",")
+            boletos = request.POST["boletos"].strip(",").split(",")
             msg = (
                 "Su comprobante ha sido "
                 + comprobante.get_status_display()
@@ -192,7 +169,7 @@ class ComprobanteView(View, LoginRequiredMixin):
                 + " ,".join(boletos)
             )
             if pk:
-                if _Comprobante.status != comprobante.status:
+                if ultimo_status != comprobante.status:
                     send_whatsapp(comprobante.telefono, msg)
             NumeroRifa.objects.filter(evento=evento, comprobante=form.instance).delete()
             if form.instance.status != StatusChoices.RECHAZADO:
@@ -203,7 +180,8 @@ class ComprobanteView(View, LoginRequiredMixin):
                     )
                     numeros.append(numero)
                 NumeroRifa.objects.bulk_create(numeros)
-
+            comprobante.monto = calcular_monto(comprobante)
+            comprobante.save(update_fields=["monto"])
             return redirect("comprobantes_admin")
         else:
             print(form.errors)
@@ -231,6 +209,7 @@ class ComprobantePDF(View):
     def get(self, request, pk):
         comprobante = get_object_or_404(Comprobante, pk=pk)
         foto = ""
+        logo = ""
         if comprobante.foto:
             foto = base64.b64encode(comprobante.foto.read()).decode("utf-8")
             logo = base64.b64encode(open("static/img/logo.png", "rb").read()).decode(
@@ -280,35 +259,55 @@ def ventas_y_participantes(request):
     # Obtener el total de visualizaciones de la página
     total_visualizaciones = Visualizacion.objects.filter(evento=evento).count()
 
+    comprobante_por_metodos = (
+        Comprobante.objects.filter(evento=evento)
+        .values("metodo")
+        .annotate(
+            cantidad=Count("metodo"),
+            total=Sum("monto"),
+            pagado=Sum("monto", filter=Q(status=StatusChoices.VERIFICADO)),
+            cantidad_pagado=Count("metodo", filter=Q(status=StatusChoices.VERIFICADO)),
+            cantidad_faltante=Count("metodo", filter=Q(status=StatusChoices.NO_VERIFICADO)),
+            faltante=Sum("monto", filter=Q(status=StatusChoices.NO_VERIFICADO)),
+        )
+        .order_by("metodo")
+    )
+    for c in comprobante_por_metodos:
+        c["nombre"] = MetodosChoices(c["metodo"]).label
     context = {
         "porcentaje": porcentaje,
         "evento": evento,
         "tickets_vendidos": tickets_vendidos,
+        "metodos":dict(MetodosChoices.choices),
         "total_tickets": total_tickets,
         "tickets_restantes": tickets_restantes,
         "personas": personas,
-        "total_visualizaciones": total_visualizaciones,  # Añadir visualizaciones al contexto
+        "total_visualizaciones": total_visualizaciones,
+        "comprobante_por_metodos":comprobante_por_metodos
     }
 
     return render(request, "gestion/estadisticas.html", context)
 
+
 def tu_vista(request):
     # Tu código existente...
-    
+
     # Agregar el cálculo de montos por método
-    montos_por_metodo = Comprobante.objects.values('metodo')\
-        .annotate(total=Sum('monto'))\
-        .order_by('metodo')
-    
+    montos_por_metodo = (
+        Comprobante.objects.values("metodo")
+        .annotate(total=Sum("monto"))
+        .order_by("metodo")
+    )
+
     # Convertir los datos para la gráfica
-    labels = [item['metodo'] for item in montos_por_metodo]
-    data = [float(item['total']) for item in montos_por_metodo]
-    
+    labels = [item["metodo"] for item in montos_por_metodo]
+    data = [float(item["total"]) for item in montos_por_metodo]
+
     # Pasar los datos al contexto
     context = {
-        'object_list': comprobantes,
-        'pendientes': pendientes,
-        'chart_labels': json.dumps(labels),
-        'chart_data': json.dumps(data),
+        "object_list": comprobantes,
+        "pendientes": pendientes,
+        "chart_labels": json.dumps(labels),
+        "chart_data": json.dumps(data),
     }
-    return render(request, 'tu_template.html', context)
+    return render(request, "tu_template.html", context)

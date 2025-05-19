@@ -4,3 +4,4 @@ venv/
 media/*
 .env
 errors.log
+.prettierrc

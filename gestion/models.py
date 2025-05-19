@@ -59,6 +59,7 @@ class Comprobante(models.Model):
     dolar = models.ForeignKey(Dolar, on_delete=models.CASCADE, null=True)
     historial = HistoricalRecords()
     evento = models.ForeignKey(Evento, models.RESTRICT, null=True)
+    monto = models.FloatField(default=0)
 
     @property
     def boletos(self):
@@ -113,4 +114,7 @@ class Visualizacion(models.Model):
     fecha = models.DateTimeField(auto_now_add=True)  # Fecha y hora de la visualización
 
     def __str__(self):
-        return f"Visualización de {self.evento.nombre} en {self.fecha}"
+        nombre = "Ninguno"
+        if self.evento:
+            nombre = self.evento.nombre
+        return f"Visualización de {nombre} en {self.fecha}"

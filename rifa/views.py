@@ -4,7 +4,7 @@ from .models import Dolar
 from django.views.decorators.http import require_POST
 from gestion.models import NumeroRifa, Comprobante, Evento, Visualizacion
 from django.http import HttpRequest
-from gestion.utils import send_whatsapp
+from gestion.utils import send_whatsapp, calcular_monto
 from django.conf import settings
 
 
@@ -98,6 +98,8 @@ def comprobantes(request: HttpRequest):
         numeroRifa = NumeroRifa(numero=boleto, comprobante=comprobante, evento=evento)
         numeros_comprados.append(numeroRifa)
     NumeroRifa.objects.bulk_create(numeros_comprados)
+    comprobante.monto = calcular_monto(comprobante)
+    comprobante.save(update_fields=["monto"])
     msg = (
         "Usted ha comprado los tickets: "
         + ", ".join(boletos)
