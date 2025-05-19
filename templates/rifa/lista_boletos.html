@@ -776,15 +776,17 @@
                       <div>
                         <img src="/static/rifas/bancolombia-qr.jpeg" alt="QR Code" width="200" height="200">
                       </div>
-                      <div  class="titularBank">
-                        <span>TITULAR</span>Jose Gregorio Delgado
-                      </div> 
-                      <div class="titularBank">
-                        <span>Documento Pasaporte</span>2338844
-                      </div>
-                      <div class="titularBank">
-                        <span>Cuenta Ahorro</span>72500004376
-                      </div>
+                      <div class="titularBank" onclick="copyToClipboard('Jose Gregorio Delgado')">
+    <span>TITULAR</span>Jose Gregorio Delgado
+</div>
+<div class="titularBank" onclick="copyToClipboard('2338844')">
+    <span>Documento Pasaporte</span>2338844
+</div>
+<div class="titularBank" onclick="copyToClipboard('72500004376')">
+    <span>Cuenta Ahorro</span>72500004376
+</div>
+
+
                   </div>
                 </div>
                 <div
@@ -804,19 +806,20 @@
                   <div class="content" hidden>
                     <div>
                       <div>
-                        <span class="nameAccountNumber"> Teléfono</span>
-                        <h3>04127319422 </h3>
-                      </div>
-                      <div>
-                        <span class="nameAccountNumber"> Banco</span>
-                        <h3>0102</h3>
-                      </div>
-                      <div>
-                        <span class="nameAccountNumber"> Cédula</span>
-                        <h3>26498112</h3>
-                      </div>
-                      <div class="titularBank">
-                        <span>TITULAR</span>Johny López
+    <span class="nameAccountNumber"> Teléfono</span>
+    <h3 onclick="copyToClipboard('04127319422')">04127319422</h3>
+</div>
+<div>
+    <span class="nameAccountNumber"> Banco</span>
+    <h3 onclick="copyToClipboard('0102')">0102</h3>
+</div>
+<div>
+    <span class="nameAccountNumber"> Cédula</span>
+    <h3 onclick="copyToClipboard('26498112')">26498112</h3>
+</div>
+<div class="titularBank" onclick="copyToClipboard('Johny López')">
+    <span>TITULAR</span>Johny López
+</div>
                       </div>
                     </div>
                   </div>
@@ -861,48 +864,44 @@
           <div class="containerAllVoucher">
             <h4 class="mt-40">
               <i class="fa fa-file-text" aria-hidden="true"></i>
-              COMPROBANTE DE PAGO
-            </h4>
-            <div class="col-lg-12 mb-10">
-              <div class="row">
-                <div class="input-field col s6 m6">
-                  <h6 id="formLblVoucher">Foto o Captura de Pantalla</h6>
+             COMPROBANTE DE PAGO
+              </h4>
+              <div class="col-lg-12 mb-10">
+                <div class="row">
+                  <div class="input-field col s6 m6">
+                    <h6 id="formLblVoucher">Foto o Captura de Pantalla</h6>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-lg-12 mb-30 nopadding">
-              <div class="row">
-                <div
-                  id="container_voucher_up"
-                  class="col col-12 s12 m6 col-lg-12 elegirbanco"
-                >
-                  <div
-                    id="formimage"
-                    class="file-field input-field s-voucher"
-                    style="display: block"
-                  >
-                    <div class="btn">
-                      <span
-                        ><i class="fa fa-upload" aria-hidden="true"></i
-                      ></span>
+              <div class="col-lg-12 mb-30 nopadding">
+                <div class="row">
+                  <div id="container_voucher_up" class="col col-12 s12 m6 col-lg-12 elegirbanco">
+                    <div id="formimage" class="file-field input-field s-voucher" style="display: block">
+                      <div class="btn" id="file-btn">
+                        <span><i class="fa fa-upload" aria-hidden="true"></i></span>
+                      </div>
+                      <div class="file-path-wrapper" style="position: static;width:100%;text-align:center">
+                        <img id="comprobante-preview" src="" style="width: 200px;height: auto;max-width: 100%;margin:auto" alt="Comprobante" />
+                        <input id="file-label" class="file-path validate" type="text" placeholder="Foto/Captura de Pantalla" />
+                      </div>
+                      <input id="files" data-maxwidth="992" data-maxheight="992" type="file" required accept="image/*"
+                        name="foto" onchange="fileChange(this)" />
                     </div>
-                    <div class="file-path-wrapper">
-                      <input
-                        class="file-path validate"
-                        type="text"
-                        placeholder="Foto/Captura de Pantalla"
-                      />
-                    </div>
-                    <input
-                      id="files"
-                      data-maxwidth="992"
-                      data-maxheight="992"
-                      type="file"
-                      required
-                      accept="image/*"
-                      name="foto"
-                    />
-                  </div>
+                    <script>
+                      function fileChange(input){
+                        if (input.files && input.files[0]) {
+                          const reader = new FileReader();
+
+                          reader.onload = function (e) {
+                            document.getElementById('comprobante-preview').setAttribute('src', e.target.result);
+                          };
+
+                          reader.readAsDataURL(input.files[0]);
+                          document.getElementById('file-label').hidden = true;
+                          document.getElementById('file-btn').hidden = true;
+                        }
+                      }
+                    </script>
                   <h6 id="montoCorrecto">
                     <strong class="total-boleto">{{evento.precio_unidad}}$ </strong>
                     o
@@ -981,3 +980,25 @@
   </p>
 </div>
 <script src="/static/rifas/lista-boletos.js"></script>
+<script>
+function copyToClipboard(text) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        alert('¡Copiado al portapapeles!'); // Opcional: mostrar una confirmación
+      })
+      .catch(err => {
+        console.error('Error al copiar al portapapeles: ', err);
+      });
+  } else {
+    // Para navegadores más antiguos
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+    alert('¡Copiado al portapapeles!'); // Opcional: mostrar una confirmación
+  }
+}
+</script>
