@@ -20,6 +20,9 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models import Count
 from .utils import send_whatsapp
+from django.db.models import Sum
+from django.shortcuts import render
+import json
 
 
 # Create your views here.
@@ -288,3 +291,24 @@ def ventas_y_participantes(request):
     }
 
     return render(request, "gestion/estadisticas.html", context)
+
+def tu_vista(request):
+    # Tu código existente...
+    
+    # Agregar el cálculo de montos por método
+    montos_por_metodo = Comprobante.objects.values('metodo')\
+        .annotate(total=Sum('monto'))\
+        .order_by('metodo')
+    
+    # Convertir los datos para la gráfica
+    labels = [item['metodo'] for item in montos_por_metodo]
+    data = [float(item['total']) for item in montos_por_metodo]
+    
+    # Pasar los datos al contexto
+    context = {
+        'object_list': comprobantes,
+        'pendientes': pendientes,
+        'chart_labels': json.dumps(labels),
+        'chart_data': json.dumps(data),
+    }
+    return render(request, 'tu_template.html', context)

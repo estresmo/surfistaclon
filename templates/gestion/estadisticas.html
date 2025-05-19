@@ -13,7 +13,7 @@
 </p>
 
 <!-- Gráfica de tipo torta con tamaño reducido -->
-<div style="max-width: 300px">
+<div style="max-width: 300px; margin: auto">
   <canvas id="porcentajeTicketsChart" width="300" height="300"></canvas>
 </div>
 
@@ -47,32 +47,43 @@
 
 <h2 style="color: #555">Visualizaciones de la Página</h2>
 <p>Total de Visualizaciones: <strong>{{ total_visualizaciones }}</strong></p>
-{{ total_tickets }}
+
+<!-- Gráfica de montos acumulados por método de pago -->
+<div class="row mt-4">
+  <div class="col-lg-8 mx-auto">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Montos Acumulados por Método de Pago</h5>
+        <canvas id="montosPorMetodo"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Agregar Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
 <script>
-  const ctx = document
-    .getElementById("porcentajeTicketsChart")
-    .getContext("2d");
-  const porcentajeTicketsChart = new Chart(ctx, {
+  // Gráfica de porcentaje de tickets vendidos
+  const ctxTickets = document.getElementById("porcentajeTicketsChart").getContext("2d");
+  const porcentajeTicketsChart = new Chart(ctxTickets, {
     type: "pie",
     data: {
       labels: ["Tickets Vendidos", "Tickets Disponibles"],
-      datasets: [
-        {
-          label: "Porcentaje de Tickets",
-          data: [
-            "{{ tickets_vendidos }}",
-            '{{ tickets_restantes }}',
-          ],
-          backgroundColor: [
-            "rgba(75, 192, 192, 0.6)",
-            "rgba(255, 99, 132, 0.6)",
-          ],
-          borderColor: ["rgba(75, 192, 192, 1)", "rgba(255, 99, 132, 1)"],
-          borderWidth: 1,
-        },
-      ],
+      datasets: [{
+        label: "Porcentaje de Tickets",
+        data: ["{{ tickets_vendidos }}", '{{ tickets_restantes }}'],
+        backgroundColor: [
+          "rgba(75, 192, 192, 0.6)",
+          "rgba(255, 99, 132, 0.6)",
+        ],
+        borderColor: [
+          "rgba(75, 192, 192, 1)",
+          "rgba(255, 99, 132, 1)"
+        ],
+        borderWidth: 1,
+      }],
     },
     options: {
       responsive: true,
@@ -87,16 +98,63 @@
         datalabels: {
           color: "#fff",
           formatter: (value, context) => {
-            const total = context.dataset.data.reduce(
-              (acc, val) => acc + val,
-              0
-            );
+            const total = context.dataset.data.reduce((acc, val) => acc + val, 0);
             const percentage = ((value / total) * 100).toFixed(2) + "%";
             return percentage;
           },
         },
       },
     },
+  });
+
+  // Gráfica de montos acumulados por método de pago
+  document.addEventListener('DOMContentLoaded', function() {
+    const ctxMontos = document.getElementById('montosPorMetodo').getContext('2d');
+    new Chart(ctxMontos, {
+      type: 'bar',
+      data: {
+        labels: {{ chart_labels|safe }},
+        datasets: [{
+          label: 'Monto Total',
+          data: {{ chart_data|safe }},
+          backgroundColor: [
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+          ],
+          borderColor: [
+            'rgba(75, 192, 192, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                return '$' + value.toLocaleString();
+              }
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true,
+            text: 'Montos Acumulados por Método de Pago'
+          }
+        }
+      }
+    });
   });
 </script>
 {% endblock %}
