@@ -1,29 +1,44 @@
 import requests
 import re
 from typing import TypedDict, cast
+from urllib.parse import urljoin
 
 from gestion.models import Comprobante, Evento, Promocion
 import logging
 
 logger = logging.getLogger(__name__)
 
-WHATSAPP_URL = "http://localhost:5008/send"
-WHATSAPP_AUTH = ("user", "secret")
+WHATSAPP_URL = "http://localhost:3001/"
 
 
 def send_whatsapp(num: str, msg: str):
     number = "".join(re.findall(r"\d+", num))
     try:
+        link = urljoin(WHATSAPP_URL, "api/sendText")
         data = {
-            "number": number,
-            "message": msg,
+            "chatId": number,
+            "reply_to": None,
+            "text": msg,
+            "linkPreview": False,
+            "linkPreviewHighQuality": False,
+            "session": "default",
         }
-        r = requests.post(WHATSAPP_URL, auth=WHATSAPP_AUTH, json=data)
-        if r.status_code == 503:
-            logger.warning("No se pudo mandar el Whatsapp")
+        response = requests.post(link, json=data)
+        if response.status_code == 422:
+            activate_session()
+            response = requests.post(link, json=data)
+        if response.status_code != 201:
+            print(f"{response.status_code} Error al enviar whatsapp: {response.text}")
     except Exception as e:
-        logger.warning("No se pudo mandar el Whatsapp")
+        print(f"Error al enviar whatsapp: {str(e)}")
 
+
+def activate_session():
+    link = urljoin(WHATSAPP_URL, "api/sessions/default/restart")
+    requests.post(link)
+    link = urljoin(WHATSAPP_URL, "api/default/presence")
+    data = {"presence": "offline"}
+    requests.post(link, json=data)
 
 class PromocionDict(TypedDict):
     """Representa una promoción de boletos con cantidad y precio en descuento.
