@@ -66,6 +66,8 @@ def comprobantes(request: HttpRequest):
     nombre = request.POST["nombre"]
     country_code = request.POST["country_code"]
     celular = request.POST["celular"].replace(" ", "")
+    if country_code == "+58" and celular.startswith("0"):
+        celular = celular[1:]
     telefono = country_code + celular
     foto = request.FILES["foto"]
     boletos = set(request.POST.getlist("boletos"))
@@ -107,6 +109,6 @@ def comprobantes(request: HttpRequest):
     )
     send_whatsapp(telefono, msg)
     admin_msg = "Ha recibido un nuevo comprobante. \
-        Verificar en https://wwww.unacosadelocos.com/gestion/comprobantes/"
+        Verificar en https://www.mundobikelife-vzla.com/gestion/comprobantes/"
     send_whatsapp(settings.ADMIN_PHONE, admin_msg)
     return JsonResponse({"ok": "ok"})
