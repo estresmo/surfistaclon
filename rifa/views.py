@@ -109,6 +109,6 @@ def comprobantes(request: HttpRequest):
     )
     send_whatsapp(telefono, msg)
     admin_msg = "Ha recibido un nuevo comprobante. \
-        Verificar en https://wwww.mundobikelife-vzla.com.com/gestion/comprobantes/"
+        Verificar en https://www.mundobikelife-vzla.com/gestion/comprobantes/"
     send_whatsapp(settings.ADMIN_PHONE, admin_msg)
     return JsonResponse({"ok": "ok"})
