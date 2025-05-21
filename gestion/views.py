@@ -117,7 +117,10 @@ class ComprobanteView(View, LoginRequiredMixin):
         form = self.form_class()
         edit_form = None
         edit_id = None
-        agarrados = NumeroRifa.objects.values_list("numero", flat=True)
+        agarrados = NumeroRifa.objects.filter(
+            comprobante__evento=evento
+        ).prefetch_related("comprobante__evento")
+        agarrados = [str(a) for a in agarrados]
         eventos = Evento.objects.all()
         tickets = []
         metodos = MetodosChoices.choices

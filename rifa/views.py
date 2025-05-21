@@ -11,11 +11,15 @@ from django.conf import settings
 def home(request: HttpRequest):
     evento = Evento.obtener_actual()
     Visualizacion.objects.create(evento=evento)
-    agarrados = NumeroRifa.objects.values_list("numero", flat=True)
-    total_tickets = 100
+    agarrados = NumeroRifa.objects.filter(comprobante__evento=evento).prefetch_related(
+        "comprobante__evento"
+    )
+    if evento:
+        agarrados = [str(a) for a in agarrados]
+    tickets = []
     if evento:
         total_tickets = evento.total_tickets
-    tickets = list(range(total_tickets))
+        tickets = [format(t, evento.digitos) for t in range(total_tickets)]
     dolar = Dolar.obtener_dolar()
     context = {
         "agarrados": agarrados,
@@ -30,6 +34,8 @@ def home(request: HttpRequest):
 def verificar(request: HttpRequest):
     celular = request.POST["celular"]
     country_code = request.POST["country_code"]
+    if country_code == "+58" and celular.startswith("0"):
+        celular = celular[1:]
     telefono = country_code + celular
     comprobantes = list(Comprobante.objects.filter(telefono=telefono).values())
     for c in comprobantes:
