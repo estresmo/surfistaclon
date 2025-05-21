@@ -33,10 +33,10 @@ def verificar(request: HttpRequest):
     telefono = country_code + celular
     comprobantes = list(Comprobante.objects.filter(telefono=telefono).values())
     for c in comprobantes:
-        numeros = NumeroRifa.objects.filter(comprobante=c["id"]).values_list(
-            "numero", flat=True
+        numeros = NumeroRifa.objects.filter(comprobante=c["id"]).prefetch_related(
+            "comprobante__evento"
         )
-        c["boletos"] = list(numeros)
+        c["boletos"] = [str(n) for n in numeros]
     return JsonResponse({"result": comprobantes})
 
 

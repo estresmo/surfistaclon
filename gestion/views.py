@@ -108,7 +108,9 @@ class ComprobanteView(View, LoginRequiredMixin):
             filtro_evento = evento.pk
         if filtro_evento == "0" or not filtro_evento:
             filtro_evento = None
-        queryset = Comprobante.objects.filter(evento=filtro_evento)
+        queryset = Comprobante.objects.filter(evento=filtro_evento).prefetch_related(
+            "evento"
+        )
         if metodo_actual:
             queryset = queryset.filter(metodo=metodo_actual)
         pendientes = queryset.filter(status=StatusChoices.NO_VERIFICADO).count()
@@ -121,6 +123,7 @@ class ComprobanteView(View, LoginRequiredMixin):
         metodos = MetodosChoices.choices
         if evento:
             tickets = list(range(evento.total_tickets))
+            tickets = [format(t, evento.digitos) for t in tickets]
         if pk:
             _Comprobante = get_object_or_404(Comprobante, pk=pk)
             edit_form = self.form_class(instance=_Comprobante)
@@ -206,6 +209,7 @@ class ComprobanteView(View, LoginRequiredMixin):
 class ComprobantePDF(View):
     def get(self, request, pk):
         from xhtml2pdf import pisa
+
         comprobante = get_object_or_404(Comprobante, pk=pk)
         foto = ""
         logo = ""
@@ -235,7 +239,7 @@ class ComprobantePDF(View):
 
 
 @login_required
-def ventas_y_participantes(request:HttpRequest):
+def ventas_y_participantes(request: HttpRequest):
     evento = Evento.obtener_actual()
     if not evento:
         return render(request, "gestion/inicio.html", {"evento": None})

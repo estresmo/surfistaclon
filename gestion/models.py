@@ -38,6 +38,10 @@ class Evento(models.Model):
     @property
     def vendidos(self):
         return NumeroRifa.objects.filter(comprobante__evento=self).count()
+    
+    @property
+    def digitos(self):
+        return "0" + str(len(str(self.total_tickets - 1))) + "d"
 
     def __str__(self):
         return self.nombre
@@ -80,7 +84,11 @@ class NumeroRifa(models.Model):
         ]
 
     def __str__(self):
-        return str(self.numero)
+        digitos = ""
+        if self.comprobante:
+            if self.comprobante.evento:
+                digitos = self.comprobante.evento.digitos
+        return format(self.numero, digitos)
 
     @classmethod
     def obtener_random(cls, evento: Evento):
