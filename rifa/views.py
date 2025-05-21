@@ -66,6 +66,8 @@ def comprobantes(request: HttpRequest):
     nombre = request.POST["nombre"]
     country_code = request.POST["country_code"]
     celular = request.POST["celular"].replace(" ", "")
+    if country_code == "+58" and celular.startswith("0"):
+        celular = celular[1:]
     telefono = country_code + celular
     foto = request.FILES["foto"]
     boletos = set(request.POST.getlist("boletos"))
