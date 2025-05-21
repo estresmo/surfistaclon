@@ -27,7 +27,7 @@ def inicioView(request: HttpRequest):
     return render(request, "gestion/inicio.html")
 
 
-class EventoView(View, LoginRequiredMixin):
+class EventoView(LoginRequiredMixin, View):
     template_name = "gestion/eventos.html"
     form_class = FormEvento
 
@@ -96,7 +96,7 @@ class EventoView(View, LoginRequiredMixin):
         return HttpResponse("ok")
 
 
-class ComprobanteView(View, LoginRequiredMixin):
+class ComprobanteView(LoginRequiredMixin, View):
     template_name = "gestion/comprobantes.html"
     form_class = FormComprobante
 
@@ -209,7 +209,7 @@ class ComprobanteView(View, LoginRequiredMixin):
         return HttpResponse("ok")
 
 
-class ComprobantePDF(View):
+class ComprobantePDF(LoginRequiredMixin, View):
     def get(self, request, pk):
         from xhtml2pdf import pisa
 
