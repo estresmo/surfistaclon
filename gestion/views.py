@@ -24,7 +24,7 @@ from typing import Optional
 
 @login_required
 def inicioView(request: HttpRequest):
-    return render(request, "gestion/inicio.html")
+    return render(request, "admin/compras.html")
 
 
 class EventoView(LoginRequiredMixin, View):

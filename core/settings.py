@@ -83,7 +83,7 @@ WSGI_APPLICATION = "core.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "mundobike",
+        "NAME": "chipibike",
         "USER": "postgres",
         "PASSWORD": "1234",
         "HOST": "127.0.0.1",
@@ -139,4 +139,4 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
 LOGIN_URL = "/accounts/login/"
-ADMIN_PHONE = '584263145652'
+ADMIN_PHONE = "584263145652"
