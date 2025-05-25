@@ -2,7 +2,7 @@
 <html lang="es" data-lt-installed="true">
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <title>Compras | R</title>
+    <title>{% block title %} {% endblock title %} | J&J</title>
     <link
       rel="stylesheet"
       media="all"
@@ -47,32 +47,28 @@
         <h1 class="site_title" id="site_title">R</h1>
         <ul class="header-item tabs" id="tabs">
           <li class="menu_item" id="dashboard">
-            <a href="/admin/dashboard">Inicio</a>
+            <a href="/admin/dashboard">Dashboard</a>
           </li>
           <li class="menu_item" id="raffles">
-            <a href="/admin/raffles">Rifas</a>
+            <a href="/admin/rifas">Rifas</a>
           </li>
           <li class="menu_item" id="buyers">
-            <a href="/admin/buyers"
-              >Participantes</a
-            >
+            <a href="/admin/participantes">Participantes</a>
           </li>
           <li class="menu_item current" id="purchases">
-            <a href="/admin/purchases">Tickets</a>
+            <a href="/admin/compras">Tickets</a>
           </li>
           <li class="menu_item" id="awards">
-            <a href="/admin/awards">Premios</a>
+            <a href="/admin/premios">Premios</a>
           </li>
           <li class="menu_item" id="clients">
-            <a href="/admin/clients">Cliente</a>
+            <a href="/admin/cliente">Cliente</a>
           </li>
           <li class="menu_item" id="payment_types">
-            <a href="/admin/payment_types"
-              >Pagos</a
-            >
+            <a href="/admin/pagos">Pagos</a>
           </li>
           <li class="menu_item" id="users">
-            <a href="/admin/users">Usuarios</a>
+            <a href="/admin/usuarios">Usuarios</a>
           </li>
         </ul>
         <ul class="header-item tabs" id="utility_nav">
@@ -80,11 +76,7 @@
             <a href="/admin/users/2812">Nelson</a>
           </li>
           <li class="menu_item" id="logout">
-            <a
-              data-method="get"
-              href="/admin/logout"
-              >Salir</a
-            >
+            <a data-method="get" href="/admin/logout">Salir</a>
           </li>
         </ul>
       </div>
@@ -94,7 +86,7 @@
             <a href="/admin">Admin</a>
             <span class="breadcrumb_sep">/</span>
           </span>
-          <h2 id="page_title">Compras</h2>
+          <h2 id="page_title">{% block subtitle %} {% endblock subtitle %}</h2>
         </div>
         <div id="titlebar_right">
           <div class="action_items">
@@ -104,9 +96,7 @@
       </div>
       <div class="flashes"></div>
       <div id="active_admin_content" class="with_sidebar">
-        {% block content %}
-          
-        {% endblock content %}
+        {% block content %} {% endblock content %}
       </div>
       <div class="footer" id="footer">
         <p>J & J PRODUCTIONS</p>

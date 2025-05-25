@@ -297,6 +297,9 @@
           font-size: 24px !important;
         }
       }
+      .header-img-section img {
+        box-shadow: 0 0 18px #d6282869 !important;
+      }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -326,6 +329,8 @@
       {% include 'rifa/lista_boletos.html' %}
       <!-- VERIFICADOR -->
       {% include 'rifa/verificar_pago.html' %}
+      <!-- FINALIZADOS -->
+      {% include 'rifa/finalizados.html' %}
       <!-- FOOTER -->
       {% include 'rifa/footer.html' %}
 

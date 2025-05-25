@@ -26,6 +26,40 @@ from typing import Optional
 def inicioView(request: HttpRequest):
     return render(request, "admin/compras.html")
 
+@login_required
+def comprasView(request: HttpRequest):
+    return render(request, "admin/compras.html")
+
+@login_required
+def participantesView(request: HttpRequest):
+    return render(request, "admin/participantes.html")
+
+@login_required
+def rifasView(request: HttpRequest):
+    return render(request, "admin/rifas.html")
+
+@login_required
+def dashboardView(request: HttpRequest):
+    return render(request, "admin/dashboard.html")
+
+@login_required
+def premiosView(request: HttpRequest):
+    return render(request, "admin/premios.html")
+
+@login_required
+def clienteView(request: HttpRequest):
+    return render(request, "admin/cliente.html")
+
+@login_required
+def pagosView(request: HttpRequest):
+    return render(request, "admin/pagos.html")
+
+@login_required
+def usuariosView(request: HttpRequest): 
+    return render(request, "admin/usuarios.html")
+
+
+
 
 class EventoView(LoginRequiredMixin, View):
     template_name = "gestion/eventos.html"

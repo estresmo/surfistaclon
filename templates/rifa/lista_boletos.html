@@ -167,7 +167,7 @@
     color: #d62828;
   }
 
-  input[type="range"] + .thumb,
+  input[type="range"]+.thumb,
   .btn,
   .btn-large,
   .btn-small,
@@ -179,10 +179,10 @@
     background-color: #d62828;
   }
 
-  input[type="range"] + .thumb .value,
+  input[type="range"]+.thumb .value,
   .input-field .prefix.active,
-  .dropdown-content li > a,
-  .dropdown-content li > span {
+  .dropdown-content li>a,
+  .dropdown-content li>span {
     color: #000000;
   }
 
@@ -214,7 +214,7 @@
   }
 
   button.magic_button:hover,
-  #page_navigation > button:hover {
+  #page_navigation>button:hover {
     color: #d9c5d4 !important;
   }
 
@@ -250,20 +250,19 @@
     color: #d62828 !important;
   }
 
-  input:not([type]):focus:not([readonly]) + label,
-  input[type="text"]:not(.browser-default):focus:not([readonly]) + label,
-  input[type="password"]:not(.browser-default):focus:not([readonly]) + label,
-  input[type="email"]:not(.browser-default):focus:not([readonly]) + label,
-  input[type="url"]:not(.browser-default):focus:not([readonly]) + label,
-  input[type="time"]:not(.browser-default):focus:not([readonly]) + label,
-  input[type="date"]:not(.browser-default):focus:not([readonly]) + label,
-  input[type="datetime"]:not(.browser-default):focus:not([readonly]) + label,
-  input[type="datetime-local"]:not(.browser-default):focus:not([readonly])
-    + label,
-  input[type="tel"]:not(.browser-default):focus:not([readonly]) + label,
-  input[type="number"]:not(.browser-default):focus:not([readonly]) + label,
-  input[type="search"]:not(.browser-default):focus:not([readonly]) + label,
-  textarea.materialize-textarea:focus:not([readonly]) + label {
+  input:not([type]):focus:not([readonly])+label,
+  input[type="text"]:not(.browser-default):focus:not([readonly])+label,
+  input[type="password"]:not(.browser-default):focus:not([readonly])+label,
+  input[type="email"]:not(.browser-default):focus:not([readonly])+label,
+  input[type="url"]:not(.browser-default):focus:not([readonly])+label,
+  input[type="time"]:not(.browser-default):focus:not([readonly])+label,
+  input[type="date"]:not(.browser-default):focus:not([readonly])+label,
+  input[type="datetime"]:not(.browser-default):focus:not([readonly])+label,
+  input[type="datetime-local"]:not(.browser-default):focus:not([readonly])+label,
+  input[type="tel"]:not(.browser-default):focus:not([readonly])+label,
+  input[type="number"]:not(.browser-default):focus:not([readonly])+label,
+  input[type="search"]:not(.browser-default):focus:not([readonly])+label,
+  textarea.materialize-textarea:focus:not([readonly])+label {
     color: #d62828 !important;
   }
 
@@ -311,7 +310,7 @@
   input[type="search"].valid:not(.browser-default):focus,
   textarea.materialize-textarea.valid,
   textarea.materialize-textarea.valid:focus,
-  .select-wrapper.valid > input.select-dropdown {
+  .select-wrapper.valid>input.select-dropdown {
     border-bottom: 1px solid #d62828;
     -webkit-box-shadow: 0 1px 0 0 #d62828;
     box-shadow: 0 0 2px 0 #7d7d7d;
@@ -330,7 +329,7 @@
     background: #d62828;
   }
 
-  .container_selected_number small > span {
+  .container_selected_number small>span {
     color: #d62828;
   }
 
@@ -362,19 +361,29 @@
     border-top-color: #000000 !important;
     border-right-color: #000000 !important;
   }
+
   body {
-    font-family: "Pixel", sans-serif; /* Cambia 'Pixel' por la fuente que desees */
-    font-size: 16px; /* Tamaño de fuente en píxeles */
-    background-color: #f0f0f0; /* Color de fondo */
-    color: #8e6ace; /* Color del texto */
+    font-family: "Pixel", sans-serif;
+    /* Cambia 'Pixel' por la fuente que desees */
+    font-size: 16px;
+    /* Tamaño de fuente en píxeles */
+    background-color: #f0f0f0;
+    /* Color de fondo */
+    color: #8e6ace;
+    /* Color del texto */
   }
+
   .pixel-text {
-    font-size: 32px; /* Tamaño de letra en píxeles */
-    letter-spacing: 2px; /* Espaciado entre letras */
-    text-shadow: 1px 1px 0 #fff; /* Sombra para dar efecto de píxel */
+    font-size: 32px;
+    /* Tamaño de letra en píxeles */
+    letter-spacing: 2px;
+    /* Espaciado entre letras */
+    text-shadow: 1px 1px 0 #fff;
+    /* Sombra para dar efecto de píxel */
   }
+
   body widget[type="ticket"] .buy,
-  body widget[type="ticket"] .bottom > strong {
+  body widget[type="ticket"] .bottom>strong {
     color: #d62828;
   }
 
@@ -383,7 +392,7 @@
     border-right: 2px solid #d62828;
   }
 
-  body widget[type="ticket"] .bottom > strong {
+  body widget[type="ticket"] .bottom>strong {
     border: 2px dashed #d62828;
   }
 
@@ -392,7 +401,7 @@
     color: #d62828;
   }
 
-  body widget .container_banner > div.tourname {
+  body widget .container_banner>div.tourname {
     background: #d62828;
     background: linear-gradient(180deg, #d62828 0%, #d62828 100%);
   }
@@ -406,11 +415,11 @@
     color: #d62828;
   }
 
-  .switch label input[type="checkbox"]:checked + .lever {
+  .switch label input[type="checkbox"]:checked+.lever {
     background-color: #d62828;
   }
 
-  .switch label input[type="checkbox"]:checked + .lever:after {
+  .switch label input[type="checkbox"]:checked+.lever:after {
     background-color: #000000;
   }
 
@@ -480,7 +489,7 @@
     /* Cursor de no permitido */
   }
 
-  #buttfixed > span {
+  #buttfixed>span {
     color: #d62828;
   }
 
@@ -505,12 +514,7 @@
 <input type="hidden" value="{{evento.minimo}}" id="minimo-tickets-js">
 <div class="container pricing-container pricing-head" id="lista_boletos">
   <article class="card">
-    <form
-      action=""
-      method="post"
-      enctype="multipart/form-data"
-      onsubmit="return confirmarTickets(this, event)"
-    >
+    <form action="" method="post" enctype="multipart/form-data" onsubmit="return confirmarTickets(this, event)">
       {% csrf_token %}
       <input type="hidden" id="total_tickets" value="{{evento.total_tickets}}">
       <div class="container">
@@ -526,54 +530,31 @@
                 <div class="row">
                   <div class="col s12 m12 text-center quantity_multiplier">
                     {% if evento.promociones %}
-                      {% for promocion in evento.promociones %}
-                      <h3
-                        class="textTicketPromos"
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        data-original-title="Promoción 0x-1"
-                      >
-                        <i class="fa fa-ticket" aria-hidden="true"></i>
-                        <span class="quantityTotalTicketsPromos">
-                          {{promocion.cantidad_tickets}} boletos por {{promocion.precio}}$
-                        </span>
-                      </h3>
-                      {% endfor %}
+                    {% for promocion in evento.promociones %}
+                    <h3 class="textTicketPromos" data-toggle="tooltip" data-placement="top"
+                      data-original-title="Promoción 0x-1">
+                      <i class="fa fa-ticket" aria-hidden="true"></i>
+                      <span class="quantityTotalTicketsPromos">
+                        {{promocion.cantidad_tickets}} boletos por {{promocion.precio}}$
+                      </span>
+                    </h3>
+                    {% endfor %}
                     {% endif %}
                   </div>
                   <div class="input-field col col-lg-12 s12 m12 text-center">
                     <div class="plusminus horiz">
-                      <button
-                        type="button"
-                        id="btnMinus"
-                        disabled=""
-                        onclick="removeTicket()"
-                      ></button>
+                      <button type="button" id="btnMinus" disabled="" onclick="removeTicket()"></button>
                       <div>
-                        <input
-                          id="ticketQty"
-                          type="number"
-                          name="productQty"
-                          value="{{evento.minimo}}"
-                          min="{{evento.minimo}}"
-                          max="100"
-                        />
+                        <input id="ticketQty" type="number" name="productQty" value="{{evento.minimo}}"
+                          min="{{evento.minimo}}" max="100" />
                         <span class="ticket_name">BOLETO</span>
                       </div>
-                      <button
-                        type="button"
-                        id="btnPlus"
-                        onclick="addTicket()"
-                      ></button>
+                      <button type="button" id="btnPlus" onclick="addTicket()"></button>
                     </div>
                   </div>
                   <div class="col s12 m12 text-center monto-total-compra">
-                    <h3
-                      id="montoTotal"
-                      data-toggle="tooltip"
-                      data-placement="bottom"
-                      data-original-title="Dólares Americanos"
-                    >
+                    <h3 id="montoTotal" data-toggle="tooltip" data-placement="bottom"
+                      data-original-title="Dólares Americanos">
                       Total:
                       <span>
                         USD&nbsp;
@@ -582,17 +563,9 @@
                     </h3>
                     <h5>Tasa: {{dolar}} Bs</h5>
                     <h5>Total: <b class="precio-bs">101 Bs</b></h5>
-                    <small
-                      class="textDiscounts"
-                      style="display: none"
-                      id="textCostByTicket"
-                      data-toggle="tooltip"
-                      data-placement="bottom"
-                      title=""
-                      data-original-title="Boleto con Descuento"
-                      >Boleto:
-                      <span id="costByTicket">USD&nbsp;{{evento.precio_unidad}}$ </span></small
-                    >
+                    <small class="textDiscounts" style="display: none" id="textCostByTicket" data-toggle="tooltip"
+                      data-placement="bottom" title="" data-original-title="Boleto con Descuento">Boleto:
+                      <span id="costByTicket">USD&nbsp;{{evento.precio_unidad}}$ </span></small>
                   </div>
                 </div>
               </div>
@@ -604,47 +577,29 @@
                       <div class="col-12 s12 m6 p0">
                         <h6>
                           <div id="containerSearch" class="mb-2">
-                            <button
-                              type="button"
-                              id="btnSearchTickets"
-                              class="magic_button show"
-                            >
+                            <button type="button" id="btnSearchTickets" class="magic_button show">
                               <i class="fa fa-search" aria-hidden="true"></i>
                               BUSCAR
                             </button>
-                            <input
-                              id="inputSearchTicket"
-                              style="display: none"
-                              type="tel"
-                              class="validate invalid"
-                              maxlength="4"
-                            />
-                            <button
-                              type="button"
-                              id="resetSearchTicket"
-                              class="magic_button"
-                              style="display: none"
-                              value="Reset"
-                            >
+                            <input id="inputSearchTicket" style="display: none" type="tel" class="validate invalid"
+                              maxlength="4" />
+                            <button type="button" id="resetSearchTicket" class="magic_button" style="display: none"
+                              value="Reset">
                               <i class="fa fa-times" aria-hidden="true"></i>
                             </button>
                           </div>
                           <br />
                           {% if evento.total_tickets < 201 %}
-                            <button
-                              type="button"
-                              id="btnChooseRandomChips"
-                              class="magic_button show"
-                              onclick="randomTickets()"
-                            >
-                              <i class="fa fa-star" aria-hidden="true"></i>
-                              <small id="formBtnRandom">Elegir a la Suerte</small>
-                              <i class="fa fa-star" aria-hidden="true"></i>
-                            </button>
+                          <button type="button" id="btnChooseRandomChips" class="magic_button show"
+                            onclick="randomTickets()">
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                            <small id="formBtnRandom">Elegir a la Suerte</small>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                          </button>
                           {% endif %}
                         </h6>
                         {% if evento.total_tickets < 201 %}
-                            {% include 'rifa/seleccion_boletos.html' %}
+                        {% include 'rifa/seleccion_boletos.html' %}
                         {% endif %}
                       </div>
                     </div>
@@ -654,18 +609,11 @@
 
               <div class="row">
                 <div class="col s12 m12 p0">
-                  <div
-                    id="container_select_to_fixed"
-                    class="row center text-center container_selected"
-                    style="display: block"
-                  >
+                  <div id="container_select_to_fixed" class="row center text-center container_selected"
+                    style="display: block">
                     <div class="col-12 s12 m6 p0">
-                      <div
-                        id="btn_view_selected"
-                        class="btn_view_selected fa fa-chevron-down"
-                        style="display: none"
-                        aria-hidden="true"
-                      ></div>
+                      <div id="btn_view_selected" class="btn_view_selected fa fa-chevron-down" style="display: none"
+                        aria-hidden="true"></div>
                       <div class="info_fixed">
                         {% if evento.total_tickets < 201 %}
                         <div class="cards_fixed">
@@ -678,7 +626,7 @@
                           </strong>
                         </div>
                         {% endif %}
-               
+
                       </div>
                     </div>
                   </div>
@@ -691,41 +639,20 @@
               <div class="col-lg-12 mb-30 p0">
                 <div class="row mbp0">
                   <div class="input-field col col-lg-6 col-6">
-                    <label for="nombre" class="active"
-                      >Nombres y Apellidos *</label
-                    >
-                    <input
-                      placeholder=""
-                      id="nombre"
-                      name="nombre"
-                      type="text"
-                      class="validate invalid"
-                      minlength="8"
-                      maxlength="66"
-                      required=""
-                    />
+                    <label for="nombre" class="active">Nombres y Apellidos *</label>
+                    <input placeholder="" id="nombre" name="nombre" type="text" class="validate invalid" minlength="8"
+                      maxlength="66" required="" />
                   </div>
                   <div class="input-field col col-lg-6 col-6">
-                    <label class="mr20 active" for="celular">Celular *</label
-                    ><br />
+                    <label class="mr20 active" for="celular">Celular *</label><br />
                     <div class="row">
                       <div class="col-4">
                         {% include 'components/country_code_select.html' %}
                       </div>
                       <div class="col-8">
-                        <input
-                          placeholder=""
-                          id="celular"
-                          type="tel"
-                          class="validate invalid"
-                          maxlength="14"
-                          minlength="8"
-                          required=""
-                          style="width: 100%"
-                          name="celular"
-                          inputmode="numeric" 
-                          pattern="[0-9]*" 
-                        />
+                        <input placeholder="" id="celular" type="tel" class="validate invalid" maxlength="14"
+                          minlength="8" required="" style="width: 100%" name="celular" inputmode="numeric"
+                          pattern="[0-9]*" />
                       </div>
                     </div>
                   </div>
@@ -742,297 +669,243 @@
                     <h6>Transferencia o depósito</h6>
                   </div>
                 </div>
-             <div id="container-payments" class="types flex justify-space-between payments-options mb-30">
-    <div id="BINANCE-4265" data-id="3" class="type option-payment selected">
-        <div class="logo">
-            <img src="/static/rifas/binance.webp" width="86" alt="Binance" />
-        </div>
-        <div class="text" hidden>Binance</div>
-        <div class="content" hidden>
-            <div>ID <span>556684612</span></div>
-            <div class="titularBank"><span>TITULAR</span>MarianIVR</div>
-        </div>
-    </div>
-    
-    <div id="Zelle-4267" data-id="1" class="type option-payment">
-        <div class="logo">
-            <img src="/static/rifas/usa-zelle-c.png" width="86" alt="Zelle" />
-        </div>
-        <div class="text" hidden>Zelle</div>
-        <div class="content" hidden>
-            <div class="titularBank" onclick="copyToClipboard('Jose Gregorio Delgado')">
-                <span>TITULAR</span>Wuilson Gonzalez
-            </div>
-            <div class="titularBank" onclick="copyToClipboard('ws1562429@gmail.com')">
-                <span>Correo</span>ws1562429@gmail.com
-            </div>
-        </div>
-    </div>
+                <div id="container-payments" class="types flex justify-space-between payments-options mb-30">
+                  <div id="BINANCE-4265" data-id="3" class="type option-payment selected">
+                    <div class="logo">
+                      <img src="/static/rifas/binance.webp" width="86" alt="Binance" />
+                    </div>
+                    <div class="text" hidden>Binance</div>
+                    <div class="content" hidden>
+                      <div>ID <span>556684612</span></div>
+                      <div class="titularBank"><span>TITULAR</span>MarianIVR</div>
+                    </div>
+                  </div>
 
-    <!-- Método de pago 3: PayPal -->
-    <div id="Bizum - España-4268" data-id="2" class="type option-payment">
-        <div class="logo">
-            <img src="/static/rifas/españa.png" width="86" alt="Bizum - España" />
-        </div>
-        <div class="text" hidden>Bizum - España</div>
-        <div class="content" hidden>
-            <div class="titularBank" onclick="copyToClipboard('+34604278556')">
-                <span>N° DEL BIZUM</span>+34604278556
-            </div>
-            <div class="titularBank" onclick="copyToClipboard('bizum@bizum.com')">
-                <span>Titular</span>WILSON GONZÁLEZ
-        </div>
-    </div>
+                  <div id="Zelle-4267" data-id="1" class="type option-payment">
+                    <div class="logo">
+                      <img src="/static/rifas/usa-zelle-c.png" width="86" alt="Zelle" />
+                    </div>
+                    <div class="text" hidden>Zelle</div>
+                    <div class="content" hidden>
+                      <div class="titularBank" onclick="copyToClipboard('Jose Gregorio Delgado')">
+                        <span>TITULAR</span>Wuilson Gonzalez
+                      </div>
+                      <div class="titularBank" onclick="copyToClipboard('ws1562429@gmail.com')">
+                        <span>Correo</span>ws1562429@gmail.com
+                      </div>
+                    </div>
+                  </div>
 
-    <!-- Método de pago 4: Tarjeta de Crédito -->
-    <div id="BANCO SANTANDER-4269" data-id="4" class="type option-payment">
-        <div class="logo">
-            <img src="/static/rifas/españa2.png" width="86" alt="BANCO SANTANDER" />
-        </div>
-        <div class="text" hidden>BANCO SANTANDER - ESPAÑA</div>
-        <div class="content" hidden>
-            <div class="titularBank"><span>TITULAR</span>CHIPI BIKELIFE</div>
-            <div class="BancoBank" onclick="copyToClipboard('ES9500490860382014577846')">
-                <span>CUENTA SANTANDER</span>ES9500490860382014577846
-            </div>
-            <div class="DNIBank" onclick="copyToClipboard('37507279D')">
-                <span>DNI </span>37507279D
-            </div>
-        </div>
-    </div>
+                  <!-- Método de pago 3: PayPal -->
+                  <div id="Bizum - España-4268" data-id="2" class="type option-payment">
+                    <div class="logo">
+                      <img src="/static/rifas/españa.png" width="86" alt="Bizum - España" />
+                    </div>
+                    <div class="text" hidden>Bizum - España</div>
+                    <div class="content" hidden>
+                      <div class="titularBank" onclick="copyToClipboard('+34604278556')">
+                        <span>N° DEL BIZUM</span>+34604278556
+                      </div>
+                      <div class="titularBank" onclick="copyToClipboard('bizum@bizum.com')">
+                        <span>Titular</span>WILSON GONZÁLEZ
+                      </div>
+                    </div>
 
-    <!-- Método de pago 5: Transferencia Bancaria -->
-    <div id="Chile" data-id="5" class="type option-payment">
-        <div class="logo">
-            <img src="/static/rifas/chile.png" width="86" alt="Chile" />
-        </div>
-        <div class="text" hidden>Banco Falabella de Chile</div>
-        <div class="content" hidden>
-            <div class="titularBank"><span>TITULAR</span>Kelwis Rodriguez</div>
-            <div class="titularBank" onclick="copyToClipboard('1-593-005256-0')">
-                <span>N° DE CUENTA CORRIENTE</span>1-593-005256-0
-            </div>
-            <div class="titularBank" onclick="copyToClipboard('26414709-3')">
-                <span>CUENTA VISTA</span>26414709-3
-        </div>
-    </div>
-</div>
 
 
                   </div>
-                </div>
-                <div
-                  id="PAGO_MOVIL-4266"
-                  data-id="2"
-                  class="type option-payment"
-                  onclick="cambiarPago(this)"
-                >
-                  <div class="logo">
-                    <img
-                      src="/static/rifas/vepagomovilc2c.png"
-                      width="86"
-                      alt="PagomóvilBDV"
-                    />
+                  <!-- Método de pago 4: Tarjeta de Crédito -->
+                  <div id="BANCO SANTANDER-4269" data-id="4" class="type option-payment">
+                    <div class="logo">
+                      <img src="/static/rifas/españa2.png" width="86" alt="BANCO SANTANDER" />
+                    </div>
+                    <div class="text" hidden>BANCO SANTANDER - ESPAÑA</div>
+                    <div class="content" hidden>
+                      <div class="titularBank"><span>TITULAR</span>CHIPI BIKELIFE</div>
+                      <div class="BancoBank" onclick="copyToClipboard('ES9500490860382014577846')">
+                        <span>CUENTA SANTANDER</span>ES9500490860382014577846
+                      </div>
+                      <div class="DNIBank" onclick="copyToClipboard('37507279D')">
+                        <span>DNI </span>37507279D
+                      </div>
+                    </div>
                   </div>
-                  <div class="text" hidden>Pagomóvil BDV</div>
-                  <div class="content" hidden>
-                    <div>
+
+                  <!-- Método de pago 5: Transferencia Bancaria -->
+                  <div id="Chile" data-id="5" class="type option-payment">
+                    <div class="logo">
+                      <img src="/static/rifas/chile.png" width="86" alt="Chile" />
+                    </div>
+                    <div class="text" hidden>Banco Falabella de Chile</div>
+                    <div class="content" hidden>
+                      <div class="titularBank"><span>TITULAR</span>Kelwis Rodriguez</div>
+                      <div class="titularBank" onclick="copyToClipboard('1-593-005256-0')">
+                        <span>N° DE CUENTA CORRIENTE</span>1-593-005256-0
+                      </div>
+                      <div class="titularBank" onclick="copyToClipboard('26414709-3')">
+                        <span>CUENTA VISTA</span>26414709-3
+                      </div>
+                    </div>
+                  </div>
+                  <div id="PAGO_MOVIL-4266" data-id="2" class="type option-payment" onclick="cambiarPago(this)">
+                    <div class="logo">
+                      <img src="/static/rifas/vepagomovilc2c.png" width="86" alt="PagomóvilBDV" />
+                    </div>
+                    <div class="text" hidden>Pagomóvil BDV</div>
+                    <div class="content" hidden>
                       <div>
-    <span class="nameAccountNumber"> Teléfono</span>
-    <h3 onclick="copyToClipboard('04242558344')">04242558344</h3>
-</div>
-<div>
-    <span class="nameAccountNumber"> Banco</span>
-    <h3 onclick="copyToClipboard('0102')">0102</h3>
-</div>
-<div>
-    <span class="nameAccountNumber"> Cédula</span>
-    <h3 onclick="copyToClipboard('27515638')">27515638</h3>
-</div>
-<div class="titularBank" onclick="copyToClipboard('NELSON DOMINGUEZ')">
-    <span>TITULAR</span>NELSON DOMINGUEZ
-</div>
-
-
+                        <div>
+                          <span class="nameAccountNumber"> Teléfono</span>
+                          <h3 onclick="copyToClipboard('04242558344')">04242558344</h3>
+                        </div>
+                        <div>
+                          <span class="nameAccountNumber"> Banco</span>
+                          <h3 onclick="copyToClipboard('0102')">0102</h3>
+                        </div>
+                        <div>
+                          <span class="nameAccountNumber"> Cédula</span>
+                          <h3 onclick="copyToClipboard('27515638')">27515638</h3>
+                        </div>
+                        <div class="titularBank" onclick="copyToClipboard('NELSON DOMINGUEZ')">
+                          <span>TITULAR</span>NELSON DOMINGUEZ
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div id="datosBanco" class="text-center input-field col s12 m6">
-                <input type="hidden" name="metodo" id="metodo-value" value="">
-                <div>
-                  <h6>
-                    <span
-                      id="metodo-titulo"
-                      data-toggle="tooltip"
-                      data-placement="bottom"
-                      title=""
-                      data-original-title="Zelle"
-                      >ZELLE</span
-                    >
-                    <span
-                      data-toggle="tooltip"
-                      data-placement="bottom"
-                      title=""
-                      data-original-title="Cuenta Personal"
-                      ><i class="help-account fa fa-user" aria-hidden="true"></i
-                    ></span>
-                  </h6>
-                </div>
-                <div id="contenido-pago">
-                </div>
-              </div>
             </div>
-            <div id="priceConvert" class="pricefixed">
-              <strong
-                data-toggle="tooltip"
-                data-placement="bottom"
-                data-original-title="Dólares Americanos"
-                >Total: <span class="total-boleto">{{evento.precio_unidad}}$</span> USD</strong
-              >
-              <small>(<span class="cantidad-boleto">{{ evento.minimo }}</span> boleto)</small>
+            <div id="datosBanco" class="text-center input-field col s12 m6">
+              <input type="hidden" name="metodo" id="metodo-value" value="">
+              <div>
+                <h6>
+                  <span id="metodo-titulo" data-toggle="tooltip" data-placement="bottom" title=""
+                    data-original-title="Zelle">ZELLE</span>
+                  <span data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Cuenta Personal"><i
+                      class="help-account fa fa-user" aria-hidden="true"></i></span>
+                </h6>
+              </div>
+              <div id="contenido-pago">
+              </div>
             </div>
           </div>
+          <div id="priceConvert" class="pricefixed">
+            <strong data-toggle="tooltip" data-placement="bottom" data-original-title="Dólares Americanos">Total: <span
+                class="total-boleto">{{evento.precio_unidad}}$</span> USD</strong>
+            <small>(<span class="cantidad-boleto">{{ evento.minimo }}</span> boleto)</small>
+          </div>
+        </div>
 
-          <div class="containerAllVoucher">
-            <h4 class="mt-40">
-              <i class="fa fa-file-text" aria-hidden="true"></i>
-             COMPROBANTE DE PAGO
-              </h4>
-              <div class="col-lg-12 mb-10">
-                <div class="row">
-                  <div class="input-field col s6 m6">
-                    <h6 id="formLblVoucher">Foto o Captura de Pantalla</h6>
-                  </div>
-                </div>
+        <div class="containerAllVoucher">
+          <h4 class="mt-40">
+            <i class="fa fa-file-text" aria-hidden="true"></i>
+            COMPROBANTE DE PAGO
+          </h4>
+          <div class="col-lg-12 mb-10">
+            <div class="row">
+              <div class="input-field col s6 m6">
+                <h6 id="formLblVoucher">Foto o Captura de Pantalla</h6>
               </div>
-              <div class="col-lg-12 mb-30 nopadding">
-                <div class="row">
-                  <div id="container_voucher_up" class="col col-12 s12 m6 col-lg-12 elegirbanco">
-                    <div id="formimage" class="file-field input-field s-voucher" style="display: block">
-                      <div class="btn" id="file-btn">
-                        <span><i class="fa fa-upload" aria-hidden="true"></i></span>
-                      </div>
-                      <div class="file-path-wrapper" style="position: static;width:100%;text-align:center">
-                        <img id="comprobante-preview" src="" style="width: 200px;height: auto;max-width: 100%;margin:auto" alt="Comprobante" />
-                        <input id="file-label" class="file-path validate" type="text" placeholder="Foto/Captura de Pantalla" />
-                      </div>
-                      <input id="files" data-maxwidth="992" data-maxheight="992" type="file" required accept="image/*"
-                        name="foto" onchange="fileChange(this)" />
-                    </div>
-                    <script>
-                      function fileChange(input){
-                        if (input.files && input.files[0]) {
-                          const reader = new FileReader();
-
-                          reader.onload = function (e) {
-                            document.getElementById('comprobante-preview').setAttribute('src', e.target.result);
-                          };
-
-                          reader.readAsDataURL(input.files[0]);
-                          document.getElementById('file-label').hidden = true;
-                          document.getElementById('file-btn').hidden = true;
-                        }
-                      }
-                    </script>
-                  <h6 id="montoCorrecto">
-                    <strong class="total-boleto">{{evento.precio_unidad}}$ </strong>
-                    o
-                    <strong class="precio-bs">150bs</strong>
-                    (
-                    <span class="cantidad-boleto">1</span>
-                    boleto )
-                  </h6>
+            </div>
+          </div>
+          <div class="col-lg-12 mb-30 nopadding">
+            <div class="row">
+              <div id="container_voucher_up" class="col col-12 s12 m6 col-lg-12 elegirbanco">
+                <div id="formimage" class="file-field input-field s-voucher" style="display: block">
+                  <div class="btn" id="file-btn">
+                    <span><i class="fa fa-upload" aria-hidden="true"></i></span>
+                  </div>
+                  <div class="file-path-wrapper" style="position: static;width:100%;text-align:center">
+                    <img id="comprobante-preview" src="" style="width: 200px;height: auto;max-width: 100%;margin:auto"
+                      alt="Comprobante" />
+                    <input id="file-label" class="file-path validate" type="text"
+                      placeholder="Foto/Captura de Pantalla" />
+                  </div>
+                  <input id="files" data-maxwidth="992" data-maxheight="992" type="file" required accept="image/*"
+                    name="foto" onchange="fileChange(this)" />
                 </div>
+                <script>
+                  function fileChange(input) {
+                    if (input.files && input.files[0]) {
+                      const reader = new FileReader();
+
+                      reader.onload = function (e) {
+                        document.getElementById('comprobante-preview').setAttribute('src', e.target.result);
+                      };
+
+                      reader.readAsDataURL(input.files[0]);
+                      document.getElementById('file-label').hidden = true;
+                      document.getElementById('file-btn').hidden = true;
+                    }
+                  }
+                </script>
+                <h6 id="montoCorrecto">
+                  <strong class="total-boleto">{{evento.precio_unidad}}$ </strong>
+                  o
+                  <strong class="precio-bs">150bs</strong>
+                  (
+                  <span class="cantidad-boleto">1</span>
+                  boleto )
+                </h6>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="col-lg-12 mb-30 text-center">
-        <label class="labelPersonalData form-check" content="">
-          <small
-            >Al confirmar autorizo el uso de
-            <a href="#" id="openModalUseData" class="link"
-              >Mis Datos Personales</a
-            >
-          </small>
-        </label>
-        <label
-          class="labelClientTermsConds form-check"
-          for="checkboxClientTermsConds"
-          content=""
-          style="display: none"
-        >
-          <input
-            id="checkboxClientTermsConds"
-            class="form-check-input"
-            name="checkboxClientTermsConds"
-            type="checkbox"
-          />
-          <small
-            >Acepto los
-            <a href="#" id="openModalTermsConds" class="link"
-              >Términos y Condiciones</a
-            >
-          </small>
-        </label>
-      </div>
-      <div class="col-lg-12 mb-30 text-center">
-        <button type="submit" class="btn-large" id="confirmTickets">
-          Confirmar
-        </button>
-      </div>
-    </form>
-  </article>
-  <p class="text-center termsGoogle">
-    <small class="gray"
-      >Sitio Web protegido por reCaptcha™ de Google. Aplican su
-      <a
-        class="link link-s"
-        rel="nofollow noopener noreferrer"
-        href="https://policies.google.com/privacy"
-        target="_blank"
-        >Política de Privacidad</a
-      >
-      y
-      <a
-        class="link link-s"
-        href="https://policies.google.com/terms"
-        rel="nofollow noopener noreferrer"
-        target="_blank"
-        >Términos del Servicio</a
-      ></small
-    >
-  </p>
-  <p class="text-center">
-    <small class="gray"
-      >Centro de Ayuda: <i class="fa fa-whatsapp" aria-hidden="true"></i>
-      <span class="phoneClient">+584242558344</span></small
-    >
-  </p>
+</div>
+<div class="col-lg-12 mb-30 text-center">
+  <label class="labelPersonalData form-check" content="">
+    <small>Al confirmar autorizo el uso de
+      <a href="#" id="openModalUseData" class="link">Mis Datos Personales</a>
+    </small>
+  </label>
+  <label class="labelClientTermsConds form-check" for="checkboxClientTermsConds" content="" style="display: none">
+    <input id="checkboxClientTermsConds" class="form-check-input" name="checkboxClientTermsConds" type="checkbox" />
+    <small>Acepto los
+      <a href="#" id="openModalTermsConds" class="link">Términos y Condiciones</a>
+    </small>
+  </label>
+</div>
+<div class="col-lg-12 mb-30 text-center">
+  <button type="submit" class="btn-large" id="confirmTickets">
+    Confirmar
+  </button>
+</div>
+</form>
+</article>
+<p class="text-center termsGoogle">
+  <small class="gray">Sitio Web protegido por reCaptcha™ de Google. Aplican su
+    <a class="link link-s" rel="nofollow noopener noreferrer" href="https://policies.google.com/privacy"
+      target="_blank">Política de Privacidad</a>
+    y
+    <a class="link link-s" href="https://policies.google.com/terms" rel="nofollow noopener noreferrer"
+      target="_blank">Términos del Servicio</a></small>
+</p>
+<p class="text-center">
+  <small class="gray">Centro de Ayuda: <i class="fa fa-whatsapp" aria-hidden="true"></i>
+    <span class="phoneClient">+584242558344</span></small>
+</p>
 </div>
 <script src="/static/rifas/lista-boletos.js"></script>
 <script>
-function copyToClipboard(text) {
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(text)
-      .then(() => {
-        alert('¡Copiado al portapapeles!'); // Opcional: mostrar una confirmación
-      })
-      .catch(err => {
-        console.error('Error al copiar al portapapeles: ', err);
-      });
-  } else {
-    // Para navegadores más antiguos
-    const textArea = document.createElement("textarea");
-    textArea.value = text;
-    document.body.appendChild(textArea);
-    textArea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textArea);
-    alert('¡Copiado al portapapeles!'); // Opcional: mostrar una confirmación
+  function copyToClipboard(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text)
+        .then(() => {
+          alert('¡Copiado al portapapeles!'); // Opcional: mostrar una confirmación
+        })
+        .catch(err => {
+          console.error('Error al copiar al portapapeles: ', err);
+        });
+    } else {
+      // Para navegadores más antiguos
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      alert('¡Copiado al portapapeles!'); // Opcional: mostrar una confirmación
+    }
   }
-}
 </script>

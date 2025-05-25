@@ -1,20 +1,15 @@
 <nav
   id="navbar"
   class="navbar fixed-top navbar-expand-lg navbar-header navbar-mobile header-scrolled"
-  style="background: #f7f2f21c; border: none"
 >
   <div class="navbar-container container">
     <!-- LOGO -->
     <div class="navbar-brand">
       <a class="navbar-brand-logo" href="#">
         <img
-          src="/static/img/logo.png"
-          style="
-            border-radius: 50%;
-            width: 170px;
-            height: 170px;
-            object-fit: cover;
-          "
+          src="https://rifarito.s3.amazonaws.com/uploads/client/logo/2330/logoMG-20241216-WA0049.png?X-Amz-Expires=86400&amp;X-Amz-Date=20250524T231230Z&amp;X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIA43AWIPHKRJMFXTNZ%2F20250524%2Fus-east-1%2Fs3%2Faws4_request&amp;X-Amz-SignedHeaders=host&amp;X-Amz-Signature=505bd0cfc229c3cafbcb011b9ad206440b7a0db2b4ba63a6db25c5abad15b078"
+          style="width: 100px"
+          width="220px"
         />
       </a>
     </div>
@@ -29,70 +24,29 @@
     >
       <i class="fa fa-th-large" aria-hidden="true"></i>
     </button>
-    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-      <ul
-        class="navbar-nav menu-navbar-nav"
-        style="display: flex; justify-content: center; padding: 0"
-      >
-        <li class="nav-item" style="margin: 0 15px">
-          <!-- Espacio lateral -->
-          <a
-            class="header-title pixeleado"
-            style="color: rgb(0, 0, 0)"
-            href="#"
-          >
-            <p
-              class="header-title pixeleado"
-              style="color: #0c0101; font-size: 30px"
-            >
-              INICIO
-            </p>
+    <div class="collapse navbar-collapse justify-content-around" id="navbarNav">
+      <ul class="navbar-nav menu-navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="#top">
+            <p class="nav-link-menu">INICIO</p>
           </a>
         </li>
-        <li class="nav-item" style="margin: 0 15px">
-          <!-- Espacio lateral -->
-          <a
-            class="header-title pixeleado"
-            style="color: rgb(7, 7, 2)"
-            href="#cuentaPago"
-          >
-            <p
-              class="header-title pixeleado"
-              style="color: #0e0202; font-size: 30px"
-            >
-              CUENTAS DE PAGO
-            </p>
+        <li class="nav-item">
+          <a class="nav-link" href="#pagos">
+            <p class="nav-link-menu">CUENTAS DE PAGO</p>
           </a>
         </li>
-        <li class="nav-item" style="margin: 0 15px">
-          <!-- Espacio lateral -->
-          <a
-            class="header-title pixeleado"
-            style="color: rgb(12, 12, 4)"
-            href="#footer"
-          >
-            <p
-              class="header-title pixeleado"
-              style="color: #080101; font-size: 30px"
-            >
-              CONTACTO
-            </p>
+        <li class="nav-item">
+          <a class="nav-link" href="#footer">
+            <p class="nav-link-menu">CONTACTO</p>
           </a>
         </li>
-        <li class="nav-item" style="margin: 0 15px">
-          <!-- Espacio lateral -->
-          <a
-            class="header-title pixeleado"
-            style="color: rgb(10, 10, 3)"
-            href="#disponible"
+      </ul>
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link learn-more-btn btn-invert" href="#eventos"
+            >Eventos</a
           >
-            <p
-              class="header-title pixeleado"
-              style="color: #0f0303; font-size: 30px"
-            >
-              EVENTOS
-            </p>
-          </a>
         </li>
       </ul>
     </div>
