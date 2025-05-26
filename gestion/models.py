@@ -52,6 +52,14 @@ class Comprobante(models.Model):
     nombre = models.CharField(max_length=500)
     apellido = models.CharField(max_length=500)
     telefono = models.CharField(max_length=500)
+    referencia = models.CharField(
+    max_length=500, 
+    unique=True,  # Asegura que cada referencia sea única
+    verbose_name='Referencia Bancaria',
+    help_text='Ingrese el número de referencia del comprobante de pago',
+    null=False,  # No permite valores nulos
+    blank=False  # No permite campos en blanco
+)
     fecha = models.DateField(default=timezone.now)
     foto = models.ImageField()
     status = models.CharField(

@@ -5,7 +5,7 @@ from django import forms
 class FormComprobante(forms.ModelForm):
     class Meta:
         model = Comprobante
-        fields = ["nombre", "telefono", "foto", "fecha", "metodo", "status"]
+        fields = ["nombre", "telefono", "foto", "fecha", "metodo", "status","referencia"]
 
 
 class FormEvento(forms.ModelForm):
