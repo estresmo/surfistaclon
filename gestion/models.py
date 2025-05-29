@@ -140,7 +140,7 @@ class Visualizacion(models.Model):
 class Clientes(models.Model):
     foto = models.ImageField(upload_to='clientes_fotos/', null=True, blank=True)
     nombre = models.CharField(max_length=100)
-    ubicacion = models.CharField(max_length=255
+    ubicacion = models.CharField(max_length=255)
                                  
 class Compras(models.Model):
     # Relates to a participant, assuming you have a 'Participante' model
