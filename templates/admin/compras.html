@@ -1,353 +1,325 @@
-{% extends 'admin/base.html' %} {% block title %} Compras {% endblock title %}
-{% block subtitle %} Compras {% endblock subtitle %} {% block content %}
-<div id="main_content_wrapper">
-  <div id="main_content">
-    <div class="table_tools">
-      <div class="scopes">
-        <ul class="table_tools_segmented_control scope-default-group">
-          <li class="scope all">
-            <a href="/admin?scope=all" class="table_tools_button">Todos</a>
-          </li>
-          <li class="scope rifas_activas selected">
-            <a href="/admin?scope=rifas_activas" class="table_tools_button"
-              >Rifas Activas</a
-            >
-          </li>
-          <li class="scope rifas_inactivas">
-            <a href="/admin?scope=rifas_inactivas" class="table_tools_button"
-              >Rifas Inactivas</a
-            >
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div class="paginated_collection">
-      <div class="paginated_collection_contents">
-        <div class="index_content">
-          <div class="index_as_table">
-            <div id="get_lower">
-              <div id="containerDivVoucher" class="modal">
-                <img id="img-voucher" src="/static/admin/ticket.png" />
+{% extends 'admin/base.html' %} {% block title %}
+  Compras
+{% endblock %}
+{% block subtitle %}
+  Compras
+{% endblock %} {% block content %}
+  <div id="active_admin_content" class="with_sidebar">
+    <div id="main_content_wrapper">
+      <div id="main_content">
+        <div class="table_tools">
+          <div class="scopes">
+            <ul class="table_tools_segmented_control scope-default-group">
+              <li class="scope all">
+                <a href="/admin?scope=all" class="table_tools_button">Todos</a>
+              </li>
+              <li class="scope rifas_activas selected">
+                <a href="/admin?scope=rifas_activas" class="table_tools_button">
+                  Rifas Activas
+                </a>
+              </li>
+              <li class="scope rifas_inactivas">
+                <a href="/admin?scope=rifas_inactivas"
+                  class="table_tools_button">
+                  Rifas Inactivas
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="paginated_collection">
+          <div class="paginated_collection_contents">
+            <div class="index_content">
+              <div class="index_as_table">
+                <div id="get_lower">
+                  <div id="containerDivVoucher" class="modal">
+                    <img id="img-voucher" src="/static/admin/ticket.png" />
+                  </div>
+                </div>
+                <table border="0"
+                  cellspacing="0"
+                  cellpadding="0"
+                  id="index_table_purchases"
+                  class="index_table index"
+                  paginator="true">
+                  <thead>
+                    <tr>
+                      <th class="col col-buyer">Participante</th>
+                      <th class="sortable col col-created_at">
+                        <a href="/admin?order=created_at_desc">Fecha</a>
+                      </th>
+                      <th class="sortable col col-verify_date">
+                        <a href="/admin?order=verify_date_desc">Verificación</a>
+                      </th>
+                      <th class="col col-payment_type">Cuenta</th>
+                      <th class="sortable col col-quantity">
+                        <a href="/admin?order=quantity_desc">Cant.</a>
+                      </th>
+                      <th class="sortable col col-amount">
+                        <a href="/admin?order=amount_desc">Monto</a>
+                      </th>
+                      <th class="col col-verify"></th>
+                      <th class="col col-whatsapp"></th>
+                      <th class="sortable col col-tickets">
+                        <a href="/admin?order=tickets_desc">Números</a>
+                      </th>
+                      <th class="col"></th>
+                      <th class="sortable col col-extra_numbers">
+                        <a href="/admin?order=extra_numbers_desc">Extras</a>
+                      </th>
+                      <th class="sortable col col-notes">
+                        <a href="/admin?order=notes_desc">Notas</a>
+                      </th>
+                      <th class="col col-actions"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="odd" id="purchase_2248063">
+                      <td class="col col-buyer">
+                        <a title="Anthony Gutierrez"
+                          href="/admin/buyers/1886932">
+                          Anthony Gutierrez +5804121295448
+                        </a>
+                      </td>
+                      <td class="col col-created_at">
+                        11:54&nbsp;am<br /><small>24 MAY 2025</small>
+                      </td>
+                      <td class="col col-verify_date"></td>
+                      <td class="col col-payment_type">
+                        PagomóvilBDV <br /><small>NELSON DOMINGUE...</small>
+                      </td>
+                      <td class="col col-quantity">1</td>
+                      <td class="col col-amount">
+                        <a rel="modal:open"
+                          onclick="loadImageModal('https://rifarito.s3.amazonaws.com/uploads/purchase/file/2248063/1748102018443.jpg?X-Amz-Expires=86400&amp;X-Amz-Date=20250524T160136Z&amp;X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIA43AWIPHKRJMFXTNZ%2F20250524%2Fus-east-1%2Fs3%2Faws4_request&amp;X-Amz-SignedHeaders=host&amp;X-Amz-Signature=823fb25a0c47ecb1e6e524180a3be82521bd878051cefd361b172b61c3765f4d')"
+                          href="#containerDivVoucher">
+                          <strong>$2.00</strong>
+                        </a>
+                      </td>
+                      <td class="col col-verify">
+                        <a onclick="verifyPurchase(event, this, 'm4hUYngs8POQA1BO', 2248063, 2812)"
+                          class="pending"
+                          href="#">
+                          <i class="fas fa-check fa-lg"></i>
+                        </a>
+                      </td>
+                      <td class="col col-whatsapp">
+                        <div class="btn_container_links">
+                          <div>
+                            <a target="_blank"
+                              title="Recordar Pago"
+                              class="orange"
+                              href="https://api.whatsapp.com/send?phone=+5804121295448&amp;text=Hola+Anthony+Gutierrez+%2C+no+pierdas+tu+oportunidad+de+ganar+con+tus+n%C3%BAmeros+elegidos+en+COMBO+AMOROSO%2C+completa+el+pago+por+favor%2C+no+dejes+ir+tu+suerte.+https%3A%2F%2Fwww.chipibikelife.com%2Fcomboamoroso%2304121295448">
+                              <i class="fab fa-whatsapp fa-2x"></i>
+                            </a>
+                          </div>
+                          <div>
+                            <a target="_blank"
+                              title="Boleto Digital"
+                              class="external_link"
+                              href="/comboamoroso#04121295448">
+                              <i class="fas fa-ticket-alt fa-2x"></i>
+                            </a>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="col col-tickets">8311</td>
+                      <td class="col"></td>
+                      <td class="col col-extra_numbers"></td>
+                      <td class="col col-notes"></td>
+                      <td class="col col-actions">
+                        <div class="table_actions">
+                          <a href="/admin/purchases/2248063/edit">
+                            <i class="fas fa-pen"></i>
+                          </a><a data-confirm="¿Confirma que desea eliminar?"
+                            class="trash"
+                            rel="nofollow"
+                            data-method="delete"
+                            href="/admin/purchases/2248063">
+                            <i class="fas fa-trash"></i>
+                          </a>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
-            <table
-              border="0"
-              cellspacing="0"
-              cellpadding="0"
-              id="index_table_purchases"
-              class="index_table index"
-              paginator="true"
-            >
-              <thead>
-                <tr>
-                  <th class="col col-buyer">Participante</th>
-                  <th class="sortable col col-created_at">
-                    <a href="/admin?order=created_at_desc">Fecha</a>
-                  </th>
-                  <th class="sortable col col-verify_date">
-                    <a href="/admin?order=verify_date_desc">Verificación</a>
-                  </th>
-                  <th class="col col-payment_type">Cuenta</th>
-                  <th class="sortable col col-quantity">
-                    <a href="/admin?order=quantity_desc">Cant.</a>
-                  </th>
-                  <th class="sortable col col-amount">
-                    <a href="/admin?order=amount_desc">Monto</a>
-                  </th>
-                  <th class="col col-verify"></th>
-                  <th class="col col-whatsapp"></th>
-                  <th class="sortable col col-tickets">
-                    <a href="/admin?order=tickets_desc">Números</a>
-                  </th>
-                  <th class="col"></th>
-                  <th class="sortable col col-extra_numbers">
-                    <a href="/admin?order=extra_numbers_desc">Extras</a>
-                  </th>
-                  <th class="sortable col col-notes">
-                    <a href="/admin?order=notes_desc">Notas</a>
-                  </th>
-                  <th class="col col-actions"></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="odd" id="purchase_2248063">
-                  <td class="col col-buyer">
-                    <a title="Anthony Gutierrez" href="/admin/buyers/1886932"
-                      >Anthony Gutierrez +5804121295448</a
-                    >
-                  </td>
-                  <td class="col col-created_at">
-                    11:54&nbsp;am<br /><small>24 MAY 2025</small>
-                  </td>
-                  <td class="col col-verify_date"></td>
-                  <td class="col col-payment_type">
-                    PagomóvilBDV <br /><small>NELSON DOMINGUE...</small>
-                  </td>
-                  <td class="col col-quantity">1</td>
-                  <td class="col col-amount">
-                    <a
-                      rel="modal:open"
-                      onclick="loadImageModal('https://rifarito.s3.amazonaws.com/uploads/purchase/file/2248063/1748102018443.jpg?X-Amz-Expires=86400&amp;X-Amz-Date=20250524T160136Z&amp;X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIA43AWIPHKRJMFXTNZ%2F20250524%2Fus-east-1%2Fs3%2Faws4_request&amp;X-Amz-SignedHeaders=host&amp;X-Amz-Signature=823fb25a0c47ecb1e6e524180a3be82521bd878051cefd361b172b61c3765f4d')"
-                      href="#containerDivVoucher"
-                      ><strong>$2.00</strong></a
-                    >
-                  </td>
-                  <td class="col col-verify">
-                    <a
-                      onclick="verifyPurchase(event, this, 'm4hUYngs8POQA1BO', 2248063, 2812)"
-                      class="pending"
-                      href="#"
-                      ><i class="fas fa-check fa-lg"></i
-                    ></a>
-                  </td>
-                  <td class="col col-whatsapp">
-                    <div class="btn_container_links">
-                      <div>
-                        <a
-                          target="_blank"
-                          title="Recordar Pago"
-                          class="orange"
-                          href="https://api.whatsapp.com/send?phone=+5804121295448&amp;text=Hola+Anthony+Gutierrez+%2C+no+pierdas+tu+oportunidad+de+ganar+con+tus+n%C3%BAmeros+elegidos+en+COMBO+AMOROSO%2C+completa+el+pago+por+favor%2C+no+dejes+ir+tu+suerte.+https%3A%2F%2Fwww.chipibikelife.com%2Fcomboamoroso%2304121295448"
-                          ><i class="fab fa-whatsapp fa-2x"></i
-                        ></a>
-                      </div>
-                      <div>
-                        <a
-                          target="_blank"
-                          title="Boleto Digital"
-                          class="external_link"
-                          href="/comboamoroso#04121295448"
-                          ><i class="fas fa-ticket-alt fa-2x"></i
-                        ></a>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="col col-tickets">8311</td>
-                  <td class="col"></td>
-                  <td class="col col-extra_numbers"></td>
-                  <td class="col col-notes"></td>
-                  <td class="col col-actions">
-                    <div class="table_actions">
-                      <a href="/admin/purchases/2248063/edit"
-                        ><i class="fas fa-pen"></i></a
-                      ><a
-                        data-confirm="¿Confirma que desea eliminar?"
-                        class="trash"
-                        rel="nofollow"
-                        data-method="delete"
-                        href="/admin/purchases/2248063"
-                        ><i class="fas fa-trash"></i
-                      ></a>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          </div>
+          <div id="index_footer">
+            <nav class="pagination">
+              <span class="page current">1</span>
+
+              <span class="page">
+                <a rel="next" href="/admin?order=id_desc&amp;page=2">2</a>
+              </span>
+
+              <span class="page">
+                <a href="/admin?order=id_desc&amp;page=3">3</a>
+              </span>
+
+              <span class="page">
+                <a href="/admin?order=id_desc&amp;page=4">4</a>
+              </span>
+
+              <span class="page">
+                <a href="/admin?order=id_desc&amp;page=5">5</a>
+              </span>
+
+              <span class="page gap">…</span>
+
+              <span class="next">
+                <a rel="next" href="/admin?order=id_desc&amp;page=2">Sig ›</a>
+              </span>
+
+              <span class="last">
+                <a href="/admin?order=id_desc&amp;page=74">Fin</a>
+              </span>
+            </nav>
+            <div class="pagination_information">
+              Mostrando Compras <b>1&nbsp;-&nbsp;10</b> de un total de
+              <b>738</b>
+            </div>
           </div>
         </div>
       </div>
-      <div id="index_footer">
-        <nav class="pagination">
-          <span class="page current"> 1 </span>
-
-          <span class="page">
-            <a rel="next" href="/admin?order=id_desc&amp;page=2">2</a>
-          </span>
-
-          <span class="page">
-            <a href="/admin?order=id_desc&amp;page=3">3</a>
-          </span>
-
-          <span class="page">
-            <a href="/admin?order=id_desc&amp;page=4">4</a>
-          </span>
-
-          <span class="page">
-            <a href="/admin?order=id_desc&amp;page=5">5</a>
-          </span>
-
-          <span class="page gap">…</span>
-
-          <span class="next">
-            <a rel="next" href="/admin?order=id_desc&amp;page=2">Sig ›</a>
-          </span>
-
-          <span class="last">
-            <a href="/admin?order=id_desc&amp;page=74">Fin</a>
-          </span>
-        </nav>
-        <div class="pagination_information">
-          Mostrando Compras <b>1&nbsp;-&nbsp;10</b> de un total de
-          <b>738</b>
+    </div>
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar_section panel" id="filters_sidebar_section">
+        <h3>Filtros</h3>
+        <div class="panel_contents">
+          <form class="filter_form"
+            id="new_q"
+            action="/admin/purchases"
+            accept-charset="UTF-8"
+            method="get">
+            <div class="select input optional filter_form_field filter_select"
+              id="q_raffle_id_eq_input">
+              <label for="q_raffle_id_eq" class="label">Rifa</label><select name="q[raffle_id_eq]"
+                id="q_raffle_id_eq">
+                <option value="" selected="selected">Cualquiera</option>
+                <option value="3025">EL YT DE LOS PODERES #1</option>
+                <option value="3834">EL COMBO MALIANTEO</option>
+                <option value="3523">COMBO DEL SHOW</option>
+                <option value="3927">COMBO AMOROSO</option>
+                <option value="3636">COMBO FAMILIAR</option>
+              </select>
+            </div>
+            <div class="string input optional stringish filter_form_field filter_string"
+              id="q_tickets_in_input">
+              <label for="q_tickets_in" class="label">Ticket</label><input id="q_tickets_in"
+                type="text"
+                name="q[tickets_in]" />
+            </div>
+            <div class="string input optional stringish filter_form_field filter_string"
+              id="q_name_contains_input">
+              <label for="q_name_contains" class="label">Participante</label><input id="q_name_contains"
+                type="text"
+                name="q[name_contains]" />
+            </div>
+            <div class="string input optional stringish filter_form_field filter_string"
+              id="q_buyer_phone_contains_input">
+              <label for="q_buyer_phone_contains" class="label">TELÉFONO</label><input id="q_buyer_phone_contains"
+                type="text"
+                name="q[buyer_phone_contains]" />
+            </div>
+            <div class="date_range input optional stringish filter_form_field filter_date_range"
+              id="q_created_at_input">
+              <label class="label">Fecha</label>
+              <input placeholder="Desde"
+                size="12"
+                class="datepicker"
+                maxlength="10"
+                type="text"
+                name="q[created_at_gteq_datetime]"
+                id="q_created_at_gteq_datetime" />
+              <input placeholder="Hasta"
+                size="12"
+                class="datepicker"
+                maxlength="10"
+                type="text"
+                name="q[created_at_lteq_datetime]"
+                id="q_created_at_lteq_datetime" />
+            </div>
+            <div class="select input optional filter_form_field filter_select"
+              id="q_expireds_input">
+              <label for="q_expireds" class="label">Creados hace más de:</label><select name="q[expireds]"
+                id="q_expireds">
+                <option value="" selected="selected">Cualquiera</option>
+                <option value="2">2 horas</option>
+                <option value="12">12 horas</option>
+                <option value="24">24 horas (1 día)</option>
+                <option value="48">48 horas (2 días)</option>
+                <option value="72">72 horas (3 días)</option>
+                <option value="96">96 horas (4 días)</option>
+              </select>
+            </div>
+            <div class="select input optional filter_form_field filter_select"
+              id="q_status_input">
+              <label for="q_status" class="label">Status</label><select name="q[status_eq]"
+                id="q_status">
+                <option value="" selected="selected">Cualquiera</option>
+                <option value="0">Sin Voucher</option>
+                <option value="1">Sin Verificación</option>
+                <option value="2">Verificados</option>
+              </select>
+            </div>
+            <div class="select input optional filter_form_field filter_select"
+              id="q_payment_type_input">
+              <label for="q_payment_type_id" class="label">Tipo de Pago</label><select name="q[payment_type_id_eq]"
+                id="q_payment_type_id">
+                <option value="" selected="selected">Cualquiera</option>
+                <option value="4153">NELSON DOMINGUEZ</option>
+                <option value="4481">Wuilson Gonzalez</option>
+                <option value="4483">MarianIVR</option>
+                <option value="4482">Kelwis Rodriguez</option>
+                <option value="4956">CHIPI BIKELIFE</option>
+                <option value="4958">BIZUM ESPAÑA</option>
+              </select>
+            </div>
+            <div class="select input optional filter_form_field filter_select"
+              id="q_mode_input">
+              <label for="q_mode" class="label">Modo</label><select name="q[mode_eq]"
+                id="q_mode">
+                <option value="" selected="selected">Cualquiera</option>
+                <option value="0">online</option>
+                <option value="1">offline</option>
+              </select>
+            </div>
+            <div class="select input optional filter_form_field filter_select"
+              id="q_creator_user_input">
+              <label for="q_creator_user_id" class="label">Creador</label><select name="q[creator_user_id_eq]"
+                id="q_creator_user_id">
+                <option value="" selected="selected">Cualquiera</option>
+              </select>
+            </div>
+            <div class="string input optional stringish filter_form_field filter_string select_and_search"
+              id="q_notes_input">
+              <label for="q_notes" class="label">Notas</label><select name=""
+                id="">
+                <option selected="selected"
+                  value="notes_contains">Contiene</option>
+                <option value="notes_equals">Igual a</option>
+                <option value="notes_starts_with">Empieza con</option>
+                <option value="notes_ends_with">Termina con</option>
+              </select>
+              <input id="q_notes" type="text" name="q[notes_contains]" />
+            </div>
+            <div class="buttons">
+              <input type="submit"
+                name="commit"
+                value="Filtrar"
+                data-disable-with="Filtrar" /><a class="clear_filters_btn"
+                href="#">
+                Quitar Filtros
+              </a><input type="hidden"
+                name="order"
+                id="hidden_active_admin_order"
+                value="id_desc" />
+            </div>
+          </form>
         </div>
       </div>
     </div>
   </div>
-</div>
-<div class="sidebar" id="sidebar">
-  <div class="sidebar_section panel" id="filters_sidebar_section">
-    <h3>Filtros</h3>
-    <div class="panel_contents">
-      <form
-        class="filter_form"
-        id="new_q"
-        action="/admin/purchases"
-        accept-charset="UTF-8"
-        method="get"
-      >
-        <div
-          class="select input optional filter_form_field filter_select"
-          id="q_raffle_id_eq_input"
-        >
-          <label for="q_raffle_id_eq" class="label">Rifa</label
-          ><select name="q[raffle_id_eq]" id="q_raffle_id_eq">
-            <option value="" selected="selected">Cualquiera</option>
-            <option value="3025">EL YT DE LOS PODERES #1</option>
-            <option value="3834">EL COMBO MALIANTEO</option>
-            <option value="3523">COMBO DEL SHOW</option>
-            <option value="3927">COMBO AMOROSO</option>
-            <option value="3636">COMBO FAMILIAR</option>
-          </select>
-        </div>
-        <div
-          class="string input optional stringish filter_form_field filter_string"
-          id="q_tickets_in_input"
-        >
-          <label for="q_tickets_in" class="label">Ticket</label
-          ><input id="q_tickets_in" type="text" name="q[tickets_in]" />
-        </div>
-        <div
-          class="string input optional stringish filter_form_field filter_string"
-          id="q_name_contains_input"
-        >
-          <label for="q_name_contains" class="label">Participante</label
-          ><input id="q_name_contains" type="text" name="q[name_contains]" />
-        </div>
-        <div
-          class="string input optional stringish filter_form_field filter_string"
-          id="q_buyer_phone_contains_input"
-        >
-          <label for="q_buyer_phone_contains" class="label">TELÉFONO</label
-          ><input
-            id="q_buyer_phone_contains"
-            type="text"
-            name="q[buyer_phone_contains]"
-          />
-        </div>
-        <div
-          class="date_range input optional stringish filter_form_field filter_date_range"
-          id="q_created_at_input"
-        >
-          <label class="label">Fecha</label>
-          <input
-            placeholder="Desde"
-            size="12"
-            class="datepicker"
-            maxlength="10"
-            type="text"
-            name="q[created_at_gteq_datetime]"
-            id="q_created_at_gteq_datetime"
-          />
-          <input
-            placeholder="Hasta"
-            size="12"
-            class="datepicker"
-            maxlength="10"
-            type="text"
-            name="q[created_at_lteq_datetime]"
-            id="q_created_at_lteq_datetime"
-          />
-        </div>
-        <div
-          class="select input optional filter_form_field filter_select"
-          id="q_expireds_input"
-        >
-          <label for="q_expireds" class="label">Creados hace más de:</label
-          ><select name="q[expireds]" id="q_expireds">
-            <option value="" selected="selected">Cualquiera</option>
-            <option value="2">2 horas</option>
-            <option value="12">12 horas</option>
-            <option value="24">24 horas (1 día)</option>
-            <option value="48">48 horas (2 días)</option>
-            <option value="72">72 horas (3 días)</option>
-            <option value="96">96 horas (4 días)</option>
-          </select>
-        </div>
-        <div
-          class="select input optional filter_form_field filter_select"
-          id="q_status_input"
-        >
-          <label for="q_status" class="label">Status</label
-          ><select name="q[status_eq]" id="q_status">
-            <option value="" selected="selected">Cualquiera</option>
-            <option value="0">Sin Voucher</option>
-            <option value="1">Sin Verificación</option>
-            <option value="2">Verificados</option>
-          </select>
-        </div>
-        <div
-          class="select input optional filter_form_field filter_select"
-          id="q_payment_type_input"
-        >
-          <label for="q_payment_type_id" class="label">Tipo de Pago</label
-          ><select name="q[payment_type_id_eq]" id="q_payment_type_id">
-            <option value="" selected="selected">Cualquiera</option>
-            <option value="4153">NELSON DOMINGUEZ</option>
-            <option value="4481">Wuilson Gonzalez</option>
-            <option value="4483">MarianIVR</option>
-            <option value="4482">Kelwis Rodriguez</option>
-            <option value="4956">CHIPI BIKELIFE</option>
-            <option value="4958">BIZUM ESPAÑA</option>
-          </select>
-        </div>
-        <div
-          class="select input optional filter_form_field filter_select"
-          id="q_mode_input"
-        >
-          <label for="q_mode" class="label">Modo</label
-          ><select name="q[mode_eq]" id="q_mode">
-            <option value="" selected="selected">Cualquiera</option>
-            <option value="0">online</option>
-            <option value="1">offline</option>
-          </select>
-        </div>
-        <div
-          class="select input optional filter_form_field filter_select"
-          id="q_creator_user_input"
-        >
-          <label for="q_creator_user_id" class="label">Creador</label
-          ><select name="q[creator_user_id_eq]" id="q_creator_user_id">
-            <option value="" selected="selected">Cualquiera</option>
-          </select>
-        </div>
-        <div
-          class="string input optional stringish filter_form_field filter_string select_and_search"
-          id="q_notes_input"
-        >
-          <label for="q_notes" class="label">Notas</label
-          ><select name="" id="">
-            <option selected="selected" value="notes_contains">Contiene</option>
-            <option value="notes_equals">Igual a</option>
-            <option value="notes_starts_with">Empieza con</option>
-            <option value="notes_ends_with">Termina con</option></select
-          ><input id="q_notes" type="text" name="q[notes_contains]" />
-        </div>
-        <div class="buttons">
-          <input
-            type="submit"
-            name="commit"
-            value="Filtrar"
-            data-disable-with="Filtrar"
-          /><a class="clear_filters_btn" href="#">Quitar Filtros</a
-          ><input
-            type="hidden"
-            name="order"
-            id="hidden_active_admin_order"
-            value="id_desc"
-          />
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
 {% endblock %}

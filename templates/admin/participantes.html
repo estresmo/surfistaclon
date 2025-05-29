@@ -1,2 +1,171 @@
-{% extends 'admin/base.html' %} {% block title %} Participantes {% endblock title %}
-{% block subtitle %} Participantes {% endblock subtitle %} {% block content %}{% endblock content %}
+{% extends 'admin/base.html' %} {% block title %}
+  Participantes
+{% endblock %}
+{% block subtitle %}
+  Participantes
+{% endblock %}
+
+{% block content %}
+
+  <div id="active_admin_content" class="without_sidebar">
+    <div id="main_content_wrapper">
+      <div id="main_content">
+        <div class="table_tools">
+          <div class="scopes">
+            <ul class="table_tools_segmented_control scope-default-group">
+              <li class="scope all">
+                <a href="/admin/buyers?scope=all" class="table_tools_button">
+                  Todos
+                </a>
+              </li>
+              <li class="scope rifa_activa selected">
+                <a href="/admin/buyers?scope=rifa_activa"
+                  class="table_tools_button">
+                  Rifa Activa
+                </a>
+              </li>
+              <li class="scope rifas_inactivas">
+                <a href="/admin/buyers?scope=rifas_inactivas"
+                  class="table_tools_button">
+                  Rifas Inactivas
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="paginated_collection">
+          <div class="paginated_collection_contents">
+            <div class="index_content">
+              <div class="index_as_table">
+                <table border="0"
+                  cellspacing="0"
+                  cellpadding="0"
+                  id="index_table_buyers"
+                  class="index_table index"
+                  paginator="true">
+                  <thead>
+                    <tr>
+                      <th class="sortable col col-name">
+                        <a href="/admin/buyers?order=name_desc">Nombre</a>
+                      </th>
+                      <th class="sortable col col-phone">
+                        <a href="/admin/buyers?order=phone_desc">Celular</a>
+                      </th>
+                      <th class="sortable col col-email">
+                        <a href="/admin/buyers?order=email_desc">Email</a>
+                      </th>
+                      <th class="sortable col col-location">
+                        <a href="/admin/buyers?order=location_desc">
+                          Ubicación
+                        </a>
+                      </th>
+                      <th class="sortable col col-address">
+                        <a href="/admin/buyers?order=address_desc">Dirección</a>
+                      </th>
+                      <th class="sortable col col-custom_field">
+                        <a href="/admin/buyers?order=custom_field_desc">
+                          Campo Extra
+                        </a>
+                      </th>
+                      <th class="sortable col col-seller">
+                        <a href="/admin/buyers?order=seller_desc">Vendedor</a>
+                      </th>
+                      <th class="sortable col col-total_amount">
+                        <a href="/admin/buyers?order=total_amount_desc">
+                          Pago Total
+                        </a>
+                      </th>
+                      <th class="sortable col col-total_tickets">
+                        <a href="/admin/buyers?order=total_tickets_desc">
+                          Total
+                        </a>
+                      </th>
+                      <th class="col col-purchases">Tickets</th>
+                      <th class="col"></th>
+                      <th class="col col-extra_numbers">Extras</th>
+                      <th class="col col-actions"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="odd" id="buyer_1914825">
+                      <td class="col col-name">Andrés Navarro</td>
+                      <td class="col col-phone">
+                        <a target="_blank"
+                          href="https://api.whatsapp.com/send?phone=%2B5804123154486">
+                          +5804123154486
+                        </a>
+                      </td>
+                      <td class="col col-email"></td>
+                      <td class="col col-location"></td>
+                      <td class="col col-address"></td>
+                      <td class="col col-custom_field"></td>
+                      <td class="col col-seller"></td>
+                      <td class="col col-total_amount">$2.00</td>
+                      <td class="col col-total_tickets">1</td>
+                      <td class="col col-purchases">7149</td>
+                      <td class="col"></td>
+                      <td class="col col-extra_numbers"></td>
+                      <td class="col col-actions">
+                        <div class="table_actions">
+                          <a href="/admin/buyers/1914825">
+                            <i class="fas fa-eye"></i>
+                          </a><a href="/admin/buyers/1914825/edit">
+                            <i class="fas fa-pen"></i>
+                          </a><a data-confirm="¿Confirma que desea eliminar?"
+                            class="trash"
+                            rel="nofollow"
+                            data-method="delete"
+                            href="/admin/buyers/1914825">
+                            <i class="fas fa-trash"></i>
+                          </a>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div id="index_footer">
+            <nav class="pagination">
+              <span class="page current">1</span>
+
+              <span class="page">
+                <a rel="next" href="/admin/buyers?order=id_desc&amp;page=2">
+                  2
+                </a>
+              </span>
+
+              <span class="page">
+                <a href="/admin/buyers?order=id_desc&amp;page=3">3</a>
+              </span>
+
+              <span class="page">
+                <a href="/admin/buyers?order=id_desc&amp;page=4">4</a>
+              </span>
+
+              <span class="page">
+                <a href="/admin/buyers?order=id_desc&amp;page=5">5</a>
+              </span>
+
+              <span class="page gap">…</span>
+
+              <span class="next">
+                <a rel="next" href="/admin/buyers?order=id_desc&amp;page=2">
+                  Sig ›
+                </a>
+              </span>
+
+              <span class="last">
+                <a href="/admin/buyers?order=id_desc&amp;page=108">Fin</a>
+              </span>
+            </nav>
+            <div class="pagination_information">
+              Mostrando Participantes <b>1&nbsp;-&nbsp;10</b> de un total de <b>1075</b>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

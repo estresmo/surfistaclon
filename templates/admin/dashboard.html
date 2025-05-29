@@ -1,2 +1,930 @@
-{% extends 'admin/base.html' %} {% block title %} Dashboard {% endblock title %}
-{% block subtitle %} Dashboard {% endblock subtitle %} {% block content %}{% endblock content %}
+{% extends 'admin/base.html' %} {% block title %}
+  Dashboard
+{% endblock %}
+{% block subtitle %}
+  Dashboard
+{% endblock %}
+
+{% block content %}
+  <div id="active_admin_content" class="without_sidebar">
+    <div id="main_content_wrapper">
+      <div id="main_content">
+        <div class="blank_slate_container" id="dashboard_default_message">
+          <select onchange="refreshDataRaffle();" id="selectRaffle">
+            <option value="3927">COMBO AMOROSO - 2025-06-20</option>
+            <option value="3834">EL COMBO MALIANTEO - 2025-05-29</option>
+            <option value="3636">COMBO FAMILIAR - 2025-04-25</option>
+            <option value="3523">COMBO DEL SHOW - 2025-03-27</option>
+            <option value="3025">EL YT DE LOS PODERES #1 - 2025-03-10</option>
+          </select>
+          <div class="columns">
+            Ticket: $2.00 Dólares Americanos<div style="clear:both;"></div>
+          </div>
+        </div>
+        <div class="columns" id="cardsDashboard">
+          <div class="column" style="width: 23.5%; margin-right: 2%;">
+            <div class="panel">
+              <h3>Total Participantes</h3>
+              <div class="panel_contents">
+                <h1>1076 personas</h1>
+                <span>2025-05-21 - 2025-05-29</span>
+              </div>
+            </div>
+          </div>
+          <div class="column" style="width: 23.5%; margin-right: 2%;">
+            <div class="panel">
+              <h3>Total Tickets Registrados</h3>
+              <div class="panel_contents">
+                <h1>3888 tickets</h1>
+                <span>Disponibles: 6112/10000 online y 0/0 offline</span>
+              </div>
+            </div>
+          </div>
+          <div class="column" style="width: 23.5%; margin-right: 2%;">
+            <div class="panel">
+              <h3>Total por Confirmar</h3>
+              <div class="panel_contents">
+                <h1>$54.00</h1>
+                <span>Total 13 compras con 27 tickets.</span>
+              </div>
+            </div>
+          </div>
+          <div class="column" style="width: 23.5%;">
+            <div class="panel">
+              <h3>Total Confirmado</h3>
+              <div class="panel_contents">
+                <h1>$7,722.00</h1>
+                <span>Total 1356 compras con 3861 tickets.</span>
+              </div>
+            </div>
+          </div>
+          <div style="clear:both;"></div>
+        </div>
+        <div class="columns" id="progressDashboard">
+          <div class="column" style="width: 100.0%;">
+            <div class="panel">
+              <h3>Progreso de Venta 38.88%</h3>
+              <div class="panel_contents">
+                <div id="chart-1"
+                  style="height: 50px; width: 100%; text-align: center; color: #999; line-height: 50px; font-size: 14px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;">
+                  <canvas style="display: block; box-sizing: border-box; height: 50px; width: 1348px;"
+                    width="1348"
+                    height="50"></canvas>
+                </div>
+                <script>
+                  (function () {
+                    if (
+                      document.documentElement.hasAttribute(
+                        "data-turbolinks-preview"
+                      )
+                    )
+                      return;
+                    if (
+                      document.documentElement.hasAttribute(
+                        "data-turbo-preview"
+                      )
+                    )
+                      return;
+
+                    var createChart = function () {
+                      new Chartkick["BarChart"]("chart-1", [["38.88%", 3888]], {
+                        colors: ["#2C435D", "#5ea3d3"],
+                        max: 10000,
+                      });
+                    };
+                    if ("Chartkick" in window) {
+                      createChart();
+                    } else {
+                      window.addEventListener(
+                        "chartkick:load",
+                        createChart,
+                        true
+                      );
+                    }
+                  })();
+                </script>
+              </div>
+            </div>
+          </div>
+          <div style="clear:both;"></div>
+        </div>
+        <div class="columns">
+          <div class="column" style="width: 100.0%;">
+            <div class="panel">
+              <h3>Tickets Registrados</h3>
+              <div class="panel_contents">
+                <div id="graphic"
+                  style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;">
+                  <canvas style="display: block; box-sizing: border-box; height: 300px; width: 1348px;"
+                    width="1348"
+                    height="300"></canvas>
+                </div>
+                <script>
+                  (function () {
+                    if (
+                      document.documentElement.hasAttribute(
+                        "data-turbolinks-preview"
+                      )
+                    )
+                      return;
+                    if (
+                      document.documentElement.hasAttribute(
+                        "data-turbo-preview"
+                      )
+                    )
+                      return;
+
+                    var createChart = function () {
+                      new Chartkick["AreaChart"](
+                        "graphic",
+                        [
+                          ["2025-05-20", 316],
+                          ["2025-05-21", 729],
+                          ["2025-05-22", 432],
+                          ["2025-05-23", 526],
+                          ["2025-05-24", 500],
+                          ["2025-05-25", 358],
+                          ["2025-05-26", 455],
+                          ["2025-05-27", 295],
+                          ["2025-05-28", 277],
+                        ],
+                        { colors: ["#2C435D", "#5ea3d3"] }
+                      );
+                    };
+                    if ("Chartkick" in window) {
+                      createChart();
+                    } else {
+                      window.addEventListener(
+                        "chartkick:load",
+                        createChart,
+                        true
+                      );
+                    }
+                  })();
+                </script>
+              </div>
+            </div>
+          </div>
+          <div style="clear:both;"></div>
+        </div>
+        <div class="columns">
+          <div class="column" style="width: 100.0%;">
+            <div class="panel">
+              <h3>Participantes y Compras</h3>
+              <div class="panel_contents">
+                <div id="chart-2"
+                  style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;">
+                  <canvas style="display: block; box-sizing: border-box; height: 300px; width: 1348px;"
+                    width="1348"
+                    height="300"></canvas>
+                </div>
+                <script>
+                  (function () {
+                    if (
+                      document.documentElement.hasAttribute(
+                        "data-turbolinks-preview"
+                      )
+                    )
+                      return;
+                    if (
+                      document.documentElement.hasAttribute(
+                        "data-turbo-preview"
+                      )
+                    )
+                      return;
+
+                    var createChart = function () {
+                      new Chartkick["LineChart"](
+                        "chart-2",
+                        [
+                          {
+                            name: "Participantes",
+                            data: [
+                              ["2025-05-20", 91],
+                              ["2025-05-21", 245],
+                              ["2025-05-22", 134],
+                              ["2025-05-23", 144],
+                              ["2025-05-24", 122],
+                              ["2025-05-25", 92],
+                              ["2025-05-26", 107],
+                              ["2025-05-27", 75],
+                              ["2025-05-28", 66],
+                            ],
+                          },
+                          {
+                            name: "Compras",
+                            data: [
+                              ["2025-05-20", 89],
+                              ["2025-05-21", 270],
+                              ["2025-05-22", 154],
+                              ["2025-05-23", 183],
+                              ["2025-05-24", 169],
+                              ["2025-05-25", 128],
+                              ["2025-05-26", 162],
+                              ["2025-05-27", 109],
+                              ["2025-05-28", 105],
+                            ],
+                          },
+                        ],
+                        { colors: ["#2C435D", "#5ea3d3"] }
+                      );
+                    };
+                    if ("Chartkick" in window) {
+                      createChart();
+                    } else {
+                      window.addEventListener(
+                        "chartkick:load",
+                        createChart,
+                        true
+                      );
+                    }
+                  })();
+                </script>
+              </div>
+            </div>
+          </div>
+          <div style="clear:both;"></div>
+        </div>
+        <div class="columns">
+          <div class="column" style="width: 49.0%; margin-right: 2%;">
+            <div class="panel">
+              <h3>PAGOS POR CONFIRMAR</h3>
+              <div class="panel_contents">
+                <div id="chart-3"
+                  style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;">
+                  <canvas style="display: block; box-sizing: border-box; height: 300px; width: 644px;"
+                    width="644"
+                    height="300"></canvas>
+                </div>
+                <script>
+                  (function () {
+                    if (
+                      document.documentElement.hasAttribute(
+                        "data-turbolinks-preview"
+                      )
+                    )
+                      return;
+                    if (
+                      document.documentElement.hasAttribute(
+                        "data-turbo-preview"
+                      )
+                    )
+                      return;
+
+                    var createChart = function () {
+                      new Chartkick["BarChart"](
+                        "chart-3",
+                        [
+                          ["PagomóvilBDV - NELSON DOMINGUEZ: $40.00", "40.0"],
+                          [
+                            "Banco Falabella de Chile - Kelwis Rodriguez: $14.00",
+                            "14.0",
+                          ],
+                        ],
+                        {
+                          colors: ["#5ea3d3", "#343c46", "#aeb6c2", "#e6e9ee"],
+                          prefix: "$",
+                        }
+                      );
+                    };
+                    if ("Chartkick" in window) {
+                      createChart();
+                    } else {
+                      window.addEventListener(
+                        "chartkick:load",
+                        createChart,
+                        true
+                      );
+                    }
+                  })();
+                </script>
+              </div>
+            </div>
+          </div>
+          <div class="column" style="width: 49.0%;">
+            <div class="panel">
+              <h3>PAGOS CONFIRMADOS</h3>
+              <div class="panel_contents">
+                <div id="chart-4"
+                  style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;">
+                  <canvas style="display: block; box-sizing: border-box; height: 300px; width: 644px;"
+                    width="644"
+                    height="300"></canvas>
+                </div>
+                <script>
+                  (function () {
+                    if (
+                      document.documentElement.hasAttribute(
+                        "data-turbolinks-preview"
+                      )
+                    )
+                      return;
+                    if (
+                      document.documentElement.hasAttribute(
+                        "data-turbo-preview"
+                      )
+                    )
+                      return;
+
+                    var createChart = function () {
+                      new Chartkick["BarChart"](
+                        "chart-4",
+                        [
+                          [
+                            "PagomóvilBDV - NELSON DOMINGUEZ: $5,180.00",
+                            "5180.0",
+                          ],
+                          ["ZELLE - Wuilson Gonzalez: $1,934.00", "1934.0"],
+                          [
+                            "Banco Falabella de Chile - Kelwis Rodriguez: $304.00",
+                            "304.0",
+                          ],
+                          ["BINANCE - MarianIVR: $158.00", "158.0"],
+                          ["Bizum - España - BIZUM ESPAÑA: $74.00", "74.0"],
+                          [
+                            "BANCO SANTANDER - ESPAÑA - CHIPI BIKELIFE: $72.00",
+                            "72.0",
+                          ],
+                        ],
+                        {
+                          colors: ["#5ea3d3", "#343c46", "#aeb6c2", "#e6e9ee"],
+                          prefix: "$",
+                        }
+                      );
+                    };
+                    if ("Chartkick" in window) {
+                      createChart();
+                    } else {
+                      window.addEventListener(
+                        "chartkick:load",
+                        createChart,
+                        true
+                      );
+                    }
+                  })();
+                </script>
+              </div>
+            </div>
+          </div>
+          <div style="clear:both;"></div>
+        </div>
+        <div class="columns">
+          <div class="column" style="width: 49.0%; margin-right: 2%;">
+            <div class="panel">
+              <h3>Medios de Pago</h3>
+              <div class="panel_contents">
+                <div id="chart-5"
+                  style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;">
+                  <canvas style="display: block; box-sizing: border-box; height: 300px; width: 644px;"
+                    width="644"
+                    height="300"></canvas>
+                </div>
+                <script>
+                  (function () {
+                    if (
+                      document.documentElement.hasAttribute(
+                        "data-turbolinks-preview"
+                      )
+                    )
+                      return;
+                    if (
+                      document.documentElement.hasAttribute(
+                        "data-turbo-preview"
+                      )
+                    )
+                      return;
+
+                    var createChart = function () {
+                      new Chartkick["PieChart"](
+                        "chart-5",
+                        [
+                          ["PagomóvilBDV - NELSON DOMINGUEZ", 1139],
+                          ["ZELLE - Wuilson Gonzalez", 159],
+                          ["Banco Falabella de Chile - Kelwis Rodriguez", 37],
+                          ["BINANCE - MarianIVR", 17],
+                          ["BANCO SANTANDER - ESPAÑA - CHIPI BIKELIFE", 9],
+                          ["Bizum - España - BIZUM ESPAÑA", 8],
+                        ],
+                        { colors: ["#5ea3d3", "#343c46", "#aeb6c2", "#e6e9ee"] }
+                      );
+                    };
+                    if ("Chartkick" in window) {
+                      createChart();
+                    } else {
+                      window.addEventListener(
+                        "chartkick:load",
+                        createChart,
+                        true
+                      );
+                    }
+                  })();
+                </script>
+              </div>
+            </div>
+          </div>
+          <div class="column" style="width: 49.0%;">
+            <div class="panel">
+              <h3>Status de las Compras</h3>
+              <div class="panel_contents">
+                <div id="chart-6"
+                  style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;">
+                  <canvas style="display: block; box-sizing: border-box; height: 300px; width: 644px;"
+                    width="644"
+                    height="300"></canvas>
+                </div>
+                <script>
+                  (function () {
+                    if (
+                      document.documentElement.hasAttribute(
+                        "data-turbolinks-preview"
+                      )
+                    )
+                      return;
+                    if (
+                      document.documentElement.hasAttribute(
+                        "data-turbo-preview"
+                      )
+                    )
+                      return;
+
+                    var createChart = function () {
+                      new Chartkick["PieChart"](
+                        "chart-6",
+                        [
+                          ["Sin Voucher", 1],
+                          ["Sin Verificación", 12],
+                          ["Verificados", 1356],
+                        ],
+                        { colors: ["#5ea3d3", "#343c46", "#aeb6c2", "#e6e9ee"] }
+                      );
+                    };
+                    if ("Chartkick" in window) {
+                      createChart();
+                    } else {
+                      window.addEventListener(
+                        "chartkick:load",
+                        createChart,
+                        true
+                      );
+                    }
+                  })();
+                </script>
+              </div>
+            </div>
+          </div>
+          <div style="clear:both;"></div>
+        </div>
+        <div class="columns">
+          <div class="column" style="width: 49.0%; margin-right: 2%;">
+            <div class="panel">
+              <h3>Participantes con más tickets</h3>
+              <div class="panel_contents">
+                <div id="chart-7"
+                  style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;">
+                  <canvas style="display: block; box-sizing: border-box; height: 300px; width: 644px;"
+                    width="644"
+                    height="300"></canvas>
+                </div>
+                <script>
+                  (function () {
+                    if (
+                      document.documentElement.hasAttribute(
+                        "data-turbolinks-preview"
+                      )
+                    )
+                      return;
+                    if (
+                      document.documentElement.hasAttribute(
+                        "data-turbo-preview"
+                      )
+                    )
+                      return;
+
+                    var createChart = function () {
+                      new Chartkick["BarChart"](
+                        "chart-7",
+                        [
+                          ["Julio Alvarez", 83],
+                          ["Luis Moreno", 30],
+                          ["Alexis García", 25],
+                          ["Erys Rodríguez", 25],
+                          ["Jefferson  Navas", 25],
+                          ["Kelvis Gonzalez", 24],
+                          ["Yoneiker Gutierrez", 22],
+                          ["Kenji José Carpio Blanco", 22],
+                          ["Jackson Rosal", 20],
+                          ["Jose Luis Castro", 20],
+                        ],
+                        { colors: ["#8995a7", "#5ea3d3"] }
+                      );
+                    };
+                    if ("Chartkick" in window) {
+                      createChart();
+                    } else {
+                      window.addEventListener(
+                        "chartkick:load",
+                        createChart,
+                        true
+                      );
+                    }
+                  })();
+                </script>
+              </div>
+            </div>
+          </div>
+          <div class="column" style="width: 49.0%;">
+            <div class="panel">
+              <h3>Días con más ventas</h3>
+              <div class="panel_contents">
+                <div id="chart-8"
+                  style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;">
+                  <canvas style="display: block; box-sizing: border-box; height: 300px; width: 644px;"
+                    width="644"
+                    height="300"></canvas>
+                </div>
+                <script>
+                  (function () {
+                    if (
+                      document.documentElement.hasAttribute(
+                        "data-turbolinks-preview"
+                      )
+                    )
+                      return;
+                    if (
+                      document.documentElement.hasAttribute(
+                        "data-turbo-preview"
+                      )
+                    )
+                      return;
+
+                    var createChart = function () {
+                      new Chartkick["ColumnChart"](
+                        "chart-8",
+                        [
+                          ["dom", 128],
+                          ["lun", 162],
+                          ["mar", 198],
+                          ["mié", 375],
+                          ["jue", 154],
+                          ["vie", 183],
+                          ["sáb", 169],
+                        ],
+                        { colors: ["#8995a7", "#5ea3d3"] }
+                      );
+                    };
+                    if ("Chartkick" in window) {
+                      createChart();
+                    } else {
+                      window.addEventListener(
+                        "chartkick:load",
+                        createChart,
+                        true
+                      );
+                    }
+                  })();
+                </script>
+              </div>
+            </div>
+          </div>
+          <div style="clear:both;"></div>
+        </div>
+        <div class="columns">
+          <div class="column" style="width: 49.0%; margin-right: 2%;">
+            <div class="panel">
+              <h3>Números de Tickets frecuentes</h3>
+              <div class="panel_contents">
+                <div id="chart-9"
+                  style="height: 396px; width: 100%; text-align: center; color: #999; line-height: 396px; font-size: 14px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;">
+                  <canvas style="display: block; box-sizing: border-box; height: 396px; width: 644px;"
+                    width="644"
+                    height="396"></canvas>
+                </div>
+                <script>
+                  (function () {
+                    if (
+                      document.documentElement.hasAttribute(
+                        "data-turbolinks-preview"
+                      )
+                    )
+                      return;
+                    if (
+                      document.documentElement.hasAttribute(
+                        "data-turbo-preview"
+                      )
+                    )
+                      return;
+
+                    var createChart = function () {
+                      new Chartkick["BarChart"](
+                        "chart-9",
+                        [
+                          ["2 tickets", 597],
+                          ["1 tickets", 361],
+                          ["5 tickets", 171],
+                          ["3 tickets", 98],
+                          ["10 tickets", 61],
+                          ["4 tickets", 42],
+                          ["6 tickets", 11],
+                          ["7 tickets", 8],
+                          ["15 tickets", 4],
+                          ["8 tickets", 3],
+                          ["20 tickets", 3],
+                          ["9 tickets", 2],
+                          ["11 tickets", 2],
+                          ["25 tickets", 2],
+                          ["0 tickets", 1],
+                          ["12 tickets", 1],
+                          ["16 tickets", 1],
+                          ["22 tickets", 1],
+                        ],
+                        { colors: ["#5ea3d3", "#343c46", "#aeb6c2", "#e6e9ee"] }
+                      );
+                    };
+                    if ("Chartkick" in window) {
+                      createChart();
+                    } else {
+                      window.addEventListener(
+                        "chartkick:load",
+                        createChart,
+                        true
+                      );
+                    }
+                  })();
+                </script>
+              </div>
+            </div>
+          </div>
+          <div class="column" style="width: 49.0%;">
+            <div class="panel">
+              <h3>Ubicaciones (Participantes)</h3>
+              <div class="panel_contents">
+                <div id="chart-10"
+                  style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;">
+                  <canvas style="display: block; box-sizing: border-box; height: 300px; width: 644px;"
+                    width="644"
+                    height="300"></canvas>
+                </div>
+                <script>
+                  (function () {
+                    if (
+                      document.documentElement.hasAttribute(
+                        "data-turbolinks-preview"
+                      )
+                    )
+                      return;
+                    if (
+                      document.documentElement.hasAttribute(
+                        "data-turbo-preview"
+                      )
+                    )
+                      return;
+
+                    var createChart = function () {
+                      new Chartkick["BarChart"](
+                        "chart-10",
+                        [["NINGUNO", 1076]],
+                        {
+                          colors: ["#5ea3d3", "#343c46", "#aeb6c2", "#e6e9ee"],
+                          label: "Total de Personas",
+                          max: 500,
+                          min: 1,
+                        }
+                      );
+                    };
+                    if ("Chartkick" in window) {
+                      createChart();
+                    } else {
+                      window.addEventListener(
+                        "chartkick:load",
+                        createChart,
+                        true
+                      );
+                    }
+                  })();
+                </script>
+              </div>
+            </div>
+          </div>
+          <div style="clear:both;"></div>
+        </div>
+        <div class="columns">
+          <div class="column" style="width: 49.0%; margin-right: 2%;">
+            <div class="panel">
+              <h3>Vendedores Web (Total de Ventas)</h3>
+              <div class="panel_contents">
+                <div id="chart-11"
+                  style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;">No
+                  data</div>
+                <script>
+                  (function () {
+                    if (
+                      document.documentElement.hasAttribute(
+                        "data-turbolinks-preview"
+                      )
+                    )
+                      return;
+                    if (
+                      document.documentElement.hasAttribute(
+                        "data-turbo-preview"
+                      )
+                    )
+                      return;
+
+                    var createChart = function () {
+                      new Chartkick["BarChart"]("chart-11", [], {
+                        colors: ["#5ea3d3", "#343c46", "#aeb6c2", "#e6e9ee"],
+                        label: "Total de Ventas",
+                      });
+                    };
+                    if ("Chartkick" in window) {
+                      createChart();
+                    } else {
+                      window.addEventListener(
+                        "chartkick:load",
+                        createChart,
+                        true
+                      );
+                    }
+                  })();
+                </script>
+              </div>
+            </div>
+          </div>
+          <div class="column" style="width: 49.0%;">
+            <div class="panel">
+              <h3>Vendedores Web (Total de Tickets)</h3>
+              <div class="panel_contents">
+                <div id="chart-12"
+                  style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;">No
+                  data</div>
+                <script>
+                  (function () {
+                    if (
+                      document.documentElement.hasAttribute(
+                        "data-turbolinks-preview"
+                      )
+                    )
+                      return;
+                    if (
+                      document.documentElement.hasAttribute(
+                        "data-turbo-preview"
+                      )
+                    )
+                      return;
+
+                    var createChart = function () {
+                      new Chartkick["BarChart"]("chart-12", [], {
+                        colors: ["#5ea3d3", "#343c46", "#aeb6c2", "#e6e9ee"],
+                        label: "Total de Tickets",
+                      });
+                    };
+                    if ("Chartkick" in window) {
+                      createChart();
+                    } else {
+                      window.addEventListener(
+                        "chartkick:load",
+                        createChart,
+                        true
+                      );
+                    }
+                  })();
+                </script>
+              </div>
+            </div>
+          </div>
+          <div style="clear:both;"></div>
+        </div>
+        <div class="columns">
+          <div class="column" style="width: 49.0%; margin-right: 2%;">
+            <div class="panel">
+              <h3>Creadores (Total de Ventas)</h3>
+              <div class="panel_contents">
+                <div id="chart-13"
+                  style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;">No
+                  data</div>
+                <script>
+                  (function () {
+                    if (
+                      document.documentElement.hasAttribute(
+                        "data-turbolinks-preview"
+                      )
+                    )
+                      return;
+                    if (
+                      document.documentElement.hasAttribute(
+                        "data-turbo-preview"
+                      )
+                    )
+                      return;
+
+                    var createChart = function () {
+                      new Chartkick["BarChart"]("chart-13", [], {
+                        colors: ["#5ea3d3", "#343c46", "#aeb6c2", "#e6e9ee"],
+                      });
+                    };
+                    if ("Chartkick" in window) {
+                      createChart();
+                    } else {
+                      window.addEventListener(
+                        "chartkick:load",
+                        createChart,
+                        true
+                      );
+                    }
+                  })();
+                </script>
+              </div>
+            </div>
+          </div>
+          <div class="column" style="width: 49.0%;">
+            <div class="panel">
+              <h3>Creadores (Total de Tickets)</h3>
+              <div class="panel_contents">
+                <div id="chart-14"
+                  style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;">No
+                  data</div>
+                <script>
+                  (function () {
+                    if (
+                      document.documentElement.hasAttribute(
+                        "data-turbolinks-preview"
+                      )
+                    )
+                      return;
+                    if (
+                      document.documentElement.hasAttribute(
+                        "data-turbo-preview"
+                      )
+                    )
+                      return;
+
+                    var createChart = function () {
+                      new Chartkick["BarChart"]("chart-14", [], {
+                        colors: ["#5ea3d3", "#343c46", "#aeb6c2", "#e6e9ee"],
+                      });
+                    };
+                    if ("Chartkick" in window) {
+                      createChart();
+                    } else {
+                      window.addEventListener(
+                        "chartkick:load",
+                        createChart,
+                        true
+                      );
+                    }
+                  })();
+                </script>
+              </div>
+            </div>
+          </div>
+          <div style="clear:both;"></div>
+        </div>
+        <div class="columns">
+          <div class="column" style="width: 100.0%;">
+            <div class="panel">
+              <h3>Campo Extra</h3>
+              <div class="panel_contents">
+                <div id="chart-15"
+                  style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;">No
+                  data</div>
+                <script>
+                  (function () {
+                    if (
+                      document.documentElement.hasAttribute(
+                        "data-turbolinks-preview"
+                      )
+                    )
+                      return;
+                    if (
+                      document.documentElement.hasAttribute(
+                        "data-turbo-preview"
+                      )
+                    )
+                      return;
+
+                    var createChart = function () {
+                      new Chartkick["BarChart"]("chart-15", [], {
+                        colors: ["#5ea3d3", "#343c46", "#aeb6c2", "#e6e9ee"],
+                      });
+                    };
+                    if ("Chartkick" in window) {
+                      createChart();
+                    } else {
+                      window.addEventListener(
+                        "chartkick:load",
+                        createChart,
+                        true
+                      );
+                    }
+                  })();
+                </script>
+              </div>
+            </div>
+          </div>
+          <div style="clear:both;"></div>
+        </div>
+        <small id="idRaffle">3927</small>
+      </div>
+    </div>
+  </div>
+{% endblock %}

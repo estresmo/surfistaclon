@@ -1,2 +1,144 @@
-{% extends 'admin/base.html' %} {% block title %} Rifas {% endblock title %}
-{% block subtitle %} Rifas {% endblock subtitle %} {% block content %}{% endblock content %}
+{% extends 'admin/base.html' %} {% block title %}
+  Rifas
+{% endblock %}
+{% block subtitle %}
+  Rifas
+{% endblock %}
+{% block content %}
+  <div id="active_admin_content" class="without_sidebar">
+    <div id="main_content_wrapper">
+      <div id="main_content">
+        <div class="table_tools">
+          <div class="scopes">
+            <ul class="table_tools_segmented_control scope-default-group">
+              <li class="scope all">
+                <a href="/admin/raffles?scope=all" class="table_tools_button">
+                  Todos
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="paginated_collection">
+          <div class="paginated_collection_contents">
+            <div class="index_content">
+              <div class="index_as_table">
+                <table border="0"
+                  cellspacing="0"
+                  cellpadding="0"
+                  id="index_table_raffles"
+                  class="index_table index"
+                  paginator="true">
+                  <thead>
+                    <tr>
+                      <th class="sortable col col-image">
+                        <a href="/admin/raffles?order=image_desc">Imagen</a>
+                      </th>
+                      <th class="sortable col col-name">
+                        <a href="/admin/raffles?order=name_desc">Nombre</a>
+                      </th>
+                      <th class="sortable col col-price_unit">
+                        <a href="/admin/raffles?order=price_unit_desc">
+                          Precio
+                        </a>
+                      </th>
+                      <th class="sortable col col-draw_date">
+                        <a href="/admin/raffles?order=draw_date_desc">
+                          Fecha Rifa
+                        </a>
+                      </th>
+                      <th class="sortable col col-tickets">
+                        <a href="/admin/raffles?order=tickets_desc">Tickets</a>
+                      </th>
+                      <th class="sortable col col-on_quantity">
+                        <a href="/admin/raffles?order=on_quantity_desc">
+                          Cant. Online
+                        </a>
+                      </th>
+                      <th class="sortable col col-opportunities">
+                        <a href="/admin/raffles?order=opportunities_desc">
+                          Oportun.
+                        </a>
+                      </th>
+                      <th class="col col-count_purchases">Vendido</th>
+                      <th class="col col-i_class_fas_fa-list-ol_fa-lg_i_listado">
+                        <i class="fas fa-list-ol fa-lg"></i> Listado
+                      </th>
+                      <th class="col col-i_class_fas_fa-download_fa-lg_i_exportar">
+                        <i class="fas fa-download fa-lg"></i> Exportar
+                      </th>
+                      <th class="sortable col col-active">
+                        <a href="/admin/raffles?order=active_desc">Activo</a>
+                      </th>
+                      <th class="col col-actions"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="odd" id="raffle_3927">
+                      <td class="col col-image">
+                        <a target="_blank"
+                          rel="noopener"
+                          href="https://www.chipibikelife.com/comboamoroso">
+                          <img class="avatar_image"
+                            src="https://rifarito.s3.amazonaws.com/uploads/raffle/image/3927/thumb_b51001823506.jpg?X-Amz-Expires=86400&amp;X-Amz-Date=20250529T010115Z&amp;X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIA43AWIPHKRJMFXTNZ%2F20250529%2Fus-east-1%2Fs3%2Faws4_request&amp;X-Amz-SignedHeaders=host&amp;X-Amz-Signature=51e025e371d363ac7080241390b4b2fba0143ec56140abbad0abf1f37789ea39" />
+                        </a>
+                      </td>
+                      <td class="col col-name">COMBO AMOROSO</td>
+                      <td class="col col-price_unit">$2.00</td>
+                      <td class="col col-draw_date">20 Junio 2025</td>
+                      <td class="col col-tickets">7149, 5691...</td>
+                      <td class="col col-on_quantity">10000</td>
+                      <td class="col col-opportunities">1</td>
+                      <td class="col col-count_purchases">3878</td>
+                      <td class="col col-i_class_fas_fa-list-ol_fa-lg_i_listado">
+                        <div>
+                          <a href="/admin/buyers?commit=Filtrar&amp;order=id_desc&amp;q%5Braffle_id_eq%5D=3927">
+                            <i class="fas fa-users fa-sm"></i>Participantes
+                          </a>
+                        </div>
+                        <div>
+                          <a href="/admin/purchases?commit=Filtrar&amp;order=id_desc&amp;q%5Braffle_id_eq%5D=3927">
+                            <i class="fas fa-ticket-alt fa-sm"></i>Tickets
+                          </a>
+                        </div>
+                      </td>
+                      <td class="col col-i_class_fas_fa-download_fa-lg_i_exportar">
+                        <div>
+                          <a href="/downloaders/purchases?raffle_token=ndsotxC2">
+                            <i class="fas fa-download fa-sm"></i>Participantes
+                          </a>
+                        </div>
+                        <div>
+                          <a href="/downloaders/tickets?raffle_token=ndsotxC2">
+                            <i class="fas fa-download fa-sm"></i>Tickets
+                          </a>
+                        </div>
+                      </td>
+                      <td class="col col-active">
+                        <span class="status_tag yes">Sí</span>
+                      </td>
+                      <td class="col col-actions">
+                        <div class="table_actions">
+                          <a class="edit_link member_link"
+                            title="Editar"
+                            href="/admin/raffles/3927/edit">
+                            Editar
+                          </a>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div id="index_footer">
+            <div class="pagination_information">
+              Mostrando <b>un total de 5</b> Rifas
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

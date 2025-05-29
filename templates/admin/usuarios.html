@@ -1,2 +1,77 @@
-{% extends 'admin/base.html' %} {% block title %} Usuarios {% endblock title %}
-{% block subtitle %} Usuarios {% endblock subtitle %} {% block content %}{% endblock content %}
+{% extends 'admin/base.html' %} {% block title %}
+  Usuarios
+{% endblock %}
+{% block subtitle %}
+  Usuarios
+{% endblock %} {% block content %}
+  <div id="active_admin_content" class="without_sidebar">
+    <div id="main_content_wrapper">
+      <div id="main_content">
+        <div class="paginated_collection">
+          <div class="paginated_collection_contents">
+            <div class="index_content">
+              <div class="index_as_table">
+                <table border="0"
+                  cellspacing="0"
+                  cellpadding="0"
+                  id="index_table_users"
+                  class="index_table index"
+                  paginator="true">
+                  <thead>
+                    <tr>
+                      <th class="sortable col col-name">
+                        <a href="/admin/users?order=name_desc">Nombre</a>
+                      </th>
+                      <th class="sortable col col-email">
+                        <a href="/admin/users?order=email_desc">Email</a>
+                      </th>
+                      <th class="sortable col col-employment">
+                        <a href="/admin/users?order=employment_desc">Cargo</a>
+                      </th>
+                      <th class="sortable col col-phone">
+                        <a href="/admin/users?order=phone_desc">Celular</a>
+                      </th>
+                      <th class="sortable col col-role">
+                        <a href="/admin/users?order=role_desc">Rol</a>
+                      </th>
+                      <th class="sortable col col-active">
+                        <a href="/admin/users?order=active_desc">Activo</a>
+                      </th>
+                      <th class="col col-actions"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="odd" id="user_2812">
+                      <td class="col col-name">Nelson</td>
+                      <td class="col col-email">chipibikelife@gmail.com</td>
+                      <td class="col col-employment">Administración</td>
+                      <td class="col col-phone">9999999</td>
+                      <td class="col col-role">admin</td>
+                      <td class="col col-active">
+                        <span class="status_tag yes">Sí</span>
+                      </td>
+                      <td class="col col-actions">
+                        <div class="table_actions">
+                          <a class="edit_link member_link"
+                            title="Editar"
+                            href="/admin/users/2812/edit">
+                            Editar
+                          </a>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div id="index_footer">
+            <div class="pagination_information">
+              Mostrando <b>1</b> Usuario
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

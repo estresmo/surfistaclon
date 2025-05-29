@@ -1,2 +1,42 @@
-{% extends 'admin/base.html' %} {% block title %} Premios {% endblock title %}
-{% block subtitle %} Premios {% endblock subtitle %} {% block content %}{% endblock content %}
+{% extends 'admin/base.html' %} {% block title %}
+  Premios
+{% endblock %}
+{% block subtitle %}
+  Premios
+{% endblock %}
+{% block content %}
+  <div id="active_admin_content" class="without_sidebar">
+    <div id="main_content_wrapper">
+      <div id="main_content">
+        <div class="table_tools">
+          <div class="scopes">
+            <ul class="table_tools_segmented_control scope-default-group">
+              <li class="scope all">
+                <a href="/admin/awards?scope=all" class="table_tools_button">
+                  Todos
+                </a>
+              </li>
+              <li class="scope rifa_activa selected">
+                <a href="/admin/awards?scope=rifa_activa"
+                  class="table_tools_button">
+                  Rifa Activa
+                </a>
+              </li>
+              <li class="scope rifas_inactivas">
+                <a href="/admin/awards?scope=rifas_inactivas"
+                  class="table_tools_button">
+                  Rifas Inactivas
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="blank_slate_container">
+          <span class="blank_slate">
+            No hay Premios aún. <a href="/admin/awards/new">Añadir</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
