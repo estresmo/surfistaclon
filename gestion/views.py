@@ -1,64 +1,77 @@
-from django.shortcuts import render
+from typing import Optional
+
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Count, Q, Sum
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.generic import View
+from django.views.generic.edit import CreateView
+from django.views.generic.list import ListView
+
+from .forms import FormComprobante, FormEvento, RifaForm
 from .models import (
     Comprobante,
+    Evento,
     MetodosChoices,
     NumeroRifa,
-    StatusChoices,
-    Evento,
     Promocion,
+    StatusChoices,
     Visualizacion,
 )
-from django.views.generic import View
-from django.shortcuts import redirect, get_object_or_404
-from django.template.loader import render_to_string
-from django.http import HttpResponse, HttpRequest
-import base64
-from .forms import FormComprobante, FormEvento
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import login_required
-from django.db.models import Count
-from .utils import send_whatsapp, calcular_monto
-from django.db.models import Sum, Q
-from typing import Optional
+from .utils import calcular_monto, send_whatsapp
 
 
 @login_required
 def inicioView(request: HttpRequest):
     return render(request, "admin/compras.html")
 
+
 @login_required
 def comprasView(request: HttpRequest):
     return render(request, "admin/compras.html")
+
 
 @login_required
 def participantesView(request: HttpRequest):
     return render(request, "admin/participantes.html")
 
-@login_required
-def rifasView(request: HttpRequest):
-    return render(request, "admin/rifas.html")
+
+class RifasListView(LoginRequiredMixin, ListView):
+    template_name = "admin/rifas.html"
+    model = Evento
+    context_object_name = "rifas"
+
+
+class RifasFormView(LoginRequiredMixin, CreateView):
+    template_name = "admin/rifa_form.html"
+    form_class = RifaForm
+    success_url = "/admin/rifas"
+
 
 @login_required
 def dashboardView(request: HttpRequest):
     return render(request, "admin/dashboard.html")
 
+
 @login_required
 def premiosView(request: HttpRequest):
     return render(request, "admin/premios.html")
+
 
 @login_required
 def clienteView(request: HttpRequest):
     return render(request, "admin/cliente.html")
 
+
 @login_required
 def pagosView(request: HttpRequest):
     return render(request, "admin/pagos.html")
 
+
 @login_required
-def usuariosView(request: HttpRequest): 
+def usuariosView(request: HttpRequest):
     return render(request, "admin/usuarios.html")
-
-
 
 
 class EventoView(LoginRequiredMixin, View):
@@ -241,38 +254,6 @@ class ComprobanteView(LoginRequiredMixin, View):
         NumeroRifa.objects.filter(comprobante=comprobante).delete()
         comprobante.delete()
         return HttpResponse("ok")
-
-
-class ComprobantePDF(LoginRequiredMixin, View):
-    def get(self, request, pk):
-        from xhtml2pdf import pisa
-
-        comprobante = get_object_or_404(Comprobante, pk=pk)
-        foto = ""
-        logo = ""
-        if comprobante.foto:
-            foto = base64.b64encode(comprobante.foto.read()).decode("utf-8")
-            logo = base64.b64encode(open("static/img/logo.png", "rb").read()).decode(
-                "utf-8"
-            )
-        context = {
-            "comprobante": comprobante,
-            "foto": foto,
-            "logo": logo,
-        }
-
-        html = render_to_string("operador_pdf.html", context)
-
-        response = HttpResponse(content_type="application/pdf")
-        response["Content-Disposition"] = 'attachment; filename="Ficha de Operador.pdf"'
-
-        # Genera el PDF
-        pisa_status = pisa.CreatePDF(html, dest=response)
-
-        if pisa_status.err:
-            return HttpResponse("Error al generar el PDF")
-
-        return response
 
 
 @login_required

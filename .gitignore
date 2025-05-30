@@ -6,3 +6,4 @@ media/*
 errors.log
 .prettierrc
 waha/
+.vscode/

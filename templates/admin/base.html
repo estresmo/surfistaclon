@@ -1,75 +1,79 @@
+{% load l10n %}
 <!DOCTYPE html>
 <html lang="es" data-lt-installed="true">
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <title>{% block title %} {% endblock title %} | J&J</title>
-    <link
-      rel="stylesheet"
+    <title>
+      {% block title %}
+
+      {% endblock %}| J&J
+    </title>
+    <link rel="stylesheet"
       media="all"
-      href="/static/admin/active_admin-67d2515b05452af71f7cd6bc4b8676d0f8262f836defd71.css"
-    />
-    <link
-      rel="stylesheet"
+      href="/static/admin/active_admin-67d2515b05452af71f7cd6bc4b8676d0f8262f836defd71.css" />
+    <link rel="stylesheet"
       media="screen"
-      href="/static/admin/toast-944c564c38891e42a37c019bb8167f0ccf95fb17d81aa387ed2364.css"
-    />
-    <link
-      rel="stylesheet"
+      href="/static/admin/toast-944c564c38891e42a37c019bb8167f0ccf95fb17d81aa387ed2364.css" />
+    <link rel="stylesheet"
       media="screen"
-      href="/static/admin/modal-bb9dc5f270c6a47d33bc71a7b072bd3524de54e8f57e8cbb7fb03b.css"
-    />
-    <link
-      rel="stylesheet"
+      href="/static/admin/modal-bb9dc5f270c6a47d33bc71a7b072bd3524de54e8f57e8cbb7fb03b.css" />
+    <link rel="stylesheet"
       media="screen"
-      href="/static/admin/coloris-ea0c0f30cba1dea088e71225d9b9df1593e6e99749ca67f70803.css"
-    />
-    <link
-      rel="stylesheet"
+      href="/static/admin/coloris-ea0c0f30cba1dea088e71225d9b9df1593e6e99749ca67f70803.css" />
+    <link rel="stylesheet"
       media="screen"
-      href="/static/admin/admin-9983b8967faf2cb8dde0eba7e58f8c43d426e6f175922d7faebe92.css"
-    />
+      href="/static/admin/admin-9983b8967faf2cb8dde0eba7e58f8c43d426e6f175922d7faebe92.css" />
     <script src="/static/admin/active_admin-b550586ef271a1200a2ff148427efb7ee88bebad4068502d.js"></script>
     <script src="/static/admin/admins-48d98eec6e3ea9c2c238eb8bb696e73e329319117f46c1a7a338de.js"></script>
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=5"
-    />
+    <meta name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=5" />
     <script src="/static/admin/toast-35a19cf853a394e8a1c4b330f694793c55f34f2a8669f6f6e452575.js"></script>
     <script src="/static/admin/modal-fde6df0d09a4d957047f4268039e42109dd83c040f3b4228792d250.js"></script>
     <script src="/static/admin/coloris-bcfbc6a6ac557a151c1f5d91ce62beeabd6db1797783b1b494482.js"></script>
+    {% block head %}
+
+    {% endblock %}
   </head>
-  <body
-    class="index admin_purchases active_admin logged_in admin_namespace"
-    cz-shortcut-listen="true"
-  >
+  <body class="index admin_purchases active_admin logged_in admin_namespace"
+    cz-shortcut-listen="true">
     <div id="wrapper">
       <div class="header" id="header">
         <h1 class="site_title" id="site_title">R</h1>
         <ul class="header-item tabs" id="tabs">
-          <li class="menu_item" id="dashboard">
+          {% with url_name=request.resolver_match.url_name %}
+            <!-- prettier-ignore -->
+            <li class="menu_item {% if url_name == 'dashboard_admin' %}current{% endif %}" id="dashboard">
             <a href="/admin/dashboard">Dashboard</a>
           </li>
-          <li class="menu_item" id="raffles">
+            <!-- prettier-ignore -->
+            <li class="menu_item {% if url_name == 'rifas_admin' %}current{% endif %}" id="raffles">
             <a href="/admin/rifas">Rifas</a>
           </li>
-          <li class="menu_item" id="buyers">
+            <!-- prettier-ignore -->
+            <li class="menu_item {% if url_name == 'participantes_admin' %}current{% endif %}" id="buyers">
             <a href="/admin/participantes">Participantes</a>
           </li>
-          <li class="menu_item current" id="purchases">
+            <!-- prettier-ignore -->
+            <li class="menu_item {% if url_name == 'compras_admin' %}current{% endif %}" id="purchases">
             <a href="/admin/compras">Tickets</a>
           </li>
-          <li class="menu_item" id="awards">
+            <!-- prettier-ignore -->
+            <li class="menu_item {% if url_name == 'premios_admin' %}current{% endif %}" id="awards">
             <a href="/admin/premios">Premios</a>
           </li>
-          <li class="menu_item" id="clients">
+            <!-- prettier-ignore -->
+            <li class="menu_item {% if url_name == 'cliente_admin' %}current{% endif %}" id="clients">
             <a href="/admin/cliente">Cliente</a>
           </li>
-          <li class="menu_item" id="payment_types">
+            <!-- prettier-ignore -->
+            <li class="menu_item {% if url_name == 'pagos_admin' %}current{% endif %}" id="payment_types">
             <a href="/admin/pagos">Pagos</a>
           </li>
-          <li class="menu_item" id="users">
+            <!-- prettier-ignore -->
+            <li class="menu_item {% if url_name == 'usuarios_admin' %}current{% endif %}" id="users">
             <a href="/admin/usuarios">Usuarios</a>
           </li>
+          {% endwith %}
         </ul>
         <ul class="header-item tabs" id="utility_nav">
           <li class="menu_item" id="current_user">
@@ -86,7 +90,11 @@
             <a href="/admin">Admin</a>
             <span class="breadcrumb_sep">/</span>
           </span>
-          <h2 id="page_title">{% block subtitle %} {% endblock subtitle %}</h2>
+          <h2 id="page_title">
+            {% block subtitle %}
+
+            {% endblock %}
+          </h2>
         </div>
         <div id="titlebar_right">
           <div class="action_items">
@@ -95,152 +103,122 @@
         </div>
       </div>
       <div class="flashes"></div>
-        {% block content %} {% endblock content %}
+      {% localize off %}
+      {% block content %}
+
+      {% endblock %}
+      {% endlocalize %}
       <div class="footer" id="footer">
         <p>J & J PRODUCTIONS</p>
       </div>
     </div>
 
     <div id="clr-picker" class="clr-picker">
-      <input
-        id="clr-color-value"
+      <input id="clr-color-value"
         class="clr-color"
         type="text"
         spellcheck="false"
-        aria-label="Color value field"
-      />
-      <div
-        id="clr-color-area"
+        aria-label="Color value field" />
+      <div id="clr-color-area"
         class="clr-gradient"
         role="application"
-        aria-label="Saturation and brightness selector. Use up, down, left and right arrow keys to select."
-      >
+        aria-label="Saturation and brightness selector. Use up, down, left and right arrow keys to select.">
         <div id="clr-color-marker" class="clr-marker" tabindex="0"></div>
       </div>
       <div class="clr-hue">
-        <input
-          id="clr-hue-slider"
+        <input id="clr-hue-slider"
           type="range"
           min="0"
           max="360"
           step="1"
           aria-label="Hue slider"
-          value="180"
-        />
+          value="180" />
         <div id="clr-hue-marker"></div>
       </div>
       <div class="clr-alpha">
-        <input
-          id="clr-alpha-slider"
+        <input id="clr-alpha-slider"
           type="range"
           min="0"
           max="100"
           step="1"
           aria-label="Opacity slider"
-          value="50"
-        />
+          value="50" />
         <div id="clr-alpha-marker"></div>
         <span></span>
       </div>
       <div id="clr-format" class="clr-format">
         <fieldset class="clr-segmented">
           <legend>Color format</legend>
-          <input id="clr-f1" type="radio" name="clr-format" value="hex" /><label
-            for="clr-f1"
-            >Hex</label
-          ><input
-            id="clr-f2"
+          <input id="clr-f1"
             type="radio"
             name="clr-format"
-            value="rgb"
-          /><label for="clr-f2">RGB</label
-          ><input
-            id="clr-f3"
+            value="hex" /><label for="clr-f1">Hex</label><input id="clr-f2"
             type="radio"
             name="clr-format"
-            value="hsl"
-          /><label for="clr-f3">HSL</label><span></span>
+            value="rgb" /><label for="clr-f2">RGB</label><input id="clr-f3"
+            type="radio"
+            name="clr-format"
+            value="hsl" /><label for="clr-f3">HSL</label><span></span>
         </fieldset>
       </div>
       <div id="clr-swatches" class="clr-swatches">
         <div>
-          <button
-            id="clr-swatch-0"
+          <button id="clr-swatch-0"
             aria-labelledby="clr-swatch-label clr-swatch-0"
-            style="color: #264653"
-          >
-            #264653</button
-          ><button
-            id="clr-swatch-1"
+            style="color: #264653">
+            #264653
+          </button><button id="clr-swatch-1"
             aria-labelledby="clr-swatch-label clr-swatch-1"
-            style="color: #2a9d8f"
-          >
-            #2a9d8f</button
-          ><button
-            id="clr-swatch-2"
+            style="color: #2a9d8f">
+            #2a9d8f
+          </button><button id="clr-swatch-2"
             aria-labelledby="clr-swatch-label clr-swatch-2"
-            style="color: #e9c46a"
-          >
-            #e9c46a</button
-          ><button
-            id="clr-swatch-3"
+            style="color: #e9c46a">
+            #e9c46a
+          </button><button id="clr-swatch-3"
             aria-labelledby="clr-swatch-label clr-swatch-3"
-            style="color: #f4a261"
-          >
-            #f4a261</button
-          ><button
-            id="clr-swatch-4"
+            style="color: #f4a261">
+            #f4a261
+          </button><button id="clr-swatch-4"
             aria-labelledby="clr-swatch-label clr-swatch-4"
-            style="color: #e76f51"
-          >
-            #e76f51</button
-          ><button
-            id="clr-swatch-5"
+            style="color: #e76f51">
+            #e76f51
+          </button><button id="clr-swatch-5"
             aria-labelledby="clr-swatch-label clr-swatch-5"
-            style="color: #d62828"
-          >
-            #d62828</button
-          ><button
-            id="clr-swatch-6"
+            style="color: #d62828">
+            #d62828
+          </button><button id="clr-swatch-6"
             aria-labelledby="clr-swatch-label clr-swatch-6"
-            style="color: #023e8a"
-          >
-            #023e8a</button
-          ><button
-            id="clr-swatch-7"
+            style="color: #023e8a">
+            #023e8a
+          </button><button id="clr-swatch-7"
             aria-labelledby="clr-swatch-label clr-swatch-7"
-            style="color: #0077b6"
-          >
-            #0077b6</button
-          ><button
-            id="clr-swatch-8"
+            style="color: #0077b6">
+            #0077b6
+          </button><button id="clr-swatch-8"
             aria-labelledby="clr-swatch-label clr-swatch-8"
-            style="color: #0096c7"
-          >
-            #0096c7</button
-          ><button
-            id="clr-swatch-9"
+            style="color: #0096c7">
+            #0096c7
+          </button><button id="clr-swatch-9"
             aria-labelledby="clr-swatch-label clr-swatch-9"
-            style="color: #00b4d8"
-          >
-            #00b4d8</button
-          ><button
-            id="clr-swatch-10"
+            style="color: #00b4d8">
+            #00b4d8
+          </button><button id="clr-swatch-10"
             aria-labelledby="clr-swatch-label clr-swatch-10"
-            style="color: #48cae4"
-          >
+            style="color: #48cae4">
             #48cae4
           </button>
         </div>
       </div>
-      <button id="clr-clear" class="clr-clear">Clear</button
-      ><button
-        id="clr-color-preview"
+      <button id="clr-clear" class="clr-clear">
+        Clear
+      </button><button id="clr-color-preview"
         class="clr-preview"
-        aria-label="Close color picker"
-      ></button
-      ><span id="clr-open-label" hidden="">Open color picker</span
-      ><span id="clr-swatch-label" hidden="">Color swatch</span>
+        aria-label="Close color picker">
+
+      </button><span id="clr-open-label" hidden="">
+        Open color picker
+      </span><span id="clr-swatch-label" hidden="">Color swatch</span>
     </div>
   </body>
 </html>
