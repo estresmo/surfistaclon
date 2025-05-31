@@ -1,7 +1,7 @@
 # Clientes, Compras, Panel, Pagos, Participantes, Premios, Rifas, User
 from django import forms
 
-from .models import Comprobante, Evento
+from .models import Comprobante, Evento, Cliente
 
 
 class FormComprobante(forms.ModelForm):
@@ -35,6 +35,11 @@ class FormEvento(forms.ModelForm):
 class RifaForm(forms.ModelForm):
     class Meta:
         model = Evento
+        fields = "__all__"
+
+class ClienteForm(forms.ModelForm):
+    class Meta:
+        model = Cliente
         fields = "__all__"
 
 

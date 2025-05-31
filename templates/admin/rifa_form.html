@@ -1,9 +1,17 @@
 {% extends 'admin/base.html' %}
 {% block title %}
-  Nueva Rifa
+  {% if form.instance.pk %}
+    Editar Rifa
+  {% else %}
+    Nueva Rifa
+  {% endif %}
 {% endblock %}
 {% block subtitle %}
-  Nueva Rifa
+  {% if form.instance.pk %}
+    Editar Rifa {{ form.instance.nombre }}
+  {% else %}
+    Nueva Rifa
+  {% endif %}
 {% endblock %}
 {% block head %}
   <style>

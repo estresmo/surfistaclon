@@ -302,56 +302,19 @@
       .clients-subtitle {
         font-weight: 700;
       }
-      .header-title,
-      .pricing-head h4,
-      .clients-title,
-      .contact-title,
-      .pricing-title h2,
-      .blog-title,
-      .services-title {
-        color: #ab1015;
-      }
-
-      .ticket-opcion {
-        color: #d62828;
-        border: 1px solid #f4f4fa;
-        background-color: transparent;
-        font-size: 16px;
-      }
-      .ticket-opcion:disabled {
-        filter: grayscale(100%);
-        background-image: url("/static/img/rocket.svg");
-        background-size: cover;
-        background-color: unset;
-      }
-
-      .ticket-opcion:hover {
-        background-color: #ba83c4;
-      }
-      .ticket-opcion.seleccionado {
-        background-image: url("/static/img/rocket.svg");
-        background-size: cover;
-        background-color: #817ed5;
-      }
     </style>
   </head>
 
   <body>
     <!-- NAVBAR -->
-    {% localize off %} {% include 'rifa/nav.html' %}
+    {% localize off %} {% include 'rifa_detalle/nav.html' %}
     <!-- SECTION LABEL -->
     <div id="top"></div>
     <!-- WRAPPER -->
     <div class="wrapper">
-      {% include 'rifa/header.html' %}
-      <!-- CLIENTS -->
-      {% include 'rifa/disponible.html' %}
-      <!-- LISTA BOLETOS -->
-      {% include 'rifa/lista_boletos.html' %}
+      {% include 'rifa_detalle/header.html' %}
       <!-- VERIFICADOR -->
-      {% include 'rifa/verificar_pago.html' %}
-      <!-- FINALIZADOS -->
-      {% include 'rifa/finalizados.html' %}
+      {% include 'rifa_detalle/verificar_pago.html' %}
       <!-- FOOTER -->
       {% include 'rifa/footer.html' %}
 

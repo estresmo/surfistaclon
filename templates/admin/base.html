@@ -53,6 +53,11 @@
       #wrapper table.index_table th {
         border: none !important;
       }
+      body.admin_purchases .table_actions > a,
+      body.admin_buyers .table_actions > a {
+        padding: 2px 8px;
+        border-radius: 12px;
+      }
     </style>
   </head>
   <body class="index admin_purchases active_admin logged_in admin_namespace"
@@ -82,12 +87,12 @@
             <a href="/admin/compras">Tickets</a>
           </li>
             <!-- prettier-ignore -->
-            <li class="menu_item {% if url_name == 'premios_admin' %}current{% endif %}" id="awards">
+            <!-- <li class="menu_item {% if url_name == 'premios_admin' %}current{% endif %}" id="awards">
             <a href="/admin/premios">Premios</a>
-          </li>
+          </li> -->
             <!-- prettier-ignore -->
-            <li class="menu_item {% if url_name == 'cliente_admin' %}current{% endif %}" id="clients">
-            <a href="/admin/cliente">Cliente</a>
+            <li class="menu_item {% if url_name == 'clientes_admin' %}current{% endif %}" id="clients">
+            <a href="/admin/clientes">Clientes</a>
           </li>
             <!-- prettier-ignore -->
             <li class="menu_item {% if url_name == 'pagos_admin' %}current{% endif %}" id="payment_types">
@@ -103,8 +108,8 @@
           <li class="menu_item" id="current_user">
             <a href="/admin/users/2812">Nelson</a>
           </li>
-          <li class="menu_item" id="logout">
-            <a data-method="get" href="/admin/logout">Salir</a>
+          <li class="menu_item">
+            <a href="#" onclick="logout()">Salir</a>
           </li>
         </ul>
       </div>
@@ -136,6 +141,23 @@
         <p>J & J PRODUCTIONS</p>
       </div>
     </div>
+    <script>
+      function logout() {
+        fetch("{% url 'logout' %}", {
+          method: "POST",
+          credentials: "same-origin",
+          headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              window.location.href = "/admin/login";
+            }
+          });
+      }
+    </script>
     {% block javascript %}
 
     {% endblock %}

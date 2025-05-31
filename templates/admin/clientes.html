@@ -36,21 +36,23 @@
                   </thead>
                   <tbody>
                     <tr class="odd" id="client_2330">
-                      <td class="col col-logo">
-                        <img class="avatar_image"
-                          src="https://rifarito.s3.amazonaws.com/uploads/client/logo/2330/logoMG-20241216-WA0049.png?X-Amz-Expires=86400&amp;X-Amz-Date=20250529T010153Z&amp;X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIA43AWIPHKRJMFXTNZ%2F20250529%2Fus-east-1%2Fs3%2Faws4_request&amp;X-Amz-SignedHeaders=host&amp;X-Amz-Signature=7eacda946fff166673f550f170989921ea84def672c2a9208a856e95aa623b2a" />
-                      </td>
-                      <td class="col col-name">CHIPIBIKELIFE</td>
-                      <td class="col col-location">Caracas</td>
-                      <td class="col col-actions">
-                        <div class="table_actions">
-                          <a class="edit_link member_link"
-                            title="Editar"
-                            href="/admin/clients/2330/edit">
-                            Editar
-                          </a>
-                        </div>
-                      </td>
+                      {% for cliente in clientes %}
+                        <td class="col col-logo">
+                          <img class="avatar_image"
+                            src="{{ cliente.logo.url }}" />
+                        </td>
+                        <td class="col col-name">{{ cliente.nombre }}</td>
+                        <td class="col col-location">{{ cliente.ubicacion }}</td>
+                        <td class="col col-actions">
+                          <div class="table_actions">
+                            <a class="edit_link member_link"
+                              title="Editar"
+                              href="/admin/cliente/{{ cliente.pk }}/">
+                              Editar
+                            </a>
+                          </div>
+                        </td>
+                      {% endfor %}
                     </tr>
                   </tbody>
                 </table>
@@ -59,7 +61,7 @@
           </div>
           <div id="index_footer">
             <div class="pagination_information">
-              Mostrando <b>1</b> Cliente
+              Mostrando <b>{{ clientes|length }}</b> Cliente
             </div>
           </div>
         </div>

@@ -10,7 +10,7 @@ from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
 from django.views.generic.edit import UpdateView
 
-from .forms import FormComprobante, FormEvento, RifaForm
+from .forms import FormComprobante, FormEvento, RifaForm, ClienteForm
 from .models import (
     Comprobante,
     Evento,
@@ -19,6 +19,7 @@ from .models import (
     Promocion,
     StatusChoices,
     Visualizacion,
+    Cliente,
 )
 from .utils import calcular_monto, send_whatsapp
 
@@ -57,6 +58,19 @@ class RifasUpdateView(LoginRequiredMixin, UpdateView):
     model = Evento
 
 
+class ClientesListView(LoginRequiredMixin, ListView):
+    template_name = "admin/clientes.html"
+    model = Cliente
+    context_object_name = "clientes"
+
+
+class ClienteUpdateView(LoginRequiredMixin, UpdateView):
+    template_name = "admin/cliente_form.html"
+    form_class = ClienteForm
+    success_url = "/admin/clientes"
+    model = Cliente
+
+
 @login_required
 def dashboardView(request: HttpRequest):
     return render(request, "admin/dashboard.html")
@@ -66,10 +80,6 @@ def dashboardView(request: HttpRequest):
 def premiosView(request: HttpRequest):
     return render(request, "admin/premios.html")
 
-
-@login_required
-def clienteView(request: HttpRequest):
-    return render(request, "admin/cliente.html")
 
 
 @login_required

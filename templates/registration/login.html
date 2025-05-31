@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Inicio de Sesión</title>
-    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">    <!-- Vendor CSS Files -->
+    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon" /> <!-- Vendor CSS Files -->
 
     <style>
       body {
@@ -106,20 +106,17 @@
       <h2>Iniciar Sesión</h2>
       <form method="post" action="{% url 'login' %}">
         {% csrf_token %}
-        <input
-          type="hidden"
+        <input type="hidden"
           name="next"
-          value="{% url 'comprobantes_admin' %}"
-        />
-        {% if messages %}
-        <ul class="messages">
-          {% for message in messages %}
-          <li>
-            {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{
-            message }}
-          </li>
-          {% endfor %}
-        </ul>
+          value="{{ request.GET.next|default:'/admin/rifas' }}" />
+        {% if form.errors %}
+          <div class="error-messages">
+            {% for field, errors in form.errors.items %}
+              {% for error in errors %}
+                <p>{{ error }}</p>
+              {% endfor %}
+            {% endfor %}
+          </div>
         {% endif %}
         <div class="form-group">
           <label for="username">Usuario</label>
