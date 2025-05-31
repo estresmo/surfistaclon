@@ -30,18 +30,41 @@
     <script src="/static/admin/toast-35a19cf853a394e8a1c4b330f694793c55f34f2a8669f6f6e452575.js"></script>
     <script src="/static/admin/modal-fde6df0d09a4d957047f4268039e42109dd83c040f3b4228792d250.js"></script>
     <script src="/static/admin/coloris-bcfbc6a6ac557a151c1f5d91ce62beeabd6db1797783b1b494482.js"></script>
+    <link rel="shortcut icon" href="/static/img/logo.png" type="image/x-icon" />
     {% block head %}
 
     {% endblock %}
+    <style>
+      .logito {
+        width: 40px;
+        border-radius: 50%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+      form fieldset.inputs ol > li input,
+      form fieldset.inputs ol > li textarea {
+        border: 1px solid #bf8f8f;
+      }
+      form fieldset.inputs ol > li label {
+        color: #753b3b;
+      }
+      #wrapper #header {
+        border: none !important;
+      }
+      #wrapper table.index_table th {
+        border: none !important;
+      }
+    </style>
   </head>
   <body class="index admin_purchases active_admin logged_in admin_namespace"
     cz-shortcut-listen="true">
     <div id="wrapper">
       <div class="header" id="header">
-<img src="/static/img/logo.png"
-     style="border-radius: 50%; width: 100px; height: 100px; object-fit: cover; border: 5px solid #fff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);" />
         <ul class="header-item tabs" id="tabs">
           {% with url_name=request.resolver_match.url_name %}
+            <!-- prettier-ignore -->
+            <li class="menu_item" >
+            <img src="/static/img/logo.png" class="logito" />
+          </li>
             <!-- prettier-ignore -->
             <li class="menu_item {% if url_name == 'dashboard_admin' %}current{% endif %}" id="dashboard">
             <a href="/admin/dashboard">Dashboard</a>
@@ -113,113 +136,8 @@
         <p>J & J PRODUCTIONS</p>
       </div>
     </div>
+    {% block javascript %}
 
-    <div id="clr-picker" class="clr-picker">
-      <input id="clr-color-value"
-        class="clr-color"
-        type="text"
-        spellcheck="false"
-        aria-label="Color value field" />
-      <div id="clr-color-area"
-        class="clr-gradient"
-        role="application"
-        aria-label="Saturation and brightness selector. Use up, down, left and right arrow keys to select.">
-        <div id="clr-color-marker" class="clr-marker" tabindex="0"></div>
-      </div>
-      <div class="clr-hue">
-        <input id="clr-hue-slider"
-          type="range"
-          min="0"
-          max="360"
-          step="1"
-          aria-label="Hue slider"
-          value="180" />
-        <div id="clr-hue-marker"></div>
-      </div>
-      <div class="clr-alpha">
-        <input id="clr-alpha-slider"
-          type="range"
-          min="0"
-          max="100"
-          step="1"
-          aria-label="Opacity slider"
-          value="50" />
-        <div id="clr-alpha-marker"></div>
-        <span></span>
-      </div>
-      <div id="clr-format" class="clr-format">
-        <fieldset class="clr-segmented">
-          <legend>Color format</legend>
-          <input id="clr-f1"
-            type="radio"
-            name="clr-format"
-            value="hex" /><label for="clr-f1">Hex</label><input id="clr-f2"
-            type="radio"
-            name="clr-format"
-            value="rgb" /><label for="clr-f2">RGB</label><input id="clr-f3"
-            type="radio"
-            name="clr-format"
-            value="hsl" /><label for="clr-f3">HSL</label><span></span>
-        </fieldset>
-      </div>
-      <div id="clr-swatches" class="clr-swatches">
-        <div>
-          <button id="clr-swatch-0"
-            aria-labelledby="clr-swatch-label clr-swatch-0"
-            style="color: #264653">
-            #264653
-          </button><button id="clr-swatch-1"
-            aria-labelledby="clr-swatch-label clr-swatch-1"
-            style="color: #2a9d8f">
-            #2a9d8f
-          </button><button id="clr-swatch-2"
-            aria-labelledby="clr-swatch-label clr-swatch-2"
-            style="color: #e9c46a">
-            #e9c46a
-          </button><button id="clr-swatch-3"
-            aria-labelledby="clr-swatch-label clr-swatch-3"
-            style="color: #f4a261">
-            #f4a261
-          </button><button id="clr-swatch-4"
-            aria-labelledby="clr-swatch-label clr-swatch-4"
-            style="color: #e76f51">
-            #e76f51
-          </button><button id="clr-swatch-5"
-            aria-labelledby="clr-swatch-label clr-swatch-5"
-            style="color: #d62828">
-            #d62828
-          </button><button id="clr-swatch-6"
-            aria-labelledby="clr-swatch-label clr-swatch-6"
-            style="color: #023e8a">
-            #023e8a
-          </button><button id="clr-swatch-7"
-            aria-labelledby="clr-swatch-label clr-swatch-7"
-            style="color: #0077b6">
-            #0077b6
-          </button><button id="clr-swatch-8"
-            aria-labelledby="clr-swatch-label clr-swatch-8"
-            style="color: #0096c7">
-            #0096c7
-          </button><button id="clr-swatch-9"
-            aria-labelledby="clr-swatch-label clr-swatch-9"
-            style="color: #00b4d8">
-            #00b4d8
-          </button><button id="clr-swatch-10"
-            aria-labelledby="clr-swatch-label clr-swatch-10"
-            style="color: #48cae4">
-            #48cae4
-          </button>
-        </div>
-      </div>
-      <button id="clr-clear" class="clr-clear">
-        Clear
-      </button><button id="clr-color-preview"
-        class="clr-preview"
-        aria-label="Close color picker">
-
-      </button><span id="clr-open-label" hidden="">
-        Open color picker
-      </span><span id="clr-swatch-label" hidden="">Color swatch</span>
-    </div>
+    {% endblock %}
   </body>
 </html>

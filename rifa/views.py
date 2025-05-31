@@ -10,12 +10,14 @@ from django.conf import settings
 
 def home(request: HttpRequest):
     evento = Evento.obtener_actual()
+    eventos = Evento.objects.only("nombre", "fecha_fin", "foto", "url").all()
     Visualizacion.objects.create(evento=evento)
     agarrados = NumeroRifa.objects.filter(comprobante__evento=evento).prefetch_related(
         "comprobante__evento"
     )
     if evento:
         agarrados = [str(a) for a in agarrados]
+        eventos = eventos.exclude(pk=evento.pk)
     tickets = []
     if evento:
         total_tickets = evento.total_tickets
@@ -26,6 +28,7 @@ def home(request: HttpRequest):
         "tickets": tickets,
         "dolar": dolar,
         "evento": evento,
+        "eventos": eventos,
     }
     return render(request, "rifa/home.html", context)
 

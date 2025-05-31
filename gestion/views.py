@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import View
 from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
+from django.views.generic.edit import UpdateView
 
 from .forms import FormComprobante, FormEvento, RifaForm
 from .models import (
@@ -43,10 +44,17 @@ class RifasListView(LoginRequiredMixin, ListView):
     context_object_name = "rifas"
 
 
-class RifasFormView(LoginRequiredMixin, CreateView):
+class RifasCreateView(LoginRequiredMixin, CreateView):
     template_name = "admin/rifa_form.html"
     form_class = RifaForm
     success_url = "/admin/rifas"
+
+
+class RifasUpdateView(LoginRequiredMixin, UpdateView):
+    template_name = "admin/rifa_form.html"
+    form_class = RifaForm
+    success_url = "/admin/rifas"
+    model = Evento
 
 
 @login_required

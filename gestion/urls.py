@@ -5,7 +5,8 @@ from . import views
 urlpatterns = [
     path("", views.inicioView, name="inicio_admin"),
     path("rifas/", views.RifasListView.as_view(), name="rifas_admin"),
-    path("rifas/crear", views.RifasFormView.as_view(), name="rifas_crear_admin"),
+    path("rifas/crear", views.RifasCreateView.as_view(), name="rifas_crear_admin"),
+    path("rifas/<int:pk>/", views.RifasUpdateView.as_view(), name="rifas_editar_admin"),
     path("participantes/", views.participantesView, name="participantes_admin"),
     path("dashboard/", views.dashboardView, name="dashboard_admin"),
     path("premios/", views.premiosView, name="premios_admin"),
