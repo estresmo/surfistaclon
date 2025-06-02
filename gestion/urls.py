@@ -30,4 +30,6 @@ urlpatterns = [
     path("estadisticas/", views.ventas_y_participantes, name="estadisticas"),
     path("eventos/", views.EventoView.as_view(), name="eventos_admin"),
     path("eventos/<int:pk>/", views.EventoView.as_view(), name="edit_eventos_admin"),
+    path("ojo/", views.ojoView, name="ojo_admin"),
+    path("purchases/", views.purchasesView, name="purchases_admin"),
 ]

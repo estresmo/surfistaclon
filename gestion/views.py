@@ -91,6 +91,16 @@ def pagosView(request: HttpRequest):
 def usuariosView(request: HttpRequest):
     return render(request, "admin/usuarios.html")
 
+@login_required
+def ojoView(request: HttpRequest):
+    return render(request, "admin/ojo.html")
+
+
+@login_required
+def purchasesView(request: HttpRequest):
+    return render(request, "admin/purchases.html")
+
+
 
 class EventoView(LoginRequiredMixin, View):
     template_name = "gestion/eventos.html"
