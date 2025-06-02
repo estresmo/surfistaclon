@@ -7,11 +7,10 @@
 
       <!-- prettier-ignore -->
       <p class="footer-subsection-text clientDescription text-center">{{cliente.descripcion}}</p>
-            <div class="text-center">
+      <div class="text-center">
         <img src="{{ cliente.logo.url }}"
           style="border-radius: 50%; width:50px; max-height: 100px; object-fit: cover;margin:auto" />
       </div>
-
     </div>
     <div class="col-lg-3 col-md-6 footer-subsection">
       <h3 class="footer-subsection-title">Secciones</h3>
@@ -45,14 +44,14 @@
     <div class="col-lg-3 col-md-6 footer-subsection">
       <div class="footer-subsection-2-2">
         <h3 class="footer-subsection-title">Síguenos</h3>
-        <div class="footer-social-media-icons-section">
+        <div class="footer-social-media-icons-section justify-content-center">
           {% if cliente.facebook %}
             <a href="{{ cliente.facebook }}"
               rel="nofollow noopener noreferrer"
               target="_blank"
               title="Facebook"
               class="footer-social-media-icon linkFacebook">
-              <i class="fa fa-facebook"></i>
+              <i class="fab fa-facebook" style="font-size: 26px;"></i>
             </a>
           {% endif %}
           {% if cliente.tiktok %}
@@ -61,14 +60,7 @@
               target="_blank"
               title="TikTok"
               class="footer-social-media-icon linkTiktok">
-              <svg xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="28"
-                fill="currentColor"
-                class="bi bi-tiktok"
-                viewBox="0 0 16 16">
-                <path d="M9 0h1.98c.144.715.54 1.617 1.235 2.512C12.895 3.389 13.797 4 15 4v2c-1.753 0-3.07-.814-4-1.829V11a5 5 0 1 1-5-5v2a3 3 0 1 0 3 3V0Z"></path>
-              </svg>
+              <i class="fab fa-tiktok" style="font-size: 26px;"></i>
             </a>
           {% endif %}
           {% if cliente.twitter %}
@@ -77,7 +69,7 @@
               target="_blank"
               title="Twitter"
               class="footer-social-media-icon linkTwitter">
-              <i class="fa fa-twitter"></i>
+              <i class="fab fa-twitter" style="font-size: 26px;"></i>
             </a>
           {% endif %}
           {% if cliente.youtube %}
@@ -86,7 +78,7 @@
               target="_blank"
               title="YouTube"
               class="footer-social-media-icon linkYoutube">
-              <i class="fa fa-youtube-play"></i>
+              <i class="fab fa-youtube" style="font-size: 26px;"></i>
             </a>
           {% endif %}
           {% if cliente.linkedin %}
@@ -95,7 +87,7 @@
               target="_blank"
               title="Linkedin"
               class="footer-social-media-icon linkLinkedin">
-              <i class="fa fa-linkedin"></i>
+              <i class="fab fa-linkedin" style="font-size: 26px;"></i>
             </a>
           {% endif %}
           {% if cliente.instagram %}
@@ -104,7 +96,7 @@
               target="_blank"
               title="Instagram"
               class="footer-social-media-icon linkInstagram">
-              <i class="fa fa-instagram"></i>
+              <i class="fab fa-instagram" style="font-size: 26px;"></i>
             </a>
           {% endif %}
         </div>
