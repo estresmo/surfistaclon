@@ -197,3 +197,24 @@ async function confirmarTickets(form, event) {
     alert("Error al ordenar los boletos. Por favor intente nuevamente");
   }
 }
+
+function copyToClipboard(text) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        alert("¡Copiado al portapapeles!");
+      })
+      .catch((err) => {
+        console.error("Error al copiar al portapapeles: ", err);
+      });
+  } else {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textArea);
+    alert("¡Copiado al portapapeles!");
+  }
+}

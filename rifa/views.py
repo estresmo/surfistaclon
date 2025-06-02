@@ -2,20 +2,23 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from .models import Dolar
 from django.views.decorators.http import require_POST
-from gestion.models import NumeroRifa, Comprobante, Evento, Visualizacion
+from gestion.models import NumeroRifa, Comprobante, Evento, Visualizacion, Cliente
 from django.http import HttpRequest
 from gestion.utils import send_whatsapp, calcular_monto
 from django.conf import settings
 
 
 def home(request: HttpRequest):
+    cliente = Cliente.objects.first()
     evento = Evento.obtener_actual()
+    eventos = Evento.objects.only("nombre", "fecha_fin", "foto", "url").all()
     Visualizacion.objects.create(evento=evento)
     agarrados = NumeroRifa.objects.filter(comprobante__evento=evento).prefetch_related(
         "comprobante__evento"
     )
     if evento:
         agarrados = [str(a) for a in agarrados]
+        eventos = eventos.exclude(pk=evento.pk)
     tickets = []
     if evento:
         total_tickets = evento.total_tickets
@@ -26,8 +29,20 @@ def home(request: HttpRequest):
         "tickets": tickets,
         "dolar": dolar,
         "evento": evento,
+        "eventos": eventos,
+        "cliente": cliente,
     }
     return render(request, "rifa/home.html", context)
+
+
+def detalle_evento(request: HttpRequest, link: str):
+    evento = Evento.objects.get(url=link)
+    cliente = Cliente.objects.first()
+    context = {
+        "evento": evento,
+        "cliente": cliente,
+    }
+    return render(request, "rifa_detalle/home.html", context)
 
 
 @require_POST

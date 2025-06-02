@@ -1,84 +1,114 @@
-<div id="footer" class="footer-section pb-0" style="background: #d62828">
+<div class="footer-section pb-0" id="footer">
   <div class="container footer-container">
-    <div class="col-lg-3 col-md-6 footer-logo">
-      <h3 class="header-title footer-title">CHIPIBIKELIFEE</h3>
-      <p class="footer-susection-text">
-        <img  src="/static/img/logo.png"
-    style="border-radius: 50%; width: 170px; height: 170px; object-fit: cover;" />
-      </p>
-    </div>
     <div class="col-lg-3 col-md-6 footer-subsection">
-      <div class="footer-subsection-2-1">
-        <h3 class="header-title pixeleado" style="font-size: 30px">
-          Secciones
-        </h3>
-        <pre><p class="footer-subsection-text" style="color: #f8f3f3;" >Inicio</p></pre>
-        <pre><p class="footer-subsection-text" style="color: #f7f3f3;">Lista de boletos</p></pre>
-        <pre><p class="footer-subsection-text" style="color: #f7f1f1;">Verificar boleto</p></pre>
-        <pre><p class="footer-subsection-text" style="color: #fcf9f9;">No le bajen ni un cambio que todos podemos🫂🙌🏻❤️</p></pre>
+      <h3 class="footer-subsection-title clientLegalName">
+        {{ cliente.nombre }}
+      </h3>
+
+      <!-- prettier-ignore -->
+      <p class="footer-subsection-text clientDescription text-center">{{cliente.descripcion}}</p>
+      <div class="text-center">
+        <img src="{{ cliente.logo.url }}"
+          style="border-radius: 50%; width:50px; max-height: 100px; object-fit: cover;margin:auto" />
       </div>
     </div>
     <div class="col-lg-3 col-md-6 footer-subsection">
-      <h3 class="header-title pixeleado" style="font-size: 30px">Contacto</h3>
-      <ul style="list-style: none; padding-left: 0">
-        <li style="display: block">
-          <a
-            href="#"
-            class="linkWebClient"
-            rel="nofollow noopener noreferrer"
-            target="_blank"
-            style="color: rgb(43, 43, 223)"
-          >
-            www.CHIPIBIKELIFEE.com
-          </a>
-        </li>
-        <li style="color: #f1efef">Los Teques, Caracas Venezuela</li>
-        <li style="color: #f7f2f2">+58 4242558344</li>
-      </ul>
-    </div>
-    <div class="col-lg-3 col-md-6 footer-subsection">
-      <div class="footer-subsection-2-2">
-        <h3 class="header-title pixeleado" style="font-size: 30px">Síguenos</h3>
-        <div style="margin-bottom: 0.5em">
-          <a
-            href="https://www.instagram.com/chipi515_bikelife?igsh=dDM3Y2FsMGlpeGV3&utm_source=qr"
-            target="_blank"
-            style="color: rgb(43, 43, 223); font-weight: bold; font-size: 14px"
-          >
-            <i class="fab fa-instagram"></i><span>@chipi515_bikelife</span>
-          </a>
-        </div>
-        <div style="margin-bottom: 0.5em">
-          <a
-            href="https://www.tiktok.com/@chipioropeza515?_t=ZM-8wdGgPitbXB&_r=1"
-            target="_blank"
-            style="color: rgb(38, 38, 230); font-weight: bold"
-          >
-            <i class="fab fa-tiktok"></i><span>@chipioropeza515</span>
-          </a>
-        </div>
-        <div style="margin-bottom: 0.5em">
-          <a
-            href="https://www.facebook.com/share/1G4fDyEXuz/?mibextid=wwXIfr"
-            target="_blank"
-            style="color: rgb(42, 42, 241); font-weight: bold"
-          >
-            <i class="fab fa-facebook"></i><span>@Chipi515bikelifee </span>
-          </a>
-        </div>
+      <h3 class="footer-subsection-title">Secciones</h3>
+      <div class="footer-social-media-menu-section">
+        <a href="#top" class="footer-subsection-text">Inicio</a>
+        <a href="#comprar" class="footer-subsection-text">Lista de Boletos</a>
+        <a href="#tickets" class="footer-subsection-text">
+          Verificar mis Boletos
+        </a>
       </div>
     </div>
 
-    <!-- <a href="#top" class="footer-social-media-icon"><i class="fa fa-linkedin"></i></a> -->
+    <div class="col-lg-3 col-md-6 footer-subsection">
+      <h3 class="footer-subsection-title">Contacto</h3>
+      <ul id="contactLinks" class="footer-subsection-list">
+        <li class="webClient" style="">
+          <a href="https://www.chipibikelifee.com/"
+            class="linkWebClient"
+            rel="nofollow noopener noreferrer"
+            target="_blank">
+            www.chipibikelifee.com/
+          </a>
+        </li>
+        <li>
+          <span class="clientLegalAddress">{{ cliente.ubicacion }}</span>
+        </li>
+        <li>+58 {{ cliente.telefono }}</li>
+      </ul>
+    </div>
+
+    <div class="col-lg-3 col-md-6 footer-subsection">
+      <div class="footer-subsection-2-2">
+        <h3 class="footer-subsection-title">Síguenos</h3>
+        <div class="footer-social-media-icons-section justify-content-center">
+          {% if cliente.facebook %}
+            <a href="{{ cliente.facebook }}"
+              rel="nofollow noopener noreferrer"
+              target="_blank"
+              title="Facebook"
+              class="footer-social-media-icon linkFacebook">
+              <i class="fab fa-facebook" style="font-size: 26px;"></i>
+            </a>
+          {% endif %}
+          {% if cliente.tiktok %}
+            <a href="{{ cliente.tiktok }}"
+              rel="nofollow noopener noreferrer"
+              target="_blank"
+              title="TikTok"
+              class="footer-social-media-icon linkTiktok">
+              <i class="fab fa-tiktok" style="font-size: 26px;"></i>
+            </a>
+          {% endif %}
+          {% if cliente.twitter %}
+            <a href="{{ cliente.twitter }}"
+              rel="nofollow noopener noreferrer"
+              target="_blank"
+              title="Twitter"
+              class="footer-social-media-icon linkTwitter">
+              <i class="fab fa-twitter" style="font-size: 26px;"></i>
+            </a>
+          {% endif %}
+          {% if cliente.youtube %}
+            <a href="{{ cliente.youtube }}"
+              rel="nofollow noopener noreferrer"
+              target="_blank"
+              title="YouTube"
+              class="footer-social-media-icon linkYoutube">
+              <i class="fab fa-youtube" style="font-size: 26px;"></i>
+            </a>
+          {% endif %}
+          {% if cliente.linkedin %}
+            <a href="{{ cliente.linkedin }}"
+              rel="nofollow noopener noreferrer"
+              target="_blank"
+              title="Linkedin"
+              class="footer-social-media-icon linkLinkedin">
+              <i class="fab fa-linkedin" style="font-size: 26px;"></i>
+            </a>
+          {% endif %}
+          {% if cliente.instagram %}
+            <a href="{{ cliente.instagram }}"
+              rel="nofollow noopener noreferrer"
+              target="_blank"
+              title="Instagram"
+              class="footer-social-media-icon linkInstagram">
+              <i class="fab fa-instagram" style="font-size: 26px;"></i>
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
   </div>
   <div>
-    <div class="text-center pb-5">
-      <a
-        style="color: #f8f8f8"
-        href="https://wa.me/584125689351?text=Hola%20quisiera%20crear%20mi%20propia%20pagina%20web"
-      >
-        ¿Quieres tener tu propia página web? Contactanos.</a
-      >
+    <div class="text-center pb-3 pt-2">
+      <a style="color: #f8f8f8"
+        href="https://wa.me/584125689351?text=Hola%20quisiera%20crear%20mi%20propia%20pagina%20web">
+        ¿Quieres tener tu propia página web? Contactanos.
+      </a>
     </div>
   </div>
 </div>

@@ -1,0 +1,149 @@
+{% extends 'admin/base.html' %}
+{% block title %}
+  Editar Cliente
+{% endblock %}
+{% block subtitle %}
+  Editar Cliente
+{% endblock %}
+{% block head %}
+
+{% endblock %}
+
+{% block content %}
+  <div id="active_admin_content" class="without_sidebar">
+    <div id="main_content_wrapper">
+      <div id="main_content">
+        <form enctype="multipart/form-data"
+          class="formtastic raffle"
+          id="edit_raffle"
+          method="post">
+          {% csrf_token %}
+          {% if form.errors %}
+            <div class="error-messages">
+              {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                  <p>{{ error }}</p>
+                {% endfor %}
+              {% endfor %}
+            </div>
+          {% endif %}
+          <fieldset class="inputs">
+            <ol>
+              <li class="string input required stringish">
+                <label class="label">Nombre</label>
+                <input type="text"
+                  value="{{ form.nombre.value|default_if_none:'' }}"
+                  name="nombre" />
+              </li>
+              <li class="text input required">
+                <label class="label">Descripción</label>
+                <!-- prettier-ignore -->
+                <textarea rows="20" class="description" name="descripcion">{{  form.descripcion.value|default_if_none:''}}</textarea>
+              </li>
+              <li class="number input required numeric stringish">
+                <label class="label">Teléfono</label>
+                <input type="number"
+                  name="telefono"
+                  value="{{ form.telefono.value|default_if_none:'' }}" />
+              </li>
+              <li class="file input required">
+                <label class="label">Logo</label>
+                <input accept="image/jpeg, image/jpg, image/webp"
+                  type="file"
+                  onchange="fileChange(this, 'preview-logo')"
+                  name="logo" />
+                <p class="inline-hints">
+                  <img src="{{ form.logo.value.url|default_if_none:'' }}"
+                    id="preview-logo" />
+                </p>
+              </li>
+              <li class="string input required stringish">
+                <label class="label">Ubicación</label>
+                <input type="text"
+                  value="{{ form.ubicacion.value|default_if_none:'' }}"
+                  name="ubicacion" />
+              </li>
+              <li class="file input required">
+                <label class="label">Portada</label>
+                <input accept="image/jpeg, image/jpg, image/webp"
+                  type="file"
+                  onchange="fileChange(this, 'preview-portada')"
+                  name="portada" />
+                <p class="inline-hints">
+                  <img src="{{ form.portada.value.url|default_if_none:'' }}"
+                    id="preview-portada" />
+                </p>
+              </li>
+              <li class="string input stringish">
+                <label class="label">TikTok</label>
+                <input type="text"
+                  value="{{ form.tiktok.value|default_if_none:'' }}"
+                  name="tiktok" />
+              </li>
+              <li class="string input stringish">
+                <label class="label">Facebook</label>
+                <input type="text"
+                  value="{{ form.facebook.value|default_if_none:'' }}"
+                  name="facebook" />
+              </li>
+              <li class="string input stringish">
+                <label class="label">Twitter</label>
+                <input type="text"
+                  value="{{ form.twitter.value|default_if_none:'' }}"
+                  name="twitter" />
+              </li>
+              <li class="string input stringish">
+                <label class="label">YouTube</label>
+                <input type="text"
+                  value="{{ form.youtube.value|default_if_none:'' }}"
+                  name="youtube" />
+              </li>
+              <li class="string input stringish">
+                <label class="label">Instagram</label>
+                <input type="text"
+                  value="{{ form.instagram.value|default_if_none:'' }}"
+                  name="instagram" />
+              </li>
+              <li class="string input stringish">
+                <label class="label">LinkedIn</label>
+                <input type="text"
+                  value="{{ form.linkedin.value|default_if_none:'' }}"
+                  name="linkedin" />
+              </li>
+            </ol>
+          </fieldset>
+          <fieldset class="actions">
+            <ol>
+              <li class="action input_action" id="raffle_submit_action">
+                <input type="submit"
+                  name="commit"
+                  value="Guardar Cliente"
+                  data-disable-with="Guardar Cliente" />
+              </li>
+              <li class="cancel">
+                <a href="/admin/clientes">Cancelar</a>
+              </li>
+            </ol>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block javascript %}
+  <script>
+    function fileChange(input, id) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+          document.getElementById(id).setAttribute("src", e.target.result);
+        };
+
+        reader.readAsDataURL(input.files[0]);
+        document.getElementById("file-label").hidden = true;
+        document.getElementById("file-btn").hidden = true;
+      }
+    }
+  </script>
+{% endblock %}

@@ -20,8 +20,8 @@ class MetodosChoices(models.IntegerChoices):
 
 
 class Evento(models.Model):
-    nombre = models.CharField(max_length=500)
-    url = models.CharField(max_length=500)
+    nombre = models.CharField(max_length=500, unique=True)
+    url = models.CharField(max_length=500, unique=True)
     descripcion = models.TextField()
     precio_unidad = models.FloatField()
     fecha_inicio = models.DateTimeField()
@@ -153,10 +153,19 @@ class Visualizacion(models.Model):
         return f"Visualización de {nombre} en {self.fecha}"
 
 
-# class Clientes(models.Model):
-#     foto = models.ImageField(upload_to="clientes_fotos/", null=True, blank=True)
-#     nombre = models.CharField(max_length=100)
-#     ubicacion = models.CharField(max_length=255)
+class Cliente(models.Model):
+    nombre = models.CharField(max_length=100)
+    descripcion = models.TextField()
+    telefono = models.CharField(max_length=500)
+    logo = models.ImageField(upload_to="cliente/")
+    ubicacion = models.CharField(max_length=255)
+    portada = models.ImageField(upload_to="cliente/")
+    tiktok = models.CharField(max_length=500, blank=True)
+    facebook = models.CharField(max_length=500, blank=True)
+    twitter = models.CharField(max_length=500, blank=True)
+    youtube = models.CharField(max_length=500, blank=True)
+    instagram = models.CharField(max_length=500, blank=True)
+    linkedin = models.CharField(max_length=500, blank=True)
 
 
 # class Compras(models.Model):

@@ -1,218 +1,311 @@
-{% extends 'admin/base.html' %} {% block content %}
-<div id="active_admin_content" class="without_sidebar">
-  <div id="main_content_wrapper">
-    <div id="main_content">
-      <form
-        enctype="multipart/form-data"
-        class="formtastic raffle"
-        id="edit_raffle"
-        method="post"
-      >
-        {% csrf_token %}
-        {% for error in form.errors %}
-          {{error}}
-        {% endfor %}
-        <fieldset class="inputs">
-          <ol>
-            <li class="string input required stringish">
-              <label class="label">Nombre</label>
-              <input type="text" value="" name="nombre" />
-            </li>
-            <li class="string input required stringish">
-              <label class="label">URL Pública</label>
-              <input type="text" name="url" />
-            </li>
-            <li class="text input required">
-              <label class="label">Descripción</label>
-              <textarea
-                rows="20"
-                class="description"
-                name="descripcion"
-              ></textarea>
-            </li>
-            <li class="number input required numeric stringish">
-              <label class="label">Cantidad de boletos</label>
-              <input step="any" type="number" name="total_tickets" />
-            </li>
-            <li class="number input required numeric stringish">
-              <label class="label">Precio</label>
-              <input step="any" type="number" name="precio_unidad" />
-            </li>
+{% extends 'admin/base.html' %}
+{% block title %}
+  {% if form.instance.pk %}
+    Editar Rifa
+  {% else %}
+    Nueva Rifa
+  {% endif %}
+{% endblock %}
+{% block subtitle %}
+  {% if form.instance.pk %}
+    Editar Rifa {{ form.instance.nombre }}
+  {% else %}
+    Nueva Rifa
+  {% endif %}
+{% endblock %}
+{% block head %}
+  <style>
+    #rifa-preview {
+      width: 200px;
+      height: auto;
+      max-width: 100%;
+    }
+  </style>
+{% endblock %}
 
-            <li class="select input required">
-              <label class="label">Moneda</label>
-              <select disabled="disabled">
-                <option selected="selected">Dólares Americanos</option>
-              </select>
-            </li>
-            <li class="number input required numeric stringish">
-              <label class="label">Mínimo de tickets a vender</label>
-              <input step="any" type="number" name="minimo" />
-            </li>
-            <li class="string input optional stringish">
-              <label class="label">Promociones</label>
-              -Por realizar-
-            </li>
-            <li class="datetime_select input required">
-              <fieldset class="fragments">
-                <legend class="label">
-                  <label for="raffle_draw_date_3i">Fecha Inicio</label>
-                </legend>
-                <ol class="fragments-group">
-                  <li class="fragment">
-                    <input type="date" name="fecha_inicio" />
-                  </li>
-                </ol>
-              </fieldset>
-            </li>
-            <li class="datetime_select input optional">
-              <fieldset class="fragments">
-                <legend class="label">
-                  <label for="raffle_end_sale_date_3i">Fecha Final</label>
-                </legend>
-                <ol class="fragments-group">
-                  <li class="fragment">
-                    <input type="date" name="fecha_fin" />
-                  </li>
-                </ol>
-              </fieldset>
-            </li>
-            <li class="string input optional stringish">
-              <label class="label">Dirección</label>
-              <input type="text" name="direccion" />
-            </li>
-            <li class="file input required">
-              <label class="label">Banner</label>
-              <input
-                accept="image/jpeg, image/jpg, image/webp"
-                type="file"
-                name="foto"
-              />
-              <p class="inline-hints">
-                <img src="" />
-              </p>
-            </li>
-            <li class="string input optional stringish">
-              <label class="label">Color Principal</label>
-              <input type="color" name="color_principal" />
-            </li>
-            <li class="string input optional stringish">
-              <label class="label">Color Secundario</label>
-              <div class="clr-field">
-                <input type="color" name="color_secundario" />
-              </div>
-            </li>
-            <li class="string input optional stringish">
-              <label class="label">Color Oscuro</label>
-              <div class="clr-field">
-                <input type="color" name="color_oscuro" />
-              </div>
-            </li>
-            <li
-              class="string input optional stringish"
-              id="raffle_colors_four_input"
-            >
-              <label class="label">Color Texto</label>
-              <div class="clr-field">
-                <input type="color" name="color_texto" />
-              </div>
-            </li>
-            <li
-              class="string input optional stringish"
-              id="raffle_colors_five_input"
-            >
-              <label class="label">Color Hover</label>
-              <div class="clr-field">
-                <input type="color" name="color_hover" />
-              </div>
-            </li>
-            <li class="string input optional stringish">
-              <label class="label">Fondo Header</label>
-              <div class="clr-field">
-                <input type="color" name="color_fondo" />
-              </div>
-            </li>
-            <li class="string input optional stringish">
-              <label class="label">Color Header</label>
-              <div class="clr-field">
-                <input type="color" name="color_header" />
-              </div>
-            </li>
+{% block content %}
+  <div id="active_admin_content" class="without_sidebar">
+    <div id="main_content_wrapper">
+      <div id="main_content">
+        <form enctype="multipart/form-data"
+          class="formtastic raffle"
+          id="edit_raffle"
+          method="post">
+          {% csrf_token %}
+          {% if form.errors %}
+            <div class="error-messages">
+              {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                  <p>{{ error }}</p>
+                {% endfor %}
+              {% endfor %}
+            </div>
+          {% endif %}
+          <fieldset class="inputs">
+            <ol>
+              <li class="string input required stringish">
+                <label class="label">Nombre</label>
+                <input type="text"
+                  value="{{ form.nombre.value|default_if_none:'' }}"
+                  name="nombre" />
+              </li>
+              <li class="string input required stringish">
+                <label class="label">URL Pública</label>
+                <input type="text"
+                  name="url"
+                  value="{{ form.url.value|default_if_none:'' }}" />
+              </li>
+              <li class="text input required">
+                <label class="label">Descripción</label>
+                <!-- prettier-ignore -->
+                <textarea rows="20" class="description" name="descripcion">{{  form.descripcion.value|default_if_none:''}}</textarea>
+              </li>
+              <li class="number input required numeric stringish">
+                <label class="label">Cantidad de boletos</label>
+                <input step="any"
+                  type="number"
+                  name="total_tickets"
+                  value="{{ form.total_tickets.value|default_if_none:'' }}" />
+              </li>
+              <li class="number input required numeric stringish">
+                <label class="label">Precio</label>
+                <input step="any"
+                  type="number"
+                  name="precio_unidad"
+                  value="{{ form.precio_unidad.value|default_if_none:'' }}" />
+              </li>
 
-            <li class="number input required numeric stringish">
-              <label class="label">Horas de espera de Voucher</label
-              ><input step="any" type="number" name="hora_espera" />
-            </li>
-            <li class="boolean input optional">
-              <label>
-                <input type="checkbox" name="eliminar_tickets" />Eliminar
-                Compras sin Pago ⚠️
-              </label>
-              <p class="inline-hints">
-                Activar para ELIMINAR las Compras sin pago. (Se ejecuta cada
-                hora) * ⚠️ Una vez eliminados NO se pueden recuperar!!.
-              </p>
-            </li>
-            <li class="boolean input optional" id="raffle_show_used_input">
-              <label>
-                <input type="checkbox" name="mostrar_ocupados" /> Mostrar
-                Tickets ocupados
-              </label>
-              <p class="inline-hints">
-                Activar para mostrar en negro los tickets ocupados. Desactivar
-                si desea mostrar sólo tickets libres.
-              </p>
-            </li>
-            <li class="boolean input optional">
-              <label>
-                <input type="checkbox" name="permitir_eleccion" />Permitir
-                selección de Tickets</label
-              >
-              <p class="inline-hints">
-                Activar para permitir ELEGIR números de tickets. Desactivar para
-                que sea RANDOM (aleatorio).
-              </p>
-            </li>
-            <li class="boolean input optional">
-              <label>
-                <input type="checkbox" name="permitir_parcial" />Permitir
-                registros Parciales</label
-              >
-              <p class="inline-hints">
-                Activar para permitir registros de TICKETS Incompletos en casos
-                de que algún número ya esté registrado o ya no haya
-                disponibles... (TODOS o NINGUNO)
-              </p>
-            </li>
-            <li class="boolean input optional">
-              <label>
-                <input
-                  type="checkbox"
-                  name="permitir_sin_comprobante"
-                />Bloquear registros Sin Pago</label
-              >
-              <p class="inline-hints">
-                Bloquear nuevos intentos de compras de Participantes que tengan
-                compras SIN PAGO.
-              </p>
-            </li>
-          </ol>
-        </fieldset>
-        <fieldset class="actions">
-          <ol>
-            <li class="action input_action" id="raffle_submit_action">
-              <input
-                type="submit"
-                name="commit"
-                value="Guardar Rifa"
-                data-disable-with="Guardar Rifa"
-              />
-            </li>
-            <li class="cancel"><a href="/admin/rifas">Cancelar</a></li>
-          </ol>
-        </fieldset>
-      </form>
+              <li class="select input required">
+                <label class="label">Moneda</label>
+                <select disabled="disabled" name="moneda">
+                  <option selected="selected" value="Dólares Americanos">Dólares
+                    Americanos</option>
+                </select>
+              </li>
+              <li class="number input required numeric stringish">
+                <label class="label">Mínimo tickets por participante</label>
+                <input step="any"
+                  type="number"
+                  name="minimo"
+                  value="{{ form.minimo.value|default_if_none:'' }}" />
+              </li>
+              <li class="string input optional stringish">
+                <label class="label">Promociones</label>
+                -Por realizar-
+              </li>
+              <li class="datetime_select input required">
+                <fieldset class="fragments">
+                  <legend class="label">
+                    <label for="raffle_draw_date_3i">Fecha Inicio</label>
+                  </legend>
+                  <ol class="fragments-group">
+                    <li class="fragment">
+                      <!-- prettier-ignore -->
+                      <input type="date" name="fecha_inicio" value="{{ form.fecha_inicio.value|date:'Y-m-d'|default_if_none:'' }}" />
+                    </li>
+                  </ol>
+                </fieldset>
+              </li>
+              <li class="datetime_select input optional">
+                <fieldset class="fragments">
+                  <legend class="label">
+                    <label for="raffle_end_sale_date_3i">Fecha Final</label>
+                  </legend>
+                  <ol class="fragments-group">
+                    <li class="fragment">
+                      <!-- prettier-ignore -->
+                      <input type="date" name="fecha_fin" value="{{ form.fecha_fin.value|date:'Y-m-d'|default_if_none:'' }}" />
+                    </li>
+                  </ol>
+                </fieldset>
+              </li>
+              <li class="string input optional stringish">
+                <label class="label">Dirección</label>
+                <input type="text"
+                  name="direccion"
+                  value="{{ form.direccion.value|default_if_none:'' }}" />
+              </li>
+              <li class="file input required">
+                <label class="label">Banner</label>
+                <input accept="image/jpeg, image/jpg, image/webp"
+                  type="file"
+                  onchange="fileChange(this)"
+                  name="foto" />
+                <p class="inline-hints">
+                  <img src="{{ form.foto.value.url|default_if_none:'' }}"
+                    id="rifa-preview" />
+                </p>
+              </li>
+              <li class="string input optional stringish">
+                <label class="label">Color Principal</label>
+                <!-- prettier-ignore -->
+                <input 
+                type="color" 
+                name="color_principal" 
+                value="{{ form.color_principal.value|default_if_none:'#000000' }}" />
+              </li>
+              <li class="string input optional stringish">
+                <label class="label">Color Secundario</label>
+                <div class="clr-field">
+                  <input type="color"
+                    name="color_secundario"
+                    value="{{ form.color_secundario.value|default_if_none:
+                      '#000000'
+                     }}" />
+                </div>
+              </li>
+              <li class="string input optional stringish">
+                <label class="label">Color Oscuro</label>
+                <div class="clr-field">
+                  <input type="color"
+                    name="color_oscuro"
+                    value="{{ form.color_oscuro.value|default_if_none:
+                      '#000000'
+                     }}" />
+                </div>
+              </li>
+              <li class="string input optional stringish"
+                id="raffle_colors_four_input">
+                <label class="label">Color Texto</label>
+                <div class="clr-field">
+                  <!-- prettier-ignore -->
+                  <input type="color"
+                    name="color_texto"
+                    value="{{ form.color_texto.value|default_if_none:'#000000'}}" />
+                </div>
+              </li>
+              <li class="string input optional stringish"
+                id="raffle_colors_five_input">
+                <label class="label">Color Hover</label>
+                <div class="clr-field">
+                  <!-- prettier-ignore -->
+                  <input type="color"
+                    name="color_hover"
+                    value="{{ form.color_hover.value|default_if_none:'#000000'}}" />
+                </div>
+              </li>
+              <li class="string input optional stringish">
+                <label class="label">Fondo Header</label>
+                <div class="clr-field">
+                  <!-- prettier-ignore -->
+                  <input type="color"
+                    name="color_fondo"
+                    value="{{ form.color_fondo.value|default_if_none:'#000000'}}" />
+                </div>
+              </li>
+              <li class="string input optional stringish">
+                <label class="label">Color Header</label>
+                <div class="clr-field">
+                  <input type="color"
+                    name="color_header"
+                    value="{{ form.color_header.value|default_if_none:
+                      '#000000'
+                     }}" />
+                </div>
+              </li>
+
+              <li class="number input required numeric stringish">
+                <label class="label">Horas de espera de Voucher</label><input step="any"
+                  type="number"
+                  name="hora_espera"
+                  value="{{ form.hora_espera.value|default_if_none:'' }}" />
+              </li>
+              <li class="boolean input optional">
+                <label>
+                  {% if form.eliminar_tickets.value %}
+                    <input type="checkbox" name="eliminar_tickets" checked />
+                  {% else %}
+                    <input type="checkbox" name="eliminar_tickets" />
+                  {% endif %}Eliminar Compras sin Pago ⚠️
+                </label>
+                <p class="inline-hints">Activar para ELIMINAR las Compras sin
+                  pago. (Se ejecuta cada hora) * ⚠️ Una vez eliminados NO se
+                  pueden recuperar!!.</p>
+              </li>
+              <li class="boolean input optional" id="raffle_show_used_input">
+                <label>
+                  {% if form.mostrar_ocupados.value %}
+                    <input type="checkbox" name="mostrar_ocupados" checked />
+                  {% else %}
+                    <input type="checkbox" name="mostrar_ocupados" />
+                  {% endif %}Mostrar Tickets ocupados
+                </label>
+                <p class="inline-hints">Activar para mostrar en negro los
+                  tickets ocupados. Desactivar si desea mostrar sólo tickets
+                  libres.</p>
+              </li>
+              <li class="boolean input optional">
+                <label>
+                  {% if form.permitir_eleccion.value %}
+                    <input type="checkbox" name="permitir_eleccion" checked />
+                  {% else %}
+                    <input type="checkbox" name="permitir_eleccion" />
+                  {% endif %}Permitir selección de Tickets
+                </label>
+                <p class="inline-hints">Activar para permitir ELEGIR números de
+                  tickets. Desactivar para que sea RANDOM (aleatorio).</p>
+              </li>
+              <li class="boolean input optional">
+                <label>
+                  {% if form.permitir_parcial.value %}
+                    <input type="checkbox" name="permitir_parcial" checked />
+                  {% else %}
+                    <input type="checkbox" name="permitir_parcial" />
+                  {% endif %}Permitir registros Parciales
+                </label>
+                <p class="inline-hints">Activar para permitir registros de
+                  TICKETS Incompletos en casos de que algún número ya esté
+                  registrado o ya no haya disponibles... (TODOS o NINGUNO)</p>
+              </li>
+              <li class="boolean input optional">
+                <label>
+                  {% if form.permitir_sin_comprobante.value %}
+                    <input type="checkbox"
+                      name="permitir_sin_comprobante"
+                      checked />
+                  {% else %}
+                    <input type="checkbox" name="permitir_sin_comprobante" />
+                  {% endif %}Bloquear registros Sin Pago
+                </label>
+                <p class="inline-hints">Bloquear nuevos intentos de compras de
+                  Participantes que tengan compras SIN PAGO.</p>
+              </li>
+            </ol>
+          </fieldset>
+          <fieldset class="actions">
+            <ol>
+              <li class="action input_action" id="raffle_submit_action">
+                <input type="submit"
+                  name="commit"
+                  value="Guardar Rifa"
+                  data-disable-with="Guardar Rifa" />
+              </li>
+              <li class="cancel">
+                <a href="/admin/rifas">Cancelar</a>
+              </li>
+            </ol>
+          </fieldset>
+        </form>
+      </div>
     </div>
   </div>
-</div>
-{% endblock content %}
+{% endblock %}
+{% block javascript %}
+  <script>
+    function fileChange(input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+          document
+            .getElementById("rifa-preview")
+            .setAttribute("src", e.target.result);
+        };
+
+        reader.readAsDataURL(input.files[0]);
+        document.getElementById("file-label").hidden = true;
+        document.getElementById("file-btn").hidden = true;
+      }
+    }
+  </script>
+{% endblock %}

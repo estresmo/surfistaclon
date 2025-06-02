@@ -20,7 +20,9 @@
   <div id="active_admin_content" class="without_sidebar">
     <div id="main_content_wrapper">
       <div id="main_content">
-        <button class="btn-add">Crear</button>
+        <button class="btn-add" onclick="location.href='/admin/rifas/crear'">
+          <i class="fas fa-plus"></i> Nueva Rifa
+        </button>
         <div class="paginated_collection">
           <div class="paginated_collection_contents">
             <div class="index_content">
@@ -112,7 +114,7 @@
                           <div class="table_actions">
                             <a class="edit_link member_link"
                               title="Editar"
-                              href="#">
+                              href="/admin/rifas/{{ rifa.pk }}/">
                               Editar
                             </a>
                           </div>
@@ -126,7 +128,7 @@
           </div>
           <div id="index_footer">
             <div class="pagination_information">
-              Mostrando <b>un total de 5</b> Rifas
+              Mostrando <b>un total de {{ rifas|length }}</b> Rifas
             </div>
           </div>
         </div>
