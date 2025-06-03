@@ -38,4 +38,7 @@ urlpatterns = [
     path("eventos/<int:pk>/", views.EventoView.as_view(), name="edit_eventos_admin"),
     path("ojo/", views.ojoView, name="ojo_admin"),
     path("purchases/", views.purchasesView, name="purchases_admin"),
+    path("cliente/crear", views.ClienteCreateView.as_view(), name="cliente_crear_admin"),
+    
+     
 ]

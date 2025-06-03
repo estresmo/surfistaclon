@@ -49,7 +49,12 @@ class RifasCreateView(LoginRequiredMixin, CreateView):
     template_name = "admin/rifa_form.html"
     form_class = RifaForm
     success_url = "/admin/rifas"
-
+    
+class ClienteCreateView(LoginRequiredMixin, CreateView):
+    template_name = "admin/cliente_form.html"
+    form_class = ClienteForm
+    success_url = "/admin/cliente"   
+    
 
 class RifasUpdateView(LoginRequiredMixin, UpdateView):
     template_name = "admin/rifa_form.html"
