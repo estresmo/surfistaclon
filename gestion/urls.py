@@ -10,24 +10,16 @@ urlpatterns = [
     path("rifas/<int:pk>/", views.RifasUpdateView.as_view(), name="rifas_editar_admin"),
     path("metodos/", views.MetodosListView.as_view(), name="metodos_admin"),
     path("metodos/crear", views.MetodoCreateView.as_view(), name="metodos_crear_admin"),
-    path(
-        "metodos/<int:pk>/",
-        views.MetodoUpdateView.as_view(),
-        name="metodos_editar_admin",
-    ),
+    path("metodos/<int:pk>/", views.MetodoUpdateView.as_view()),
     path("compras/", views.ComprasListView.as_view(), name="compras_admin"),
-    path("compras/crear", views.ComprasListView.as_view(), name="compras_crear_admin"),
-    path(
-        "compras/<int:pk>", views.ComprasListView.as_view(), name="compras_crear_admin"
-    ),
+    path("compras/crear", views.ComprasCreateView.as_view()),
+    path("compras/<int:pk>", views.ComprasUpdateView.as_view()),
+    path("compras/eliminar/<int:pk>", views.eliminar_compra),
+    path("verificar/<int:pk>", views.verificar_comprobante, name="verificar_admin"),
     path("participantes/", views.participantesView, name="participantes_admin"),
     path("dashboard/", views.dashboardView, name="dashboard_admin"),
     path("clientes/", views.ClientesListView.as_view(), name="clientes_admin"),
-    path(
-        "cliente/<int:pk>/",
-        views.ClienteUpdateView.as_view(),
-        name="clientes_editar_admin",
-    ),
+    path("cliente/<int:pk>/", views.ClienteUpdateView.as_view()),
     path("usuarios/", views.usuariosView, name="usuarios_admin"),
     # path("", views.inicioView, name="inicio_admin"),
     path("comprobantes/", views.ComprobanteView.as_view(), name="comprobantes_admin"),
@@ -41,7 +33,7 @@ urlpatterns = [
     path("eventos/<int:pk>/", views.EventoView.as_view(), name="edit_eventos_admin"),
     path("ojo/", views.ojoView, name="ojo_admin"),
     path("purchases/", views.purchasesView, name="purchases_admin"),
-    path("cliente/crear", views.ClienteCreateView.as_view(), name="cliente_crear_admin"),
-    
-     
+    path(
+        "cliente/crear", views.ClienteCreateView.as_view(), name="cliente_crear_admin"
+    ),
 ]

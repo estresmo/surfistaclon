@@ -3,8 +3,10 @@ from typing import Optional
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count, Q, Sum
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
+from django.views.decorators.http import require_POST
 from django.views.generic import View
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
@@ -51,12 +53,13 @@ class RifasCreateView(LoginRequiredMixin, CreateView):
     template_name = "admin/rifa_form.html"
     form_class = RifaForm
     success_url = "/admin/rifas"
-    
+
+
 class ClienteCreateView(LoginRequiredMixin, CreateView):
     template_name = "admin/cliente_form.html"
     form_class = ClienteForm
-    success_url = "/admin/cliente"   
-    
+    success_url = "/admin/cliente"
+
 
 class RifasUpdateView(LoginRequiredMixin, UpdateView):
     template_name = "admin/rifa_form.html"
@@ -115,6 +118,40 @@ class ComprasUpdateView(LoginRequiredMixin, UpdateView):
     form_class = CompraForm
     success_url = "/admin/compras"
     model = Comprobante
+
+
+@login_required
+@require_POST
+def eliminar_compra(request: HttpRequest, pk: int):
+    comprobante = get_object_or_404(Comprobante, pk=pk)
+    NumeroRifa.objects.filter(comprobante=comprobante).delete()
+    comprobante.delete()
+    return JsonResponse({"result": "ok"})
+
+
+@login_required
+def verificar_comprobante(request: HttpRequest, pk: int):
+    if request.method == "POST":
+        comprobante = Comprobante.objects.get(pk=pk)
+        if comprobante.status != StatusChoices.VERIFICADO:
+            comprobante.status = StatusChoices.VERIFICADO
+            fecha_actual = timezone.now()
+            comprobante.fecha_verificacion = fecha_actual
+            comprobante.save(update_fields=("status", "fecha_verificacion"))
+            queryset = comprobante.boletos.values_list("numero", flat=True)
+            boletos = (str(item) for item in queryset)
+            msg = (
+                "Su comprobante ha sido "
+                + comprobante.get_status_display()  # type: ignore
+                + ". Los boletos verificados son "
+                + " ,".join(boletos)
+            )
+            send_whatsapp(comprobante.telefono, msg)
+            hora = fecha_actual.strftime("%I:%M %p")
+            fecha = fecha_actual.strftime("%d %B %Y")
+            return JsonResponse({"result": "ok", "fecha": fecha, "hora": hora})
+        return JsonResponse({"result": "verificado"})
+    return render(request, "admin/verificar.html")
 
 
 @login_required

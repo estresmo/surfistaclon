@@ -111,6 +111,9 @@ class MetodoPago(models.Model):
                 con_contenido.append(c)
         return con_contenido
 
+    def __str__(self):
+        return self.banco
+
 
 # Create your models here.
 class Comprobante(models.Model):
@@ -129,10 +132,15 @@ class Comprobante(models.Model):
     historial = HistoricalRecords()
     evento = models.ForeignKey(Evento, models.RESTRICT, null=False)
     monto = models.FloatField(default=0)
+    fecha_verificacion = models.DateTimeField(null=True)
 
     @property
     def boletos(self):
         return NumeroRifa.objects.filter(comprobante=self)
+
+    @property
+    def verificado(self):
+        return self.status == StatusChoices.VERIFICADO
 
     def __str__(self):
         return self.nombre
