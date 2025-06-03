@@ -19,8 +19,7 @@
                 </a>
               </li>
               <li class="scope rifas_inactivas">
-                <a href="?scope=rifas_inactivas"
-                  class="table_tools_button">
+                <a href="?scope=rifas_inactivas" class="table_tools_button">
                   Rifas Inactivas
                 </a>
               </li>
@@ -74,73 +73,78 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <!-- <tr class="odd" id="purchase_2248063">
-                      <td class="col col-buyer">
-                        <a title="Anthony Gutierrez"
-                          href="/admin/buyers/1886932">
-                          Anthony Gutierrez +5804121295448
-                        </a>
-                      </td>
-                      <td class="col col-created_at">
-                        11:54&nbsp;am<br /><small>24 MAY 2025</small>
-                      </td>
-                      <td class="col col-verify_date"></td>
-                      <td class="col col-payment_type">
-                        PagomóvilBDV <br /><small>NELSON DOMINGUE...</small>
-                      </td>
-                      <td class="col col-quantity">1</td>
-                      <td class="col col-amount">
-                        <a rel="modal:open"
-                          onclick="loadImageModal('https://rifarito.s3.amazonaws.com/uploads/purchase/file/2248063/1748102018443.jpg?X-Amz-Expires=86400&amp;X-Amz-Date=20250524T160136Z&amp;X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIA43AWIPHKRJMFXTNZ%2F20250524%2Fus-east-1%2Fs3%2Faws4_request&amp;X-Amz-SignedHeaders=host&amp;X-Amz-Signature=823fb25a0c47ecb1e6e524180a3be82521bd878051cefd361b172b61c3765f4d')"
-                          href="#containerDivVoucher">
-                          <strong>$2.00</strong>
-                        </a>
-                      </td>
-                      <td class="col col-verify">
-                        <a onclick="verifyPurchase(event, this, 'm4hUYngs8POQA1BO', 2248063, 2812)"
-                          class="pending"
-                          href="#">
-                          <i class="fas fa-check fa-lg"></i>
-                        </a>
-                      </td>
-                      <td class="col col-whatsapp">
-                        <div class="btn_container_links">
-                          <div>
-                            <a target="_blank"
-                              title="Recordar Pago"
-                              class="orange"
-                              href="https://api.whatsapp.com/send?phone=+5804121295448&amp;text=Hola+Anthony+Gutierrez+%2C+no+pierdas+tu+oportunidad+de+ganar+con+tus+n%C3%BAmeros+elegidos+en+COMBO+AMOROSO%2C+completa+el+pago+por+favor%2C+no+dejes+ir+tu+suerte.+https%3A%2F%2Fwww.chipibikelife.com%2Fcomboamoroso%2304121295448">
-                              <i class="fab fa-whatsapp fa-2x"></i>
-                            </a>
-                          </div>
-                          <div>
-                            <a target="_blank"
-                              title="Boleto Digital"
-                              class="external_link"
-                              href="/comboamoroso#04121295448">
-                              <i class="fas fa-ticket-alt fa-2x"></i>
-                            </a>
-                          </div>
-                        </div>
-                      </td>
-                      <td class="col col-tickets">8311</td>
-                      <td class="col"></td>
-                      <td class="col col-extra_numbers"></td>
-                      <td class="col col-notes"></td>
-                      <td class="col col-actions">
-                        <div class="table_actions">
-                          <a href="/admin/purchases/2248063/edit">
-                            <i class="fas fa-pen"></i>
-                          </a><a data-confirm="¿Confirma que desea eliminar?"
-                            class="trash"
-                            rel="nofollow"
-                            data-method="delete"
-                            href="/admin/purchases/2248063">
-                            <i class="fas fa-trash"></i>
+                    {% for compra in compras %}
+                      <tr class="odd">
+                        <td class="col col-buyer">
+                          <a title="Anthony Gutierrez"
+                            href="/admin/participantes/detalle?nombre={{ compra.nombre|urlencode }}&telefono={{ compra.telefono|urlencode }}">
+                            {{ compra.nombre|title }} +{{ compra.telefono }}
                           </a>
-                        </div>
-                      </td>
-                    </tr> -->
+                        </td>
+                        <td class="col col-created_at">
+                          {{ compra.fecha|date:'h:i A' }}
+                          11:54&nbsp;am<br /><small>{{
+                              compra.fecha|date:'d F Y'
+                            }}</small>
+                        </td>
+                        <td class="col col-verify_date"></td>
+                        <td class="col col-payment_type">
+                          PagomóvilBDV <br /><small>NELSON DOMINGUE...</small>
+                        </td>
+                        <td class="col col-quantity">1</td>
+                        <td class="col col-amount">
+                          <a rel="modal:open"
+                            onclick="loadImageModal('https://rifarito.s3.amazonaws.com/uploads/purchase/file/2248063/1748102018443.jpg?X-Amz-Expires=86400&amp;X-Amz-Date=20250524T160136Z&amp;X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIA43AWIPHKRJMFXTNZ%2F20250524%2Fus-east-1%2Fs3%2Faws4_request&amp;X-Amz-SignedHeaders=host&amp;X-Amz-Signature=823fb25a0c47ecb1e6e524180a3be82521bd878051cefd361b172b61c3765f4d')"
+                            href="#containerDivVoucher">
+                            <strong>$2.00</strong>
+                          </a>
+                        </td>
+                        <td class="col col-verify">
+                          <a onclick="verifyPurchase(event, this, 'm4hUYngs8POQA1BO', 2248063, 2812)"
+                            class="pending"
+                            href="#">
+                            <i class="fas fa-check fa-lg"></i>
+                          </a>
+                        </td>
+                        <td class="col col-whatsapp">
+                          <div class="btn_container_links">
+                            <div>
+                              <a target="_blank"
+                                title="Recordar Pago"
+                                class="orange"
+                                href="https://api.whatsapp.com/send?phone=+5804121295448&amp;text=Hola+Anthony+Gutierrez+%2C+no+pierdas+tu+oportunidad+de+ganar+con+tus+n%C3%BAmeros+elegidos+en+COMBO+AMOROSO%2C+completa+el+pago+por+favor%2C+no+dejes+ir+tu+suerte.+https%3A%2F%2Fwww.chipibikelife.com%2Fcomboamoroso%2304121295448">
+                                <i class="fab fa-whatsapp fa-2x"></i>
+                              </a>
+                            </div>
+                            <div>
+                              <a target="_blank"
+                                title="Boleto Digital"
+                                class="external_link"
+                                href="/comboamoroso#04121295448">
+                                <i class="fas fa-ticket-alt fa-2x"></i>
+                              </a>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="col col-tickets">8311</td>
+                        <td class="col"></td>
+                        <td class="col col-extra_numbers"></td>
+                        <td class="col col-notes"></td>
+                        <td class="col col-actions">
+                          <div class="table_actions">
+                            <a href="/admin/purchases/2248063/edit">
+                              <i class="fas fa-pen"></i>
+                            </a><a data-confirm="¿Confirma que desea eliminar?"
+                              class="trash"
+                              rel="nofollow"
+                              data-method="delete"
+                              href="/admin/purchases/2248063">
+                              <i class="fas fa-trash"></i>
+                            </a>
+                          </div>
+                        </td>
+                      </tr>
+                    {% endfor %}
                   </tbody>
                 </table>
               </div>

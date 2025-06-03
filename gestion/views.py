@@ -9,7 +9,14 @@ from django.views.generic import View
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
 
-from .forms import ClienteForm, FormComprobante, FormEvento, MetodoForm, RifaForm
+from .forms import (
+    ClienteForm,
+    CompraForm,
+    FormComprobante,
+    FormEvento,
+    MetodoForm,
+    RifaForm,
+)
 from .models import (
     Cliente,
     Comprobante,
@@ -26,11 +33,6 @@ from .utils import calcular_monto, send_whatsapp
 
 @login_required
 def inicioView(request: HttpRequest):
-    return render(request, "admin/compras.html")
-
-
-@login_required
-def comprasView(request: HttpRequest):
     return render(request, "admin/compras.html")
 
 
@@ -89,6 +91,25 @@ class MetodoUpdateView(LoginRequiredMixin, UpdateView):
     form_class = MetodoForm
     success_url = "/admin/metodos"
     model = MetodoPago
+
+
+class ComprasListView(LoginRequiredMixin, ListView):
+    template_name = "admin/compras.html"
+    model = Comprobante
+    context_object_name = "compras"
+
+
+class ComprasCreateView(LoginRequiredMixin, CreateView):
+    template_name = "admin/compra_form.html"
+    form_class = CompraForm
+    success_url = "/admin/compras"
+
+
+class ComprasUpdateView(LoginRequiredMixin, UpdateView):
+    template_name = "admin/compra_form.html"
+    form_class = CompraForm
+    success_url = "/admin/compras"
+    model = Comprobante
 
 
 @login_required

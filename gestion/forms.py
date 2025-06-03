@@ -50,7 +50,7 @@ class MetodoForm(forms.ModelForm):
         fields = "__all__"
 
 
-class ComprobanteForm(forms.ModelForm):
+class CompraForm(forms.ModelForm):
     class Meta:
         model = Comprobante
         fields = "__all__"

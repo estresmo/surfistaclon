@@ -117,7 +117,7 @@ class Comprobante(models.Model):
     nombre = models.CharField(max_length=500)
     telefono = models.CharField(max_length=500)
     referencia = models.CharField(max_length=100)
-    fecha = models.DateField(default=timezone.now)
+    fecha = models.DateTimeField(default=timezone.now)
     foto = models.ImageField(upload_to="comprobantes/")
     status = models.CharField(
         max_length=500,
