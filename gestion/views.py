@@ -6,20 +6,20 @@ from django.db.models import Count, Q, Sum
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import View
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
-from django.views.generic.edit import UpdateView
 
-from .forms import FormComprobante, FormEvento, RifaForm, ClienteForm
+from .forms import ClienteForm, FormComprobante, FormEvento, MetodoForm, RifaForm
 from .models import (
+    Cliente,
     Comprobante,
     Evento,
+    MetodoPago,
     MetodosChoices,
     NumeroRifa,
     Promocion,
     StatusChoices,
     Visualizacion,
-    Cliente,
 )
 from .utils import calcular_monto, send_whatsapp
 
@@ -71,6 +71,26 @@ class ClienteUpdateView(LoginRequiredMixin, UpdateView):
     model = Cliente
 
 
+class MetodosListView(LoginRequiredMixin, ListView):
+    template_name = "admin/metodos.html"
+    model = MetodoPago
+    context_object_name = "metodos"
+
+
+class MetodoCreateView(LoginRequiredMixin, CreateView):
+    template_name = "admin/metodo_form.html"
+    form_class = MetodoForm
+    success_url = "/admin/metodos"
+    model = MetodoPago
+
+
+class MetodoUpdateView(LoginRequiredMixin, UpdateView):
+    template_name = "admin/metodo_form.html"
+    form_class = MetodoForm
+    success_url = "/admin/metodos"
+    model = MetodoPago
+
+
 @login_required
 def dashboardView(request: HttpRequest):
     return render(request, "admin/dashboard.html")
@@ -79,7 +99,6 @@ def dashboardView(request: HttpRequest):
 @login_required
 def premiosView(request: HttpRequest):
     return render(request, "admin/premios.html")
-
 
 
 @login_required
@@ -91,6 +110,7 @@ def pagosView(request: HttpRequest):
 def usuariosView(request: HttpRequest):
     return render(request, "admin/usuarios.html")
 
+
 @login_required
 def ojoView(request: HttpRequest):
     return render(request, "admin/ojo.html")
@@ -99,7 +119,6 @@ def ojoView(request: HttpRequest):
 @login_required
 def purchasesView(request: HttpRequest):
     return render(request, "admin/purchases.html")
-
 
 
 class EventoView(LoginRequiredMixin, View):

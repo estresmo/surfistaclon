@@ -1,0 +1,156 @@
+{% extends 'admin/base.html' %}
+{% block title %}
+  {% if form.instance.pk %}
+    Editar Metodo de Pago
+  {% else %}
+    Nueva Metodo de Pago
+  {% endif %}
+{% endblock %}
+{% block subtitle %}
+  {% if form.instance.pk %}
+    Editar Metodo de Pago {{ form.instance.nombre }}
+  {% else %}
+    Nueva Metodo de Pago
+  {% endif %}
+{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block content %}
+  <div id="active_admin_content" class="without_sidebar">
+    <div id="main_content_wrapper">
+      <div id="main_content">
+        <form enctype="multipart/form-data"
+          class="formtastic raffle"
+          id="edit_raffle"
+          method="post">
+          {% csrf_token %}
+          {% if form.errors %}
+            <div class="error-messages">
+              {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                  <p>{{ field }} {{ error }}</p>
+                {% endfor %}
+              {% endfor %}
+            </div>
+          {% endif %}
+          <fieldset class="inputs">
+            <ol>
+              <li class="string input required stringish">
+                <label class="label">Banco</label>
+                <input type="text"
+                  value="{{ form.banco.value|default_if_none:'' }}"
+                  name="banco" />
+              </li>
+              <li class="file input required">
+                <label class="label">Logo</label>
+                <input accept="image/*"
+                  type="file"
+                  onchange="fileChange(this, 'preview-logo')"
+                  name="imagen" />
+                <p class="inline-hints">
+                  <img src="{{ form.imagen.value.url|default_if_none:'' }}"
+                    id="preview-logo" />
+                </p>
+              </li>
+              <li class="string input required stringish">
+                <label class="label">Titular</label>
+                <input type="text"
+                  value="{{ form.titular.value|default_if_none:'' }}"
+                  name="titular" />
+              </li>
+              <li class="number input required">
+                <label class="label">Posicion</label>
+                <input type="number"
+                  value="{{ form.posicion.value|default_if_none:'' }}"
+                  name="posicion" />
+              </li>
+              <li class="boolean input optional">
+                <label class="label">
+                  {% if form.activo.value %}
+                    <input type="checkbox" checked name="activo" />
+                  {% else %}
+                    <input type="checkbox" name="activo" />
+                  {% endif %}Activo
+                </label>
+              </li>
+
+              <li class="string input optional">
+                <label class="label">Titulo 1</label>
+                <input type="text"
+                  value="{{ form.titulo_1.value|default_if_none:'' }}"
+                  name="titulo_1" />
+              </li>
+              <li class="string input optional">
+                <label class="label">Contenido 1</label>
+                <input type="text"
+                  value="{{ form.contenido_1.value|default_if_none:'' }}"
+                  name="contenido_1" />
+              </li>
+              <li class="string input optional">
+                <label class="label">Titulo 2</label>
+                <input type="text"
+                  value="{{ form.titulo_2.value|default_if_none:'' }}"
+                  name="titulo_2" />
+              </li>
+              <li class="string input optional">
+                <label class="label">Contenido 2</label>
+                <input type="text"
+                  value="{{ form.contenido_2.value|default_if_none:'' }}"
+                  name="contenido_2" />
+              </li>
+              <li class="string input optional">
+                <label class="label">Titulo 3</label>
+                <input type="text"
+                  value="{{ form.titulo_3.value|default_if_none:'' }}"
+                  name="titulo_3" />
+              </li>
+              <li class="string input optional">
+                <label class="label">Contenido 3</label>
+                <input type="text"
+                  value="{{ form.contenido_3.value|default_if_none:'' }}"
+                  name="contenido_3" />
+              </li>
+              <li class="string input optional">
+                <label class="label">Nota</label>
+                <input type="text"
+                  value="{{ form.nota.value|default_if_none:'' }}"
+                  name="nota" />
+              </li>
+            </ol>
+          </fieldset>
+          <fieldset class="actions">
+            <ol>
+              <li class="action input_action" id="raffle_submit_action">
+                <input type="submit"
+                  name="commit"
+                  value="Guardar Método de Pago"
+                  data-disable-with="Guardar Método de Pago" />
+              </li>
+              <li class="cancel">
+                <a href="/admin/metodos">Cancelar</a>
+              </li>
+            </ol>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block javascript %}
+  <script>
+    function fileChange(input, id) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+          document.getElementById(id).setAttribute("src", e.target.result);
+        };
+
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+  </script>
+{% endblock %}

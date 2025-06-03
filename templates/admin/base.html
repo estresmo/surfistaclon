@@ -58,6 +58,14 @@
         padding: 2px 8px;
         border-radius: 12px;
       }
+
+      .btn-add {
+        margin-bottom: 10px;
+        cursor: pointer;
+      }
+      .btn-add:hover {
+        cursor: pointer;
+      }
     </style>
   </head>
   <body class="index admin_purchases active_admin logged_in admin_namespace"
@@ -95,8 +103,8 @@
             <a href="/admin/clientes">Clientes</a>
           </li>
             <!-- prettier-ignore -->
-            <li class="menu_item {% if url_name == 'pagos_admin' %}current{% endif %}" id="payment_types">
-            <a href="/admin/pagos">Pagos</a>
+            <li class="menu_item {% if url_name == 'metodos_admin' %}current{% endif %}" id="payment_types">
+            <a href="/admin/metodos">Metodos de Pago</a>
           </li>
             <!-- prettier-ignore -->
             <li class="menu_item {% if url_name == 'usuarios_admin' %}current{% endif %}" id="users">

@@ -1,0 +1,86 @@
+{% extends 'admin/base.html' %}
+{% block title %}
+  Métodos de Pago
+{% endblock %}
+{% block subtitle %}
+  Métodos de Pago
+{% endblock %}
+{% block content %}
+  <div id="active_admin_content" class="without_sidebar">
+    <div id="main_content_wrapper">
+      <div id="main_content">
+        <button class="btn-add" onclick="location.href='/admin/metodos/crear'">
+          <i class="fas fa-plus"></i> Nuevo método de pago
+        </button>
+        <div class="paginated_collection">
+          <div class="paginated_collection_contents">
+            <div class="index_content">
+              <div class="index_as_table">
+                <table border="0"
+                  cellspacing="0"
+                  cellpadding="0"
+                  id="index_table_payment_types"
+                  class="index_table index"
+                  paginator="true">
+                  <thead>
+                    <tr>
+                      <th class="col col-bank_logo">Imagen</th>
+                      <th class="col col-bank_name">Banco</th>
+                      <th class="sortable col col-owner">
+                        <a href="?order=owner_desc">Titular</a>
+                      </th>
+                      <th class="sortable col col-number">
+                        <a href="?order=number_desc">Contenido</a>
+                      </th>
+                      <th class="sortable col col-visible_public">
+                        <a href="?order=visible_public_desc">Activo</a>
+                      </th>
+                      <th class="col col-actions"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for metodo in metodos %}
+                      <tr class="odd" id="payment_type_4958">
+                        <td class="col col-bank_logo">
+                          <img class="avatar_image"
+                            src="{{ metodo.imagen.url }}" />
+                        </td>
+                        <td class="col col-bank_name">{{ metodo.banco }}</td>
+                        <td class="col col-owner">{{ metodo.titular }}</td>
+                        <td class="col col-number">
+                          <!-- prettier-ignore -->
+                          {{  metodo.mostrar_contenido|join:'<br>' }}
+                        </td>
+                        <td class="col col-visible_public">
+                          {% if metodo.activo %}
+                            <span class="status_tag yes">SI</span>
+                          {% else %}
+                            <span class="status_tag no">NO</span>
+                          {% endif %}
+                        </td>
+                        <td class="col col-actions">
+                          <div class="table_actions">
+                            <a class="edit_link member_link"
+                              title="Editar"
+                              href="/admin/metodos/{{ metodo.pk }}">
+                              Editar
+                            </a>
+                          </div>
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div id="index_footer">
+            <div class="pagination_information">
+              Mostrando <b>{{ metodos|length }}</b> Medios de Pago
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -26,15 +26,15 @@ class Dolar(models.Model):
         corte_2 = hoy.replace(hour=13, minute=40)
         if ultima_fecha < corte_1 and hoy > corte_1:
             try:
-                return cls.actualizar()
+                ultimo = cls.actualizar()
             except Exception:
                 logger.warning("No se pudo actualizar el dolar")
         if ultima_fecha < corte_2 and hoy > corte_2:
             try:
-                return cls.actualizar()
+                ultimo = cls.actualizar()
             except Exception:
                 logger.warning("No se pudo actualizar el dolar")
-        return ultimo.valor_bs
+        return round(ultimo.valor_bs, 2)
 
     @classmethod
     def actualizar(cls):
@@ -43,9 +43,9 @@ class Dolar(models.Model):
         currency = Currency()
         precio = currency.get_rate("EUR")
         if isinstance(precio, str):
-            precio = float(precio)
-            cls.objects.create(fecha_hora=timezone.now(), valor_bs=precio)
-            return precio
+            precio = round(float(precio), 2)
+            dolar = cls.objects.create(fecha_hora=timezone.now(), valor_bs=precio)
+            return dolar
         raise ValueError("Error al obtener el dolar")
 
     def __str__(self):
