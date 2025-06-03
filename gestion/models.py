@@ -88,15 +88,23 @@ class MetodoPago(models.Model):
     nota = models.CharField(max_length=100, blank=True)
 
     @property
+    def contenidos(self):
+        return [
+            (self.titulo_1, self.contenido_1),
+            (self.titulo_2, self.contenido_2),
+            (self.titulo_3, self.contenido_3),
+        ]
+
+    @property
     def mostrar_contenido(self):
-        contenidos = [
+        contenidos = (
             self.titulo_1,
             self.contenido_1,
             self.titulo_2,
             self.contenido_2,
             self.titulo_3,
             self.contenido_3,
-        ]
+        )
         con_contenido: list[str] = []
         for c in contenidos:
             if c:
@@ -108,7 +116,7 @@ class MetodoPago(models.Model):
 class Comprobante(models.Model):
     nombre = models.CharField(max_length=500)
     telefono = models.CharField(max_length=500)
-    referencia = models.CharField(max_length=100, unique=True)
+    referencia = models.CharField(max_length=100)
     fecha = models.DateField(default=timezone.now)
     foto = models.ImageField(upload_to="comprobantes/")
     status = models.CharField(

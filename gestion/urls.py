@@ -17,7 +17,6 @@ urlpatterns = [
     ),
     path("participantes/", views.participantesView, name="participantes_admin"),
     path("dashboard/", views.dashboardView, name="dashboard_admin"),
-    path("premios/", views.premiosView, name="premios_admin"),
     path("clientes/", views.ClientesListView.as_view(), name="clientes_admin"),
     path(
         "cliente/<int:pk>/",

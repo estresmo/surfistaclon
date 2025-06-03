@@ -8,23 +8,19 @@
           {% include 'components/country_code_select.html' %}
         </div>
         <div class="input-field col-8 s12 m6">
-          <input
-            type="tel"
+          <input type="tel"
             id="telefonoInput"
             placeholder="Ingrese su número de teléfono"
-            class="px-3"
-          />
+            class="px-3" />
 
           <label for="findPhone" class="active">Número de Teléfono</label>
         </div>
 
         <div class="input-field col s12 m6">
-          <button
-            class="btn-large"
+          <button class="btn-large"
             onclick="searchBuyer()"
             data-toggle="modal"
-            data-target="#modalVerificar"
-          >
+            data-target="#modalVerificar">
             <i class="fa fa-search" aria-hidden="true"></i> Buscar
           </button>
         </div>
@@ -38,12 +34,10 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Verificación de Boleto</h5>
-        <button
-          type="button"
+        <button type="button"
           class="close"
           data-dismiss="modal"
-          aria-label="Close"
-        >
+          aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -63,6 +57,7 @@
     const formData = new FormData();
     formData.append("celular", telefono);
     formData.append("country_code", country_code);
+    formData.append("evento_id", "{{evento.id}}");
     const response = await fetch("/verificar/", {
       method: "POST",
       headers: {

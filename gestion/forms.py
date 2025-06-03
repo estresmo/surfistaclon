@@ -48,3 +48,9 @@ class MetodoForm(forms.ModelForm):
     class Meta:
         model = MetodoPago
         fields = "__all__"
+
+
+class ComprobanteForm(forms.ModelForm):
+    class Meta:
+        model = Comprobante
+        fields = "__all__"

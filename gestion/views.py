@@ -97,16 +97,6 @@ def dashboardView(request: HttpRequest):
 
 
 @login_required
-def premiosView(request: HttpRequest):
-    return render(request, "admin/premios.html")
-
-
-@login_required
-def pagosView(request: HttpRequest):
-    return render(request, "admin/pagos.html")
-
-
-@login_required
 def usuariosView(request: HttpRequest):
     return render(request, "admin/usuarios.html")
 

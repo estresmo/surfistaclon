@@ -1,11 +1,19 @@
-from django.shortcuts import render
-from django.http import JsonResponse
-from .models import Dolar
-from django.views.decorators.http import require_POST
-from gestion.models import NumeroRifa, Comprobante, Evento, Visualizacion, Cliente
-from django.http import HttpRequest
-from gestion.utils import send_whatsapp, calcular_monto
 from django.conf import settings
+from django.http import HttpRequest, JsonResponse
+from django.shortcuts import render
+from django.views.decorators.http import require_POST
+
+from gestion.models import (
+    Cliente,
+    Comprobante,
+    Evento,
+    MetodoPago,
+    NumeroRifa,
+    Visualizacion,
+)
+from gestion.utils import calcular_monto, send_whatsapp
+
+from .models import Dolar
 
 
 def home(request: HttpRequest):
@@ -24,6 +32,7 @@ def home(request: HttpRequest):
         total_tickets = evento.total_tickets
         tickets = [format(t, evento.digitos) for t in range(total_tickets)]
     dolar = Dolar.obtener_dolar()
+    metodos = MetodoPago.objects.all()
     context = {
         "agarrados": agarrados,
         "tickets": tickets,
@@ -31,6 +40,7 @@ def home(request: HttpRequest):
         "evento": evento,
         "eventos": eventos,
         "cliente": cliente,
+        "metodos": metodos,
     }
     return render(request, "rifa/home.html", context)
 
@@ -49,10 +59,12 @@ def detalle_evento(request: HttpRequest, link: str):
 def verificar(request: HttpRequest):
     celular = request.POST["celular"]
     country_code = request.POST["country_code"]
+    evento_id = request.POST["evento_id"]
     if country_code == "+58" and celular.startswith("0"):
         celular = celular[1:]
     telefono = country_code + celular
-    comprobantes = list(Comprobante.objects.filter(telefono=telefono).values())
+    queryset = Comprobante.objects.filter(telefono=telefono, evento_id=evento_id)
+    comprobantes = list(queryset.values())
     for c in comprobantes:
         numeros = NumeroRifa.objects.filter(comprobante=c["id"]).prefetch_related(
             "comprobante__evento"
@@ -84,25 +96,27 @@ def comprobantes(request: HttpRequest):
     evento = Evento.obtener_actual()
     if evento is None:
         return JsonResponse({"error": "No hay ninguna rifa disponible"})
-    nombre = request.POST["nombre"]
+    nombre = request.POST["nombre"].upper()
     country_code = request.POST["country_code"]
     celular = request.POST["celular"].replace(" ", "")
-    if country_code == "+58" and celular.startswith("0"):
-        celular = celular[1:]
-    telefono = country_code + celular
     foto = request.FILES["foto"]
     boletos = set(request.POST.getlist("boletos"))
     metodo = request.POST["metodo"]
     cantidad_tickets = request.POST["productQty"]
+    referencia = request.POST["referencia"]
+    if country_code == "+58" and celular.startswith("0"):
+        celular = celular[1:]
+    telefono = country_code + celular
     Dolar.obtener_dolar()
     dolar = Dolar.objects.last()
     comprobante = Comprobante.objects.create(
         nombre=nombre,
         telefono=telefono,
         foto=foto,
-        metodo=metodo,
+        metodo_id=metodo,
         dolar=dolar,
         evento=evento,
+        referencia=referencia,
     )
     if evento.total_tickets > 200:
         for _ in range(int(cantidad_tickets)):

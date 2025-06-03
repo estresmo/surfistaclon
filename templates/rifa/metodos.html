@@ -1,0 +1,52 @@
+<div id="sectionAllPayments">
+  <h4 class="mt-20">
+    <i class="fa fa-bank" aria-hidden="true"></i> MODOS DE PAGO
+  </h4>
+  <div class="col-lg-12 mb-10">
+    <div class="row">
+      <div class="input-field col s6 m6">
+        <h6>Transferencia o depósito</h6>
+      </div>
+    </div>
+    <div id="container-payments"
+      class="types flex justify-space-between payments-options mb-30">
+      {% for metodo in metodos %}
+        <div data-id="{{ metodo.pk }}"
+          class="type option-payment"
+          onclick="cambiarPago(this)">
+          <div class="logo">
+            <img src="{{ metodo.imagen.url }}"
+              width="86"
+              alt="{{ metodo.banco }}" />
+          </div>
+          <div class="text" hidden>{{ metodo.banco }}</div>
+          <div class="content" hidden>
+            <div>
+              <div>
+                {% for titulo, contenido in metodo.contenidos %}
+                  {% if titulo %}
+                    <span class="nameAccountNumber">{{ metodo.titulo }}</span>
+                  {% endif %}
+                  {% if contenido %}
+                    <h3>
+                      {{ contenido }}
+                      {% include 'components/copyButton.html' %}
+                    </h3>
+                  {% endif %}
+                {% endfor %}
+              </div>
+              <div class="titularBank">
+                <span>TITULAR</span>{{ metodo.titular }}
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+      <script>
+        document
+          .getElementById("container-payments")
+          .firstElementChild.classList.add("selected");
+      </script>
+    </div>
+  </div>
+</div>

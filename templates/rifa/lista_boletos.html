@@ -31,7 +31,9 @@
                           <i class="fa fa-ticket" aria-hidden="true"></i>
                           <span class="quantityTotalTicketsPromos">
                             <!-- prettier-ignore -->
-                            {{ promocion.cantidad_tickets }} boletos por ${{ promocion.precio }}$
+                            {{ promocion.cantidad_tickets }} boletos por
+                            <!-- prettier-ignore -->
+                            <b>{{ promocion.precio }}$</b>
                           </span>
                         </h3>
                       {% endfor %}
@@ -189,162 +191,7 @@
                 </div>
               </div>
             </div>
-            <div id="sectionAllPayments">
-              <h4 class="mt-20">
-                <i class="fa fa-bank" aria-hidden="true"></i> MODOS DE PAGO
-              </h4>
-              <div class="col-lg-12 mb-10">
-                <div class="row">
-                  <div class="input-field col s6 m6">
-                    <h6>Transferencia o depósito</h6>
-                  </div>
-                </div>
-                <div id="container-payments"
-                  class="types flex justify-space-between payments-options mb-30">
-                  <div id="BINANCE-4265"
-                    data-id="3"
-                    class="type option-payment selected">
-                    <div class="logo">
-                      <img src="/static/rifas/binance.webp"
-                        width="86"
-                        alt="Binance" />
-                    </div>
-                    <div class="text" hidden>Binance</div>
-                    <div class="content" hidden>
-                      <div>
-                        ID <span>556684612</span>
-                      </div>
-                      <div class="titularBank">
-                        <span>TITULAR</span>MarianIVR
-                      </div>
-                    </div>
-                  </div>
-
-                  <div id="Zelle-4267" data-id="1" class="type option-payment">
-                    <div class="logo">
-                      <img src="/static/rifas/usa-zelle-c.png"
-                        width="86"
-                        alt="Zelle" />
-                    </div>
-                    <div class="text" hidden>Zelle</div>
-                    <div class="content" hidden>
-                      <div class="titularBank"
-                        onclick="copyToClipboard('Jose Gregorio Delgado')">
-                        <span>TITULAR</span>Wuilson Gonzalez
-                      </div>
-                      <div class="titularBank"
-                        onclick="copyToClipboard('ws1562429@gmail.com')">
-                        <span>Correo</span>ws1562429@gmail.com
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Método de pago 3: PayPal -->
-                  <div id="Bizum - España-4268"
-                    data-id="2"
-                    class="type option-payment">
-                    <div class="logo">
-                      <img src="/static/rifas/españa.png"
-                        width="86"
-                        alt="Bizum - España" />
-                    </div>
-                    <div class="text" hidden>Bizum - España</div>
-                    <div class="content" hidden>
-                      <div class="titularBank"
-                        onclick="copyToClipboard('+34604278556')">
-                        <span>N° DEL BIZUM</span>+34604278556
-                      </div>
-                      <div class="titularBank"
-                        onclick="copyToClipboard('bizum@bizum.com')">
-                        <span>Titular</span>WILSON GONZÁLEZ
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Método de pago 4: Tarjeta de Crédito -->
-                  <div id="BANCO SANTANDER-4269"
-                    data-id="4"
-                    class="type option-payment">
-                    <div class="logo">
-                      <img src="/static/rifas/españa2.png"
-                        width="86"
-                        alt="BANCO SANTANDER" />
-                    </div>
-                    <div class="text" hidden>BANCO SANTANDER - ESPAÑA</div>
-                    <div class="content" hidden>
-                      <div class="titularBank">
-                        <span>TITULAR</span>CHIPI BIKELIFE
-                      </div>
-                      <div class="BancoBank"
-                        onclick="copyToClipboard('ES9500490860382014577846')">
-                        <span>CUENTA SANTANDER</span>ES9500490860382014577846
-                      </div>
-                      <div class="DNIBank"
-                        onclick="copyToClipboard('37507279D')">
-                        <span>DNI</span>37507279D
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Método de pago 5: Transferencia Bancaria -->
-                  <div id="Chile" data-id="5" class="type option-payment">
-                    <div class="logo">
-                      <img src="/static/rifas/chile.png"
-                        width="86"
-                        alt="Chile" />
-                    </div>
-                    <div class="text" hidden>Banco Falabella de Chile</div>
-                    <div class="content" hidden>
-                      <div class="titularBank">
-                        <span>TITULAR</span>Kelwis Rodriguez
-                      </div>
-                      <div class="titularBank"
-                        onclick="copyToClipboard('1-593-005256-0')">
-                        <span>N° DE CUENTA CORRIENTE</span>1-593-005256-0
-                      </div>
-                      <div class="titularBank"
-                        onclick="copyToClipboard('26414709-3')">
-                        <span>CUENTA VISTA</span>26414709-3
-                      </div>
-                    </div>
-                  </div>
-                  <div id="PAGO_MOVIL-4266"
-                    data-id="2"
-                    class="type option-payment"
-                    onclick="cambiarPago(this)">
-                    <div class="logo">
-                      <img src="/static/rifas/vepagomovilc2c.png"
-                        width="86"
-                        alt="PagomóvilBDV" />
-                    </div>
-                    <div class="text" hidden>Pagomóvil BDV</div>
-                    <div class="content" hidden>
-                      <div>
-                        <div>
-                          <span class="nameAccountNumber">Teléfono</span>
-                          <h3 onclick="copyToClipboard('04242558344')">
-                            04242558344
-                          </h3>
-                        </div>
-                        <div>
-                          <span class="nameAccountNumber">Banco</span>
-                          <h3 onclick="copyToClipboard('0102')">0102</h3>
-                        </div>
-                        <div>
-                          <span class="nameAccountNumber">Cédula</span>
-                          <h3 onclick="copyToClipboard('27515638')">
-                            27515638
-                          </h3>
-                        </div>
-                        <div class="titularBank"
-                          onclick="copyToClipboard('NELSON DOMINGUEZ')">
-                          <span>TITULAR</span>NELSON DOMINGUEZ
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {% include 'rifa/metodos.html' %}
             <div id="datosBanco" class="text-center input-field col s12 m6">
               <input type="hidden" name="metodo" id="metodo-value" value="" />
               <div>
@@ -352,9 +199,8 @@
                   <span id="metodo-titulo"
                     data-toggle="tooltip"
                     data-placement="bottom"
-                    title=""
-                    data-original-title="Zelle">
-                    ZELLE
+                    title="">
+
                   </span>
                   <span data-toggle="tooltip"
                     data-placement="bottom"
@@ -451,21 +297,19 @@
                   boleto )
                 </h6>
               </div>
-              <h4>
+              <h4 class="">
                 <i class="fa fa-user" aria-hidden="true"></i> REFERENCIA BANCARIA
               </h4>
-              <div class="input-field col col-lg-6 col-6">
-                <label for="referencia" class="active">
-                  Codigo de Referencia *
-                </label>
-                <input placeholder=""
-                  id="referencia"
-                  name="referencia"
-                  type="number"
-                  class="validate invalid"
-                  minlength="8"
-                  maxlength="66"
-                  required="" />
+              <div class="col-lg-12 p0">
+                <div class="input-field col col-lg-6 col-6">
+                  <label for="referencia" class="active">
+                    Codigo de Referencia *
+                  </label>
+                  <input name="referencia"
+                    type="text"
+                    class="validate invalid px-3"
+                    required="" />
+                </div>
               </div>
             </div>
           </div>
