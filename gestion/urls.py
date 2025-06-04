@@ -15,6 +15,8 @@ urlpatterns = [
     path("compras/crear", views.ComprasCreateView.as_view()),
     path("compras/<int:pk>", views.ComprasUpdateView.as_view()),
     path("compras/eliminar/<int:pk>", views.eliminar_compra),
+    path("rifas/eliminar/<int:pk>", views.eliminar_rifa),
+    path("metodos/eliminar/<int:pk>", views.eliminar_metodo),
     path("verificar/<int:pk>", views.verificar_comprobante, name="verificar_admin"),
     path("participantes/", views.participantesView, name="participantes_admin"),
     path("dashboard/", views.dashboardView, name="dashboard_admin"),

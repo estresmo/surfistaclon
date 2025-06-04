@@ -129,6 +129,17 @@ def eliminar_compra(request: HttpRequest, pk: int):
     return JsonResponse({"result": "ok"})
 
 
+def eliminar_rifa(request: HttpRequest, pk: int):
+    evento = get_object_or_404(Evento, pk=pk)  
+    evento.delete() 
+    return JsonResponse({"result": "ok"})
+
+def eliminar_metodo(request: HttpRequest, pk: int):
+        metodo_pago = get_object_or_404(MetodoPago, pk=pk)
+        metodo_pago.delete()      
+        return JsonResponse({"result": "ok"})
+   
+
 @login_required
 def verificar_comprobante(request: HttpRequest, pk: int):
     if request.method == "POST":
