@@ -3,6 +3,7 @@ from typing import Optional
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count, Q, Sum
+from django.contrib.postgres.aggregates import ArrayAgg  # Import this!
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
@@ -42,7 +43,18 @@ def inicioView(request: HttpRequest):
 
 @login_required
 def participantesView(request: HttpRequest):
-    return render(request, "admin/participantes.html")
+    evento = Evento.obtener_actual()
+    participantes = (
+        Comprobante.objects.filter(evento=evento)
+        .values("telefono", "nombre")
+        .annotate(
+            num_tickets=Count("numerorifa"),
+            total=Sum("monto"),
+            boletos=ArrayAgg("numerorifa__numero"),
+        )
+        .order_by("-num_tickets")
+    )
+    return render(request, "admin/participantes.html", {"participantes": participantes})
 
 
 class RifasListView(LoginRequiredMixin, ListView):
@@ -162,15 +174,18 @@ class ComprasUpdateView(LoginRequiredMixin, UpdateView):
         agarrados = NumeroRifa.objects.filter(
             comprobante__evento=evento
         ).prefetch_related("comprobante__evento")
-        tickets = (format(t, evento.digitos) for t in range(evento.total_tickets))
+        tickets = list(format(t, evento.digitos) for t in range(evento.total_tickets))
+        seleccionados = list(
+            format(b.numero, evento.digitos) for b in self.object.boletos
+        )
+        print(seleccionados, tickets)
+        print(type(seleccionados[0]), type(tickets[0]))
         context["tickets"] = tickets
         context["agarrados"] = [str(a) for a in agarrados]
         context["status_choices"] = StatusChoices.choices
         context["metodos"] = MetodoPago.objects.all()
         context["evento"] = evento
-        context["seleccionados"] = (
-            format(b.numero, evento.digitos) for b in self.object.boletos
-        )
+        context["seleccionados"] = seleccionados
         return context
 
     def form_valid(self, form):
@@ -394,7 +409,13 @@ class ComprobanteView(LoginRequiredMixin, View):
             evento = Evento.obtener_actual()
             comprobante = form.save(commit=False)
             comprobante.evento = evento
-            comprobante.telefono = comprobante.telefono.replace(" ", "")
+            comprobante.telefono = (
+                comprobante.telefono.replace(" ", "")
+                .replace("+", "")
+                .replace("-", "")
+                .replace("(", "")
+                .replace(")", "")
+            )
             comprobante.save()
             boletos = request.POST["boletos"].strip(",").split(",")
             msg = (

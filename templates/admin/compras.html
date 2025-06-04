@@ -22,6 +22,9 @@
     {% csrf_token %}
     <div id="main_content_wrapper">
       <div id="main_content">
+        <button class="btn-add" onclick="location.href='/admin/compras/crear'">
+          <i class="fas fa-plus"></i> Nueva Compra
+        </button>
         <div class="table_tools">
           <div class="scopes">
             <ul class="table_tools_segmented_control scope-default-group">
@@ -174,7 +177,7 @@
             </div>
           </div>
           <div id="index_footer">
-            <!--         <nav class="pagination">
+            <!--           <nav class="pagination">
               <span class="page current">1</span>
 
               <span class="page">
@@ -202,7 +205,7 @@
               <span class="last">
                 <a href="?order=id_desc&amp;page=74">Fin</a>
               </span>
-            </nav>         -->
+            </nav>           -->
             <div class="pagination_information">
               Mostrando Compras <b>1&nbsp;-&nbsp;0</b> de un total de
               <b>0</b>

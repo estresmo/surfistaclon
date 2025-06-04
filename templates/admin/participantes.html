@@ -46,21 +46,6 @@
                       <th class="sortable col col-phone">
                         <a href="?order=phone_desc">Celular</a>
                       </th>
-                      <th class="sortable col col-email">
-                        <a href="?order=email_desc">Email</a>
-                      </th>
-                      <th class="sortable col col-location">
-                        <a href="?order=location_desc">Ubicación</a>
-                      </th>
-                      <th class="sortable col col-address">
-                        <a href="?order=address_desc">Dirección</a>
-                      </th>
-                      <th class="sortable col col-custom_field">
-                        <a href="?order=custom_field_desc">Campo Extra</a>
-                      </th>
-                      <th class="sortable col col-seller">
-                        <a href="?order=seller_desc">Vendedor</a>
-                      </th>
                       <th class="sortable col col-total_amount">
                         <a href="?order=total_amount_desc">Pago Total</a>
                       </th>
@@ -68,33 +53,32 @@
                         <a href="?order=total_tickets_desc">Total</a>
                       </th>
                       <th class="col col-purchases">Tickets</th>
-                      <th class="col"></th>
-                      <th class="col col-extra_numbers">Extras</th>
                       <th class="col col-actions"></th>
                     </tr>
                   </thead>
                   <tbody>
-                    <!--  <tr class="odd" id="buyer_1914825">
-                      <td class="col col-name">Andrés Navarro</td>
-                      <td class="col col-phone">
-                        <a target="_blank"
-                          href="https://api.whatsapp.com/send?phone=%2B5804123154486">
-                          +5804123154486
-                        </a>
-                      </td>
-                      <td class="col col-email"></td>
-                      <td class="col col-location"></td>
-                      <td class="col col-address"></td>
-                      <td class="col col-custom_field"></td>
-                      <td class="col col-seller"></td>
-                      <td class="col col-total_amount">$2.00</td>
-                      <td class="col col-total_tickets">1</td>
-                      <td class="col col-purchases">7149</td>
-                      <td class="col"></td>
-                      <td class="col col-extra_numbers"></td>
-                      <td class="col col-actions">
-                        <div class="table_actions">
-                          <a href="/1914825">
+                    {% for participante in participantes %}
+                      <tr class="odd">
+                        <td class="col col-name">{{ participante.nombre }}</td>
+                        <td class="col col-phone">
+                          <!-- prettier-ignore -->
+                          <a target="_blank"
+                            href="https://api.whatsapp.com/send?phone=%2B{{ participante.telefono }}">
+                            +{{ participante.telefono }}
+                          </a>
+                        </td>
+                        <td class="col col-total_amount">${{ participante.total }}</td>
+                        <td class="col col-total_tickets">
+                          <!-- prettier-ignore -->
+                          {{ participante.num_tickets }}
+                        </td>
+                        <td class="col col-purchases">
+                          <!-- prettier-ignore -->
+                          {{ participante.boletos|join:"," }}
+                        </td>
+                        <td class="col col-actions">
+                          <div class="table_actions">
+                            <!--     <a href="/1914825">
                             <i class="fas fa-eye"></i>
                           </a><a href="/1914825/edit">
                             <i class="fas fa-pen"></i>
@@ -104,10 +88,11 @@
                             data-method="delete"
                             href="/1914825">
                             <i class="fas fa-trash"></i>
-                          </a>
-                        </div>
-                      </td>
-                    </tr>  -->
+                          </a>     -->
+                          </div>
+                        </td>
+                      </tr>
+                    {% endfor %}
                   </tbody>
                 </table>
               </div>

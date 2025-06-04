@@ -20,11 +20,27 @@
       width: 50px;
       height: 50px;
       padding: 0 !important;
-      background-image: linear-gradient(180deg, #9f4851, #414549);
+      background-image: none;
+      background-color: #9f4851;
     }
 
     .ticket-opcion.seleccionado {
-      background-image: linear-gradient(180deg, #4a489f, #414549);
+      background-color: #4a489f;
+      background-image: none;
+    }
+    .ticket-opcion:disabled {
+      background-color: #333333;
+      background-image: none !important;
+      cursor: not-allowed !important;
+    }
+    .ticket-opcion:disabled:hover {
+      background-color: #333333;
+      background-image: none !important;
+      cursor: not-allowed !important;
+    }
+    .ticket-opcion:hover {
+      background-color: #616163;
+      background-image: none !important;
     }
 
     .ticket-opcion:hover {
@@ -82,7 +98,7 @@
               </li>
               <li class="string input required stringish">
                 <label class="label">Teléfono</label>
-                <input type="text"
+                <input type="number"
                   value="{{ form.telefono.value|default_if_none:'' }}"
                   name="telefono" />
               </li>
@@ -128,19 +144,19 @@
                       value="" />
                     <div id="lista" class="input-field col s12 containtickets">
                       {% for numero in tickets %}
-                        {% if numero in agarrados %}
+                        {% if numero|stringformat:'s' in seleccionados %}
+                          <button type="button"
+                            class="ticket-opcion seleccionado"
+                            onclick="seleccionarTicket(this)"
+                            data-ticket="{{ numero }}">
+                            {{ numero }}
+                          </button>
+                        {% elif numero in agarrados %}
                           <button type="button"
                             class="ticket-opcion"
                             disabled
                             data-ticket="{{ numero }}"
                             data-disabled="true">
-                            {{ numero }}
-                          </button>
-                        {% elif numero|stringformat:'s' in seleccionados %} 
-                          <button type="button"
-                            class="ticket-opcion seleccionado"
-                            onclick="seleccionarTicket(this)"
-                            data-ticket="{{ numero }}">
                             {{ numero }}
                           </button>
                         {% else %}
@@ -223,7 +239,7 @@
 {% endblock %}
 {% block javascript %}
   <script>
-    let tickets_seleccionados = [];
+    let tickets_seleccionados = '{{ seleccionados|join:"," }}'.split(",");
 
     function fileChange(input, id) {
       if (input.files && input.files[0]) {
