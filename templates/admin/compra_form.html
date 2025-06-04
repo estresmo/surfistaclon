@@ -1,78 +1,270 @@
-{% extends 'admin/base.html' %} {% block title %}
-  Compras
+{% extends 'admin/base.html' %}
+{% block title %}
+  {% if form.instance.pk %}
+    Editar Compra
+  {% else %}
+    Nueva Compra
+  {% endif %}
 {% endblock %}
 {% block subtitle %}
-  Editar Compra
-{% endblock %} {% block content %}
-  <div id="active_admin_content" class="with_sidebar">
-    <form enctype="multipart/form-data" class="formtastic purchase" id="edit_purchase" novalidate="novalidate" action="/admin/purchases/2318760" accept-charset="UTF-8" method="post"><input type="hidden" name="_method" value="patch"><input type="hidden" name="authenticity_token" value="eit6KmtULIUHvTvpz/G0IHmRgrZbTDieh027r20oMrvHYYj4Fxc4bcz0BI7++TcsQilSDIa9fC5/DzcZG3KuFw=="><fieldset class="inputs"><legend><span>COMBO AMOROSO</span></legend><ol><li class="string input optional stringish" id="purchase_name_input"><label for="purchase_name" class="label">Alias</label><input id="purchase_name" type="text" value="Oswel semacaritt " name="purchase[name]">
+  {% if form.instance.pk %}
+    Editar Compra
+  {% else %}
+    Nueva Compra
+  {% endif %}
+{% endblock %}
+{% block head %}
+  <style>
+    .ticket-opcion {
+      border: none;
+      width: 50px;
+      height: 50px;
+      padding: 0 !important;
+      background-image: linear-gradient(180deg, #9f4851, #414549);
+    }
 
-    </li><li class="select input required" id="purchase_mode_input"><label for="purchase_mode" class="label">Modo<abbr title="requerido">*</abbr></label><select name="purchase[mode]" id="purchase_mode" onchange="changeModeRafflePurchase()" disabled="disabled"><option value=""></option>
-    <option selected="selected" value="online">online</option></select>
-    
-    </li><li class="select input required" id="purchase_payment_type_input"><label for="purchase_payment_type_id" class="label">Cuenta<abbr title="requerido">*</abbr></label><select name="purchase[payment_type_id]" id="purchase_payment_type_id"><option value=""></option>
-    <option selected="selected" value="4153">PagomóvilBDV - NELSON DOMINGUEZ</option>
-    <option value="4481">ZELLE - Wuilson Gonzalez</option>
-    <option value="4483">BINANCE - MarianIVR</option>
-    <option value="4482">Banco Falabella de Chile - Kelwis Rodriguez</option>
-    <option value="4956">BANCO SANTANDER - ESPAÑA - CHIPI BIKELIFE</option>
-    <option value="4958">Bizum - España - WILSON GONZÁLEZ </option></select>
-    
-    </li><li class="has_many_container raffle_tickets" data-sortable-start="0"><h3>Tickets</h3><fieldset class="inputs has_many_fields"><ol><li class="hidden input required" id="purchase_raffle_tickets_attributes_0_raffle_id_input"><input id="purchase_raffle_tickets_attributes_0_raffle_id" value="3927" type="hidden" name="purchase[raffle_tickets_attributes][0][raffle_id]">
-    
-    </li><li class="string input required stringish" id="purchase_raffle_tickets_attributes_0_ticket_number_input"><label for="purchase_raffle_tickets_attributes_0_ticket_number" class="label"><abbr title="requerido">*</abbr></label><input maxlength="4" id="purchase_raffle_tickets_attributes_0_ticket_number" pattern="[0-9]*" oninput="this.value = this.value.replace(/[^0-9]/g, '')" type="text" value="8148" name="purchase[raffle_tickets_attributes][0][ticket_number]">
-    
-    </li><li class="has_many_delete boolean input optional" id="purchase_raffle_tickets_attributes_0__destroy_input"><input type="hidden" name="purchase[raffle_tickets_attributes][0][_destroy]" value="0"><label for="purchase_raffle_tickets_attributes_0__destroy" class=""><input type="checkbox" name="purchase[raffle_tickets_attributes][0][_destroy]" id="purchase_raffle_tickets_attributes_0__destroy" value="1">Eliminar</label>
-    
-    </li></ol></fieldset><input type="hidden" value="436288" name="purchase[raffle_tickets_attributes][0][id]" id="purchase_raffle_tickets_attributes_0_id"><fieldset class="inputs has_many_fields"><ol><li class="hidden input required" id="purchase_raffle_tickets_attributes_1_raffle_id_input"><input id="purchase_raffle_tickets_attributes_1_raffle_id" value="3927" type="hidden" name="purchase[raffle_tickets_attributes][1][raffle_id]">
-    
-    </li><li class="string input required stringish" id="purchase_raffle_tickets_attributes_1_ticket_number_input"><label for="purchase_raffle_tickets_attributes_1_ticket_number" class="label"><abbr title="requerido">*</abbr></label><input maxlength="4" id="purchase_raffle_tickets_attributes_1_ticket_number" pattern="[0-9]*" oninput="this.value = this.value.replace(/[^0-9]/g, '')" type="text" value="1453" name="purchase[raffle_tickets_attributes][1][ticket_number]">
-    
-    </li><li class="has_many_delete boolean input optional" id="purchase_raffle_tickets_attributes_1__destroy_input"><input type="hidden" name="purchase[raffle_tickets_attributes][1][_destroy]" value="0"><label for="purchase_raffle_tickets_attributes_1__destroy" class=""><input type="checkbox" name="purchase[raffle_tickets_attributes][1][_destroy]" id="purchase_raffle_tickets_attributes_1__destroy" value="1">Eliminar</label>
-    
-    </li></ol></fieldset><input type="hidden" value="436289" name="purchase[raffle_tickets_attributes][1][id]" id="purchase_raffle_tickets_attributes_1_id"><a class="button has_many_add" data-html="<fieldset class=&quot;inputs has_many_fields&quot;><ol><li class=&quot;hidden input required&quot; id=&quot;purchase_raffle_tickets_attributes_NEW_RAFFLE_TICKET_RECORD_raffle_id_input&quot;><input id=&quot;purchase_raffle_tickets_attributes_NEW_RAFFLE_TICKET_RECORD_raffle_id&quot; value=&quot;3927&quot; type=&quot;hidden&quot; name=&quot;purchase[raffle_tickets_attributes][NEW_RAFFLE_TICKET_RECORD][raffle_id]&quot; />
-    
-    </li><li class=&quot;string input required stringish&quot; id=&quot;purchase_raffle_tickets_attributes_NEW_RAFFLE_TICKET_RECORD_ticket_number_input&quot;><label for=&quot;purchase_raffle_tickets_attributes_NEW_RAFFLE_TICKET_RECORD_ticket_number&quot; class=&quot;label&quot;><abbr title=&quot;requerido&quot;>*</abbr></label><input maxlength=&quot;4&quot; id=&quot;purchase_raffle_tickets_attributes_NEW_RAFFLE_TICKET_RECORD_ticket_number&quot; pattern=&quot;[0-9]*&quot; oninput=&quot;this.value = this.value.replace(/[^0-9]/g, &amp;#39;&amp;#39;)&quot; type=&quot;text&quot; name=&quot;purchase[raffle_tickets_attributes][NEW_RAFFLE_TICKET_RECORD][ticket_number]&quot; />
-    
-    </li><li><a class=&quot;button has_many_remove&quot; href=&quot;#&quot;>Quitar</a></li></ol></fieldset>" data-placeholder="NEW_RAFFLE_TICKET_RECORD" href="#">Añadir Número</a></li>                <div class="columns">
-                      <div class="column" style="width: 100.0%;">
-    <fieldset class="inputs"><legend><span>DISPONIBLES ONLINE</span></legend><ol>                      <div id="tickets_available_on_wrapper" class="tickets-wrapper"><div id="tickets_available_online">
-      <textarea readonly="" disabled="" class="tickets-available no-resizable tickets" rows="4">0002 0010 0012 0013 0015 0019 0022 0024 0026 0031 0032 0033 0034 0036 0037 0042 0044 0045 0049 0051 0052 0055 0056 0057 0058 0060 0061 0065 0068 0072 0073 0075 0078 0081 0084 0086 0087 0090 0093 0094 0096 0097 0099 0100 0106 0109 0111 0112 0114 0116 0117 0122 0124 0126 0127 0129 0132 0133 0136 0137 0140 0142 0152 0154 0155 0161 0162 0168 0169 0170 0171 0172 0173 0174 0175 0178 0180 0183 0187 0192 0194 0196 0199 0200 0201 0202 0203 0206 0207 0212 0214 0215 0216 0217 0219 0220 0225 0226 0228 0231 ...
-      </textarea>
-      
-        <div class="title_pagination"><strong> Página 1 </strong></div>
-        <a class="load-tickets" data-target="tickets_available_online" href="/admin/raffles/tickets_page?mode=online&amp;page=2&amp;raffle_id=3927">Siguiente &gt;</a>
-    
-    </div>
-    </div>
-    </ol></fieldset>                  </div>
-                    <div style="clear:both;"></div></div>
-    <li class="text input optional" id="purchase_notes_input"><label for="purchase_notes" class="label">Notas</label><textarea rows="20" id="purchase_notes" name="purchase[notes]"></textarea>
-    
-    </li><li class="string input optional stringish" id="purchase_seller_input"><label for="purchase_seller" class="label">Vendedor</label><input id="purchase_seller" type="text" name="purchase[seller]">
-    
-    </li><li class="select input required" id="purchase_status_input"><label for="purchase_status" class="label">Status<abbr title="requerido">*</abbr></label><select name="purchase[status]" id="purchase_status"><option value=""></option>
-    <option value="no_voucher">Sin Voucher</option>
-    <option selected="selected" value="unverified">Sin Verificación</option>
-    <option value="verified">Verificados</option></select>
-    
-    </li><li class="number input optional numeric stringish" id="purchase_amount_input"><label for="purchase_amount" class="label">Monto</label><input id="purchase_amount" disabled="disabled" step="any" type="number" value="4.0" name="purchase[amount]">
-    
-    </li><li class="number input optional numeric stringish" id="purchase_quantity_input"><label for="purchase_quantity" class="label">Cant.</label><input id="purchase_quantity" disabled="disabled" step="any" type="number" value="2" name="purchase[quantity]">
-    
-    </li><li class="number input optional numeric stringish" id="purchase_opportunities_input"><label for="purchase_opportunities" class="label">Oportunidades</label><input id="purchase_opportunities" value="1" disabled="disabled" step="any" type="number" name="purchase[opportunities]">
-    
-    </li><li class="file input optional" id="purchase_file_input"><label for="purchase_file" class="label">Comprobante</label><input id="purchase_file" type="file" name="purchase[file]">
-    
-    <p class="inline-hints"><img src="https://rifarito.s3.amazonaws.com/uploads/purchase/file/2318760/1748886962333.jpg?X-Amz-Expires=86400&amp;X-Amz-Date=20250602T180843Z&amp;X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIA43AWIPHKRJMFXTNZ%2F20250602%2Fus-east-1%2Fs3%2Faws4_request&amp;X-Amz-SignedHeaders=host&amp;X-Amz-Signature=0d14030019c18b60e3bfa1c58e5bcd1f89b14bc879d49a5fe3c94153a3a4d476"></p></li></ol></fieldset><fieldset class="actions"><ol><li class="action input_action " id="purchase_submit_action"><input type="submit" name="commit" value="Guardar Compra" data-disable-with="Guardar Compra"></li><li class="cancel"><a href="/admin">Cancelar</a></li></ol></fieldset></form>
+    .ticket-opcion.seleccionado {
+      background-image: linear-gradient(180deg, #4a489f, #414549);
+    }
+
+    .ticket-opcion:hover {
+      cursor: pointer;
+    }
+
+    #lista {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 20px;
+      height: 500px;
+      overflow: auto;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div id="active_admin_content" class="without_sidebar">
+    <div id="main_content_wrapper">
       <div id="main_content">
-        <div class="table_tools">
-          <div class="scopes">
-            <ul class="table_tools_segmented_control scope-default-group">
-              <li class="scope all">
-          </form>
-        </div>
+        <form enctype="multipart/form-data"
+          class="formtastic raffle"
+          id="edit_raffle"
+          method="post">
+          {% csrf_token %}
+          {% if form.errors %}
+            <div class="error-messages">
+              {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                  <p>{{ field }}{{ error }}</p>
+                {% endfor %}
+              {% endfor %}
+            </div>
+          {% endif %}
+          <input type="hidden" name="evento" value="{{ evento.pk }}" />
+          {% if form.instance.pk %}
+            <input type="hidden"
+              name="dolar"
+              value="{{ form.instance.dolar.pk }}" />
+          {% else %}
+            <input type="hidden" name="dolar" value="{{ dolar.pk }}" />
+          {% endif %}
+          <fieldset class="inputs">
+            <legend>
+              <span>{{ evento.nombre }}</span>
+            </legend>
+
+            <ol>
+              <li class="string input required stringish">
+                <label class="label">Nombre</label>
+                <input type="text"
+                  value="{{ form.nombre.value|default_if_none:'' }}"
+                  name="nombre" />
+              </li>
+              <li class="string input required stringish">
+                <label class="label">Teléfono</label>
+                <input type="text"
+                  value="{{ form.telefono.value|default_if_none:'' }}"
+                  name="telefono" />
+              </li>
+
+              <li class="select input required">
+                <label class="label">
+                  Método de Pago<abbr title="requerido">*</abbr>
+                </label>
+                <select name="metodo">
+                  <option value="">-- Seleccionar --</option>
+                  {% for metodo in metodos %}
+                    {% if metodo.id == form.metodo.value %}
+                      <option value="{{ metodo.id }}" selected>
+                        <!-- prettier-ignore -->
+                        {{  metodo.banco|title}}
+                      </option>
+                    {% else %}
+                      <option value="{{ metodo.id }}">
+                        <!-- prettier-ignore -->
+                        {{ metodo.banco|title }}
+                      </option>
+                    {% endif %}
+                  {% endfor %}
+                </select>
+              </li>
+              <div class="columns">
+                <div class="column" style="width: 100.0%;">
+                  <fieldset class="inputs">
+                    <legend>
+                      <span>DISPONIBLES ONLINE</span>
+                    </legend>
+
+                    <input type="text"
+                      placeholder="Buscar..."
+                      style="width: 200px;"
+                      id="buscador" />
+                    <button onclick="buscarTicket(this)" type="button">
+                      Buscar
+                    </button>
+                    <input type="hidden"
+                      name="boletos"
+                      id="boletosName"
+                      value="" />
+                    <div id="lista" class="input-field col s12 containtickets">
+                      {% for numero in tickets %}
+                        {% if numero in agarrados %}
+                          <button type="button"
+                            class="ticket-opcion"
+                            disabled
+                            data-ticket="{{ numero }}"
+                            data-disabled="true">
+                            {{ numero }}
+                          </button>
+                        {% elif numero|stringformat:'s' in seleccionados %} 
+                          <button type="button"
+                            class="ticket-opcion seleccionado"
+                            onclick="seleccionarTicket(this)"
+                            data-ticket="{{ numero }}">
+                            {{ numero }}
+                          </button>
+                        {% else %}
+                          <button type="button"
+                            class="ticket-opcion"
+                            onclick="seleccionarTicket(this)"
+                            data-ticket="{{ numero }}">
+                            {{ numero }}
+                          </button>
+                        {% endif %}
+                      {% endfor %}
+                    </div>
+                  </fieldset>
+                </div>
+                <div style="clear:both;"></div>
+              </div>
+              <li class="text input optional">
+                <label class="label">Notas</label><textarea rows="20"
+                  name="nota"></textarea>
+              </li>
+              <li class="select input required">
+                <label class="label">
+                  Estatus <abbr title="requerido">*</abbr>
+                </label>
+                <select name="status" value="{{ form.status.value }}">
+                  <option value="">--Seleccionar--</option>
+                  {% for status_id, status in status_choices %}
+                    {% if status_id == form.status.value %}
+                      <option value="{{ status_id }}" selected>{{ status }}</option>
+                    {% else %}
+                      <option value="{{ status_id }}">{{ status }}</option>
+                    {% endif %}
+                  {% endfor %}
+                </select>
+              </li>
+
+              <li class="number input optional numeric stringish">
+                <label class="label">Monto</label><input step="any"
+                  type="number"
+                  value="{{ form.monto.value|default_if_none:0 }}"
+                  name="monto" />
+              </li>
+
+              <li class="string input optional stringish">
+                <label class="label">Referencia</label>
+                <input type="text"
+                  value="{{ form.referencia.value|default_if_none:'' }}"
+                  name="referencia" />
+              </li>
+
+              <li class="file input optional">
+                <label class="label">Comprobante</label><input type="file"
+                  name="foto"
+                  onclick="fileChange(this, 'preview-foto')" />
+
+                <p class="inline-hints">
+                  <img src="{{ form.foto.value.url|default_if_none:'' }}"
+                    id="preview-foto" />
+                </p>
+              </li>
+            </ol>
+          </fieldset>
+          <fieldset class="actions">
+            <ol>
+              <li class="action input_action" id="raffle_submit_action">
+                <input type="submit"
+                  name="commit"
+                  value="Guardar Compra"
+                  data-disable-with="Guardar Compra" />
+              </li>
+              <li class="cancel">
+                <a href="/admin/clientes">Cancelar</a>
+              </li>
+            </ol>
+          </fieldset>
+        </form>
       </div>
     </div>
   </div>
+{% endblock %}
+{% block javascript %}
+  <script>
+    let tickets_seleccionados = [];
+
+    function fileChange(input, id) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+          document.getElementById(id).setAttribute("src", e.target.result);
+        };
+
+        reader.readAsDataURL(input.files[0]);
+        document.getElementById("file-label").hidden = true;
+        document.getElementById("file-btn").hidden = true;
+      }
+    }
+
+    function buscarTicket() {
+      const input = document.getElementById("buscador");
+      document.querySelectorAll(".ticket-opcion").forEach((element) => {
+        if (
+          element.innerText.toLowerCase().includes(input.value.toLowerCase())
+        ) {
+          element.hidden = false;
+        } else {
+          element.hidden = true;
+        }
+      });
+    }
+
+    function seleccionarTicket(btn) {
+      let ticket = btn.dataset.ticket;
+      if (tickets_seleccionados.includes(ticket)) {
+        btn.classList.remove("seleccionado");
+        tickets_seleccionados = tickets_seleccionados.filter(
+          (item) => item !== ticket
+        );
+      } else {
+        btn.classList.add("seleccionado");
+        tickets_seleccionados.push(ticket);
+      }
+      document.querySelector("#boletosName").value =
+        tickets_seleccionados.join(",");
+    }
+  </script>
 {% endblock %}

@@ -53,4 +53,4 @@ class MetodoForm(forms.ModelForm):
 class CompraForm(forms.ModelForm):
     class Meta:
         model = Comprobante
-        fields = "__all__"
+        exclude = ["fecha"]

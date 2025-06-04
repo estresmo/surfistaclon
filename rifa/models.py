@@ -15,7 +15,8 @@ class Dolar(models.Model):
     def obtener_dolar(cls):
         ultimo = cls.objects.last()
         if not ultimo:
-            return cls.actualizar()
+            ultimo = cls.actualizar()
+            return round(ultimo.valor_bs, 2)
         # Hacemos los cálculos en horario Venezolano
         vnzla_tz = pytz.timezone("America/Caracas")
         ultima_fecha = ultimo.fecha_hora.astimezone(vnzla_tz)
@@ -35,6 +36,11 @@ class Dolar(models.Model):
             except Exception:
                 logger.warning("No se pudo actualizar el dolar")
         return round(ultimo.valor_bs, 2)
+
+    @classmethod
+    def dolar_actual(cls):
+        cls.obtener_dolar()
+        return cls.objects.last()
 
     @classmethod
     def actualizar(cls):

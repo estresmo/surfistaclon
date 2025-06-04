@@ -132,7 +132,8 @@ class Comprobante(models.Model):
     historial = HistoricalRecords()
     evento = models.ForeignKey(Evento, models.RESTRICT, null=False)
     monto = models.FloatField(default=0)
-    fecha_verificacion = models.DateTimeField(null=True)
+    fecha_verificacion = models.DateTimeField(null=True, blank=True)
+    nota = models.TextField(null=True, blank=True)
 
     @property
     def boletos(self):

@@ -11,6 +11,8 @@ from django.views.generic import View
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
 
+from rifa.models import Dolar
+
 from .forms import (
     ClienteForm,
     CompraForm,
@@ -112,12 +114,82 @@ class ComprasCreateView(LoginRequiredMixin, CreateView):
     form_class = CompraForm
     success_url = "/admin/compras"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        evento = Evento.obtener_actual()
+        if evento is None:
+            return context
+        agarrados = NumeroRifa.objects.filter(
+            comprobante__evento=evento
+        ).prefetch_related("comprobante__evento")
+        tickets = (format(t, evento.digitos) for t in range(evento.total_tickets))
+        context["tickets"] = tickets
+        context["agarrados"] = [str(a) for a in agarrados]
+        context["status_choices"] = StatusChoices.choices
+        context["metodos"] = MetodoPago.objects.all()
+        context["evento"] = evento
+        context["dolar"] = Dolar.dolar_actual()
+        return context
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        boletos = self.request.POST["boletos"].strip(",").split(",")
+        NumeroRifa.objects.filter(comprobante=form.instance).delete()
+        if form.instance.status != StatusChoices.RECHAZADO:
+            numeros = []
+            for boleto in boletos:
+                numero = NumeroRifa(
+                    numero=boleto,
+                    comprobante=form.instance,
+                    evento=form.instance.evento,
+                )
+                numeros.append(numero)
+            NumeroRifa.objects.bulk_create(numeros)
+        form.instance.monto = calcular_monto(form.instance)
+        form.instance.save(update_fields=["monto"])
+        return response
+
 
 class ComprasUpdateView(LoginRequiredMixin, UpdateView):
     template_name = "admin/compra_form.html"
     form_class = CompraForm
     success_url = "/admin/compras"
     model = Comprobante
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        evento = Evento.objects.get(pk=self.kwargs["pk"])
+        agarrados = NumeroRifa.objects.filter(
+            comprobante__evento=evento
+        ).prefetch_related("comprobante__evento")
+        tickets = (format(t, evento.digitos) for t in range(evento.total_tickets))
+        context["tickets"] = tickets
+        context["agarrados"] = [str(a) for a in agarrados]
+        context["status_choices"] = StatusChoices.choices
+        context["metodos"] = MetodoPago.objects.all()
+        context["evento"] = evento
+        context["seleccionados"] = (
+            format(b.numero, evento.digitos) for b in self.object.boletos
+        )
+        return context
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        boletos = self.request.POST["boletos"].strip(",").split(",")
+        NumeroRifa.objects.filter(comprobante=form.instance).delete()
+        if form.instance.status != StatusChoices.RECHAZADO:
+            numeros = []
+            for boleto in boletos:
+                numero = NumeroRifa(
+                    numero=boleto,
+                    comprobante=form.instance,
+                    evento=form.instance.evento,
+                )
+                numeros.append(numero)
+            NumeroRifa.objects.bulk_create(numeros)
+        form.instance.monto = calcular_monto(form.instance)
+        form.instance.save(update_fields=["monto"])
+        return response
 
 
 @login_required
@@ -130,15 +202,16 @@ def eliminar_compra(request: HttpRequest, pk: int):
 
 
 def eliminar_rifa(request: HttpRequest, pk: int):
-    evento = get_object_or_404(Evento, pk=pk)  
-    evento.delete() 
+    evento = get_object_or_404(Evento, pk=pk)
+    evento.delete()
     return JsonResponse({"result": "ok"})
 
+
 def eliminar_metodo(request: HttpRequest, pk: int):
-        metodo_pago = get_object_or_404(MetodoPago, pk=pk)
-        metodo_pago.delete()      
-        return JsonResponse({"result": "ok"})
-   
+    metodo_pago = get_object_or_404(MetodoPago, pk=pk)
+    metodo_pago.delete()
+    return JsonResponse({"result": "ok"})
+
 
 @login_required
 def verificar_comprobante(request: HttpRequest, pk: int):
