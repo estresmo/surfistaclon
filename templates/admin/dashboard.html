@@ -10,15 +10,18 @@
     <div id="main_content_wrapper">
       <div id="main_content">
         <div class="blank_slate_container" id="dashboard_default_message">
-          <select onchange="refreshDataRaffle();" id="selectRaffle">
-            <option value="3927">COMBO AMOROSO - 2025-06-20</option>
-            <option value="3834">EL COMBO MALIANTEO - 2025-05-29</option>
-            <option value="3636">COMBO FAMILIAR - 2025-04-25</option>
-            <option value="3523">COMBO DEL SHOW - 2025-03-27</option>
-            <option value="3025">EL YT DE LOS PODERES #1 - 2025-03-10</option>
-          </select>
+          <form method="get">
+            <select onchange="refreshDataRaffle();" id="selectRaffle">
+              <option value="3927">COMBO AMOROSO - 2025-06-20</option>
+              <option value="3834">EL COMBO MALIANTEO - 2025-05-29</option>
+              <option value="3636">COMBO FAMILIAR - 2025-04-25</option>
+              <option value="3523">COMBO DEL SHOW - 2025-03-27</option>
+              <option value="3025">EL YT DE LOS PODERES #1 - 2025-03-10</option>
+            </select>
+          </form>
+
           <div class="columns">
-            Ticket: $2.00 Dólares Americanos<div style="clear:both;"></div>
+            Ticket: $2.00 Dólares<div style="clear:both;"></div>
           </div>
         </div>
         <div class="columns" id="cardsDashboard">
@@ -703,10 +706,6 @@
                   })();
                 </script>
               </div>
-            </div>
-          </div>
-          <div style="clear:both;"></div>
-        </div>
             </div>
           </div>
           <div style="clear:both;"></div>

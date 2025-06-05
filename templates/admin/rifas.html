@@ -10,7 +10,7 @@
 {% endblock %}
 {% block content %}
   <div id="active_admin_content" class="without_sidebar">
-     {% csrf_token %}
+    {% csrf_token %}
     <div id="main_content_wrapper">
       <div id="main_content">
         <button class="btn-add" onclick="location.href='/admin/rifas/crear'">
@@ -58,7 +58,7 @@
                   </thead>
                   <tbody>
                     {% for rifa in rifas %}
-                      <tr class="odd">
+                      <tr class="odd" id="row-{{ rifa.id }}">
                         <td class="col col-image">
                           <a target="_blank"
                             rel="noopener"
@@ -108,15 +108,12 @@
                             <a class="edit_link member_link"
                               title="Editar"
                               href="/admin/rifas/{{ rifa.pk }}/">
-                               <i class="fas fa-pen"></i>
-                            </a>
+                              <i class="fas fa-pen"></i>
                             </a><a class="trash"
                               onclick="eliminarRifa('{{ rifa.id }}')"
                               href="javascript:void(0)">
                               <i class="fas fa-trash"></i>
                             </a>
-                          </div>
-                        </td>
                           </div>
                         </td>
                       </tr>
@@ -141,30 +138,6 @@
     const crsf_token = document.querySelector(
       "[name=csrfmiddlewaretoken]"
     ).value;
-    async function verificarRifa(id) {
-      const element = document.getElementById("verificar-" + id);
-      element.classList.replace("pending", "processing");
-
-      const response = await fetch(`/admin/verificar/${id}`, {
-        method: "POST",
-        headers: {
-          "X-CSRFToken": crsf_token,
-        },
-      });
-      try {
-        const result = await response.json();
-        if (result.result == "ok") {
-          element.classList.replace("processing", "verified");
-          document.getElementById(`fecha-v-${id}`).innerText = element.fecha;
-          document.getElementById(`hora-v-${id}`).innerText = element.hora;
-        } else {
-          alert("Ya ha sido verificado anteriormente");
-        }
-      } catch (error) {
-        alert("Ha ocurrido un error");
-      }
-    }
-
     async function eliminarRifa(id) {
       const confirmed = confirm("¿Estas seguro de eliminar esta rifa?");
       if (!confirmed) return;
@@ -189,4 +162,3 @@
     }
   </script>
 {% endblock %}
-

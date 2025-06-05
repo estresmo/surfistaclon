@@ -7,7 +7,7 @@
 {% endblock %}
 {% block content %}
   <div id="active_admin_content" class="without_sidebar">
-     {% csrf_token %}
+    {% csrf_token %}
     <div id="main_content_wrapper">
       <div id="main_content">
         <button class="btn-add" onclick="location.href='/admin/metodos/crear'">
@@ -41,7 +41,7 @@
                   </thead>
                   <tbody>
                     {% for metodo in metodos %}
-                      <tr class="odd" id="payment_type_4958">
+                      <tr class="odd" id="row-{{ metodo.id }}">
                         <td class="col col-bank_logo">
                           <img class="avatar_image"
                             src="{{ metodo.imagen.url }}" />
@@ -64,8 +64,7 @@
                             <a class="edit_link member_link"
                               title="Editar"
                               href="/admin/metodos/{{ metodo.pk }}">
-                                <i class="fas fa-pen"></i>
-                            </a>
+                              <i class="fas fa-pen"></i>
                             </a><a class="trash"
                               onclick="eliminarMetodos('{{ metodo.id }}')"
                               href="javascript:void(0)">
@@ -95,32 +94,11 @@
     const crsf_token = document.querySelector(
       "[name=csrfmiddlewaretoken]"
     ).value;
-    async function verificarMetodos(id) {
-      const element = document.getElementById("verificar-" + id);
-      element.classList.replace("pending", "processing");
-
-      const response = await fetch(`/admin/verificar/${id}`, {
-        method: "POST",
-        headers: {
-          "X-CSRFToken": crsf_token,
-        },
-      });
-      try {
-        const result = await response.json();
-        if (result.result == "ok") {
-          element.classList.replace("processing", "verified");
-          document.getElementById(`fecha-v-${id}`).innerText = element.fecha;
-          document.getElementById(`hora-v-${id}`).innerText = element.hora;
-        } else {
-          alert("Ya ha sido verificado anteriormente");
-        }
-      } catch (error) {
-        alert("Ha ocurrido un error");
-      }
-    }
 
     async function eliminarMetodos(id) {
-      const confirmed = confirm("¿Estas seguro de eliminar esta método de pago?");
+      const confirmed = confirm(
+        "¿Estas seguro de eliminar esta método de pago?"
+      );
       if (!confirmed) return;
 
       try {
@@ -143,4 +121,3 @@
     }
   </script>
 {% endblock %}
-
