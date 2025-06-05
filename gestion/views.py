@@ -2,8 +2,8 @@ from typing import Optional
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Count, Q, Sum
 from django.contrib.postgres.aggregates import ArrayAgg  # Import this!
+from django.db.models import Count, Q, Sum
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
@@ -216,12 +216,16 @@ def eliminar_compra(request: HttpRequest, pk: int):
     return JsonResponse({"result": "ok"})
 
 
+@login_required
+@require_POST
 def eliminar_rifa(request: HttpRequest, pk: int):
     evento = get_object_or_404(Evento, pk=pk)
     evento.delete()
     return JsonResponse({"result": "ok"})
 
 
+@login_required
+@require_POST
 def eliminar_metodo(request: HttpRequest, pk: int):
     metodo_pago = get_object_or_404(MetodoPago, pk=pk)
     metodo_pago.delete()
@@ -255,7 +259,47 @@ def verificar_comprobante(request: HttpRequest, pk: int):
 
 @login_required
 def dashboardView(request: HttpRequest):
-    return render(request, "admin/dashboard.html")
+    eventos = Evento.objects.only("id", "nombre", "fecha_fin").all()
+    evento_id = request.GET.get("rifa")
+    if evento_id:
+        evento_actual = Evento.objects.get(id=evento_id)
+    else:
+        evento_actual = Evento.obtener_actual()
+    if evento_actual is None:
+        return render(request, "admin/dashboard.html", {"eventos": eventos})
+    comprobantes = Comprobante.objects.filter(evento=evento_actual)
+
+    participantes = (
+        comprobantes.values("telefono", "nombre")
+        .annotate(
+            num_tickets=Count("numerorifa"),
+            total=Sum("monto"),
+            boletos=ArrayAgg("numerorifa__numero"),
+        )
+        .order_by("-num_tickets")
+    )
+    total_comprobantes = comprobantes.count()
+    total_numeros = NumeroRifa.objects.filter(evento=evento_actual).count()
+    total_participantes = participantes.count()
+    por_cofirmar = comprobantes.filter(status=StatusChoices.NO_VERIFICADO).aggregate(
+        monto=Sum("monto"), cantidad=Count("id"), tickets=Count("numerorifa")
+    )
+    verificados = comprobantes.filter(status=StatusChoices.VERIFICADO).aggregate(
+        monto=Sum("monto"), cantidad=Count("id"), tickets=Count("numerorifa")
+    )
+    progreso = (total_numeros / evento_actual.total_tickets) * 100
+    context = {
+        "eventos": eventos,
+        "evento_actual": evento_actual,
+        "total_participantes": total_participantes,
+        "total_comprobantes": total_comprobantes,
+        "total_numeros": total_numeros,
+        "participantes": participantes[:10],
+        "por_cofirmar": por_cofirmar,
+        "verificados": verificados,
+        "progreso": round(progreso, 2),
+    }
+    return render(request, "admin/dashboard.html", context)
 
 
 @login_required
@@ -266,11 +310,6 @@ def usuariosView(request: HttpRequest):
 @login_required
 def ojoView(request: HttpRequest):
     return render(request, "admin/ojo.html")
-
-
-@login_required
-def purchasesView(request: HttpRequest):
-    return render(request, "admin/purchases.html")
 
 
 class EventoView(LoginRequiredMixin, View):

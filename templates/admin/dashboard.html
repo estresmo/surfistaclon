@@ -5,23 +5,53 @@
   Dashboard
 {% endblock %}
 
+{% block head %}
+  <style>
+    .rifa-select {
+      padding: 12px 20px 15px;
+      text-align: center;
+      height: 52px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #ffffff;
+      background: #4b0505;
+      border-radius: 20px;
+    }
+  </style>
+{% endblock %}
+
 {% block content %}
   <div id="active_admin_content" class="without_sidebar">
     <div id="main_content_wrapper">
       <div id="main_content">
         <div class="blank_slate_container" id="dashboard_default_message">
-          <form method="get">
-            <select onchange="refreshDataRaffle();" id="selectRaffle">
-              <option value="3927">COMBO AMOROSO - 2025-06-20</option>
-              <option value="3834">EL COMBO MALIANTEO - 2025-05-29</option>
-              <option value="3636">COMBO FAMILIAR - 2025-04-25</option>
-              <option value="3523">COMBO DEL SHOW - 2025-03-27</option>
-              <option value="3025">EL YT DE LOS PODERES #1 - 2025-03-10</option>
+          <form method="get" action="" id="rifa-form">
+            <select onchange="refrescarRifa();" class="rifa-select" name="rifa">
+              {% for evento in eventos %}
+                {% if evento.id == evento_actual.id %}
+                  <option value="{{ evento.id }}" selected>
+                    <!-- prettier-ignore -->
+                    {{ evento.nombre|title }} -
+                    {{ evento.fecha_fin|date:'F Y' }}
+                  </option>
+                {% else %}
+                  <option value="{{ evento.id }}">
+                    <!-- prettier-ignore -->
+                    {{ evento.nombre|title }} -
+                    {{ evento.fecha_fin|date:'F Y' }}
+                  </option>
+                {% endif %}
+              {% endfor %}
             </select>
           </form>
+          <script>
+            function refrescarRifa() {
+              document.getElementById("rifa-form").submit();
+            }
+          </script>
 
           <div class="columns">
-            Ticket: $2.00 Dólares<div style="clear:both;"></div>
+            Ticket: ${{ evento_actual.precio_unidad }} Dólares<div style="clear:both;"></div>
           </div>
         </div>
         <div class="columns" id="cardsDashboard">
@@ -29,8 +59,12 @@
             <div class="panel">
               <h3>Total Participantes</h3>
               <div class="panel_contents">
-                <h1>1076 personas</h1>
-                <span>2025-05-21 - 2025-05-29</span>
+                <h1>{{ total_participantes }} personas</h1>
+                <span>
+                  <!-- prettier-ignore -->
+                  {{ evento_actual.fecha_inicio|date:'d-m-Y' }} -
+                  {{ evento_actual.fecha_fin|date:'d-m-Y' }}
+                </span>
               </div>
             </div>
           </div>
@@ -38,8 +72,10 @@
             <div class="panel">
               <h3>Total Tickets Registrados</h3>
               <div class="panel_contents">
-                <h1>3888 tickets</h1>
-                <span>Disponibles: 6112/10000 online y 0/0 offline</span>
+                <h1>{{ total_comprobantes }} tickets</h1>
+                <span>
+                  Disponibles: {{ total_numeros }}/{{ evento_actual.total_tickets }}
+                </span>
               </div>
             </div>
           </div>
@@ -47,8 +83,10 @@
             <div class="panel">
               <h3>Total por Confirmar</h3>
               <div class="panel_contents">
-                <h1>$54.00</h1>
-                <span>Total 13 compras con 27 tickets.</span>
+                <h1>${{ por_cofirmar.monto|default_if_none:0 }}</h1>
+                <!-- prettier-ignore -->
+                <span>Total {{ por_cofirmar.cantidad }} compras
+                   con {{ por_cofirmar.tickets }} tickets.</span>
               </div>
             </div>
           </div>
@@ -56,8 +94,10 @@
             <div class="panel">
               <h3>Total Confirmado</h3>
               <div class="panel_contents">
-                <h1>$7,722.00</h1>
-                <span>Total 1356 compras con 3861 tickets.</span>
+                <h1>${{ verificados.monto|default_if_none:0 }}</h1>
+                <!-- prettier-ignore -->
+                <span>Total {{ verificados.cantidad }} compras
+                   con {{ verificados.tickets }} tickets.</span>
               </div>
             </div>
           </div>
@@ -66,10 +106,10 @@
         <div class="columns" id="progressDashboard">
           <div class="column" style="width: 100.0%;">
             <div class="panel">
-              <h3>Progreso de Venta 38.88%</h3>
+              <h3>Progreso de Venta {{ progreso }}%</h3>
               <div class="panel_contents">
                 <div id="chart-1"
-                  style="height: 50px; width: 100%; text-align: center; color: #999; line-height: 50px; font-size: 14px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;">
+                  style="height: 50px; width: 100%; text-align: center; color: #5f2b2b; line-height: 50px; font-size: 14px; ">
                   <canvas style="display: block; box-sizing: border-box; height: 50px; width: 1348px;"
                     width="1348"
                     height="50"></canvas>
