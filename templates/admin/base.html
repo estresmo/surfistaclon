@@ -160,13 +160,9 @@
           headers: {
             "X-CSRFToken": "{{ csrf_token }}",
           },
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.success) {
-              window.location.href = "/admin/login";
-            }
-          });
+        }).then(() => {
+          window.location.href = "/admin/login";
+        });
       }
     </script>
     {% block javascript %}

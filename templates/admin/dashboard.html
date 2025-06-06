@@ -108,8 +108,7 @@
             <div class="panel">
               <h3>Progreso de Venta {{ progreso }}%</h3>
               <div class="panel_contents">
-                <div id="chart-1"
-                  style="height: 50px; width: 100%; text-align: center; color: #5f2b2b; line-height: 50px; font-size: 14px; ">
+                <div id="chart-1">
                   <canvas style="display: block; box-sizing: border-box; height: 50px; width: 1348px;"
                     width="1348"
                     height="50"></canvas>
@@ -130,10 +129,17 @@
                       return;
 
                     var createChart = function () {
-                      new Chartkick["BarChart"]("chart-1", [["38.88%", 3888]], {
-                        colors: ["#2C435D", "#5ea3d3"],
-                        max: 10000,
-                      });
+                      const numeros = parseInt("{{ total_numeros }}");
+                      const max = parseInt("{{evento_actual.total_tickets}}");
+
+                      new Chartkick["BarChart"](
+                        "chart-1",
+                        [["{{ progreso }}%", numeros]],
+                        {
+                          colors: ["#4f1616", "#5ea3d3"],
+                          max: max,
+                        }
+                      );
                     };
                     if ("Chartkick" in window) {
                       createChart();
@@ -157,12 +163,17 @@
               <h3>Tickets Registrados</h3>
               <div class="panel_contents">
                 <div id="graphic"
-                  style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;">
+                  style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px;">
                   <canvas style="display: block; box-sizing: border-box; height: 300px; width: 1348px;"
                     width="1348"
                     height="300"></canvas>
                 </div>
                 <script>
+                  const tickets_fecha = "{{ tickets_fecha }}".split(",");
+                  const TICKETS_FECHA = tickets_fecha.map((i) => i.split(";"));
+                  const tickets_chart = TICKETS_FECHA.map((i) => [i[0], i[1]]);
+                  const compras_chart = TICKETS_FECHA.map((i) => [i[0], i[3]]);
+                  const buyers_chart = TICKETS_FECHA.map((i) => [i[0], i[3]]);
                   (function () {
                     if (
                       document.documentElement.hasAttribute(
@@ -178,21 +189,9 @@
                       return;
 
                     var createChart = function () {
-                      new Chartkick["AreaChart"](
-                        "graphic",
-                        [
-                          ["2025-05-20", 316],
-                          ["2025-05-21", 729],
-                          ["2025-05-22", 432],
-                          ["2025-05-23", 526],
-                          ["2025-05-24", 500],
-                          ["2025-05-25", 358],
-                          ["2025-05-26", 455],
-                          ["2025-05-27", 295],
-                          ["2025-05-28", 277],
-                        ],
-                        { colors: ["#2C435D", "#5ea3d3"] }
-                      );
+                      new Chartkick["AreaChart"]("graphic", tickets_chart, {
+                        colors: ["#4f1616", "#5ea3d3"],
+                      });
                     };
                     if ("Chartkick" in window) {
                       createChart();
@@ -216,12 +215,17 @@
               <h3>Participantes y Compras</h3>
               <div class="panel_contents">
                 <div id="chart-2"
-                  style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;">
+                  style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px;">
                   <canvas style="display: block; box-sizing: border-box; height: 300px; width: 1348px;"
                     width="1348"
                     height="300"></canvas>
                 </div>
                 <script>
+                  const tickets_metodo = "{{ tickets_metodo }}".split(",");
+                  const TICKETS_METODO = tickets_metodo.map((i) =>
+                    i.split(";")
+                  );
+                  const m_m_chart = TICKETS_METODO.map((i) => [i[0], i[1]]);
                   (function () {
                     if (
                       document.documentElement.hasAttribute(
@@ -242,31 +246,11 @@
                         [
                           {
                             name: "Participantes",
-                            data: [
-                              ["2025-05-20", 91],
-                              ["2025-05-21", 245],
-                              ["2025-05-22", 134],
-                              ["2025-05-23", 144],
-                              ["2025-05-24", 122],
-                              ["2025-05-25", 92],
-                              ["2025-05-26", 107],
-                              ["2025-05-27", 75],
-                              ["2025-05-28", 66],
-                            ],
+                            data: buyers_chart,
                           },
                           {
                             name: "Compras",
-                            data: [
-                              ["2025-05-20", 89],
-                              ["2025-05-21", 270],
-                              ["2025-05-22", 154],
-                              ["2025-05-23", 183],
-                              ["2025-05-24", 169],
-                              ["2025-05-25", 128],
-                              ["2025-05-26", 162],
-                              ["2025-05-27", 109],
-                              ["2025-05-28", 105],
-                            ],
+                            data: compras_chart,
                           },
                         ],
                         { colors: ["#2C435D", "#5ea3d3"] }
@@ -294,7 +278,7 @@
               <h3>PAGOS POR CONFIRMAR</h3>
               <div class="panel_contents">
                 <div id="chart-3"
-                  style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;">
+                  style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px;">
                   <canvas style="display: block; box-sizing: border-box; height: 300px; width: 644px;"
                     width="644"
                     height="300"></canvas>
@@ -349,7 +333,7 @@
               <h3>PAGOS CONFIRMADOS</h3>
               <div class="panel_contents">
                 <div id="chart-4"
-                  style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;">
+                  style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px;">
                   <canvas style="display: block; box-sizing: border-box; height: 300px; width: 644px;"
                     width="644"
                     height="300"></canvas>
@@ -417,7 +401,7 @@
               <h3>Medios de Pago</h3>
               <div class="panel_contents">
                 <div id="chart-5"
-                  style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;">
+                  style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px;">
                   <canvas style="display: block; box-sizing: border-box; height: 300px; width: 644px;"
                     width="644"
                     height="300"></canvas>
@@ -470,7 +454,7 @@
               <h3>Status de las Compras</h3>
               <div class="panel_contents">
                 <div id="chart-6"
-                  style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;">
+                  style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px;">
                   <canvas style="display: block; box-sizing: border-box; height: 300px; width: 644px;"
                     width="644"
                     height="300"></canvas>
@@ -523,7 +507,7 @@
               <h3>Participantes con más tickets</h3>
               <div class="panel_contents">
                 <div id="chart-7"
-                  style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;">
+                  style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px;">
                   <canvas style="display: block; box-sizing: border-box; height: 300px; width: 644px;"
                     width="644"
                     height="300"></canvas>
@@ -580,7 +564,7 @@
               <h3>Días con más ventas</h3>
               <div class="panel_contents">
                 <div id="chart-8"
-                  style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;">
+                  style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px;">
                   <canvas style="display: block; box-sizing: border-box; height: 300px; width: 644px;"
                     width="644"
                     height="300"></canvas>
@@ -637,7 +621,7 @@
               <h3>Números de Tickets frecuentes</h3>
               <div class="panel_contents">
                 <div id="chart-9"
-                  style="height: 396px; width: 100%; text-align: center; color: #999; line-height: 396px; font-size: 14px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;">
+                  style="height: 396px; width: 100%; text-align: center; color: #999; line-height: 396px; font-size: 14px;">
                   <canvas style="display: block; box-sizing: border-box; height: 396px; width: 644px;"
                     width="644"
                     height="396"></canvas>
@@ -702,7 +686,7 @@
               <h3>Ubicaciones (Participantes)</h3>
               <div class="panel_contents">
                 <div id="chart-10"
-                  style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial, Helvetica, sans-serif;">
+                  style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px;">
                   <canvas style="display: block; box-sizing: border-box; height: 300px; width: 644px;"
                     width="644"
                     height="300"></canvas>

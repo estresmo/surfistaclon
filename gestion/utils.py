@@ -1,10 +1,13 @@
-import requests
+import logging
 import re
 from typing import TypedDict, cast
 from urllib.parse import urljoin
 
-from gestion.models import Comprobante, Evento, Promocion
-import logging
+import requests
+from django.contrib.postgres.aggregates import ArrayAgg  # Import this!
+from django.db.models import Count, Sum
+
+from gestion.models import Comprobante, Evento, Promocion, StatusChoices
 
 logger = logging.getLogger(__name__)
 
@@ -39,6 +42,7 @@ def activate_session():
     link = urljoin(WHATSAPP_URL, "api/default/presence")
     data = {"presence": "offline"}
     requests.post(link, json=data)
+
 
 class PromocionDict(TypedDict):
     """Representa una promoción de boletos con cantidad y precio en descuento.
@@ -113,3 +117,97 @@ def calcular_precio(
         return total
     else:
         return calcular_precio(boletos, precio_unidad, promociones, index, total)
+
+
+def generar_estadisticas(evento: Evento):
+    comprobantes = list(
+        Comprobante.objects.filter(evento=evento)
+        .select_related("numerorifa", "metodo")
+        .prefetch_related("numerorifa__numero", "metodo__banco")
+        .annotate(
+            tickets=ArrayAgg("numerorifa__numero"),
+        )
+        .values(
+            "nombre",
+            "telefono",
+            "numerorifa__numero",
+            "fecha_creado",
+            "monto",
+            "metodo__banco",
+            "status",
+        )
+    )
+    participantes = obtener_participantes(evento)
+    total_comprobantes = len(comprobantes)
+    total_participantes = participantes.count()
+    top_participantes = participantes[:10]
+    por_confirmar = {"monto": 0, "cantidad": 0, "tickets": 0}
+    verificados = {"monto": 0, "cantidad": 0, "tickets": 0}
+    tickets_fecha_d = {}
+    tickets_metodo_d = {}
+    total_numeros = 0
+    for c in comprobantes:
+        c_numeros = len(c["numerorifa__numero"])
+        total_numeros += c_numeros
+        participante = f"{c['telefono']} {c['nombre']}"
+        fecha = c["fecha_creado"].strftime("%Y-%m-%d")
+        metodo = c["metodo__banco"]
+        if c["status"] == StatusChoices.NO_VERIFICADO:
+            por_confirmar["monto"] += c["monto"]
+            por_confirmar["cantidad"] += 1
+            por_confirmar["tickets"] += c_numeros
+        elif c["status"] == StatusChoices.VERIFICADO:
+            verificados["monto"] += c["monto"]
+            verificados["cantidad"] += 1
+            verificados["tickets"] += c_numeros
+        if fecha not in tickets_fecha_d:
+            tickets_fecha_d[fecha] = {
+                "tickets": c_numeros,
+                "cantidad": 1,
+                "monto": c["monto"],
+                "participantes": set(participante),
+            }
+        else:
+            tickets_fecha_d[fecha]["tickets"] += c_numeros
+            tickets_fecha_d[fecha]["cantidad"] += 1
+            tickets_fecha_d[fecha]["monto"] += c["monto"]
+            tickets_fecha_d[fecha]["participantes"].add(participante)
+        if metodo not in tickets_metodo_d:
+            tickets_metodo_d[metodo] = {
+                "tickets": c_numeros,
+                "cantidad": 1,
+                "monto": c["monto"],
+            }
+        else:
+            tickets_metodo_d[metodo]["tickets"] += c_numeros
+            tickets_metodo_d[metodo]["cantidad"] += 1
+            tickets_metodo_d[metodo]["monto"] += c["monto"]
+    progreso = round(total_numeros / evento.total_tickets, 4) * 100
+    return {
+        "total_participantes": total_participantes,
+        "total_comprobantes": total_comprobantes,
+        "total_numeros": total_numeros,
+        "participantes": top_participantes,
+        "por_cofirmar": por_confirmar,
+        "verificados": verificados,
+        "progreso": round(progreso, 2),
+        "tickets_fecha": tickets_fecha_d,
+        "tickets_metodo": tickets_metodo_d,
+    }
+
+
+def obtener_participantes(evento: Evento):
+    return (
+        Comprobante.objects.filter(evento=evento)
+        .select_related("numerorifa")
+        .prefetch_related(
+            "numerorifa__numero",
+        )
+        .values("telefono", "nombre")
+        .annotate(
+            num_tickets=Count("numerorifa"),
+            total=Sum("monto"),
+            boletos=ArrayAgg("numerorifa__numero"),
+        )
+        .order_by("-num_tickets")
+    )

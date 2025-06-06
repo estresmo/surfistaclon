@@ -3,7 +3,8 @@ from typing import Optional
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.postgres.aggregates import ArrayAgg  # Import this!
-from django.db.models import Count, Q, Sum
+from django.db.models import CharField, Count, Q, Sum, Value
+from django.db.models.functions import Concat
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
@@ -261,13 +262,14 @@ def verificar_comprobante(request: HttpRequest, pk: int):
 def dashboardView(request: HttpRequest):
     eventos = Evento.objects.only("id", "nombre", "fecha_fin").all()
     evento_id = request.GET.get("rifa")
-    if evento_id:
-        evento_actual = Evento.objects.get(id=evento_id)
-    else:
-        evento_actual = Evento.obtener_actual()
+    evento_actual = Evento.obtener_actual(evento_id)
     if evento_actual is None:
         return render(request, "admin/dashboard.html", {"eventos": eventos})
-    comprobantes = Comprobante.objects.filter(evento=evento_actual)
+    comprobantes = (
+        Comprobante.objects.filter(evento=evento_actual)
+        .select_related("numerorifa")
+        .prefetch_related("numerorifa__numero")
+    )
 
     participantes = (
         comprobantes.values("telefono", "nombre")
@@ -288,6 +290,40 @@ def dashboardView(request: HttpRequest):
         monto=Sum("monto"), cantidad=Count("id"), tickets=Count("numerorifa")
     )
     progreso = (total_numeros / evento_actual.total_tickets) * 100
+    tickets_fecha = list(
+        comprobantes.annotate(
+            participante=Concat(
+                "nombre", Value("|"), "telefono", output_field=CharField()
+            )
+        )
+        .values("fecha_creado")
+        .annotate(
+            num_tickets=Count("numerorifa"),
+            num_compras=Count("id"),
+            num_participantes=Count("participante", distinct=True),
+        )
+        .order_by("-fecha_creado")
+    )
+    tickets_fecha_str = []
+    for t_f in tickets_fecha:
+        t_f["fecha_creado"] = t_f["fecha_creado"].strftime("%Y-%m-%d")
+        tickets_fecha_str.append(
+            f"{t_f['fecha_creado']};{t_f['num_tickets']};{t_f['num_compras']};{t_f['num_participantes']}"
+        )
+    tickets_metodo = list(
+        comprobantes.select_related("metodo")
+        .prefetch_related("metodo__banco")
+        .values("metodo__banco")
+        .annotate(
+            tickets=Count("numerorifa"),
+            compras=Count("id"),
+        )
+    )
+    tickets_metodo_str = []
+    for t_m in tickets_metodo:
+        tickets_metodo_str.append(
+            f"{t_m['metodo__banco']};{t_m['tickets']};{t_m['compras']}"
+        )
     context = {
         "eventos": eventos,
         "evento_actual": evento_actual,
@@ -298,6 +334,8 @@ def dashboardView(request: HttpRequest):
         "por_cofirmar": por_cofirmar,
         "verificados": verificados,
         "progreso": round(progreso, 2),
+        "tickets_fecha": ",".join(tickets_fecha_str),
+        "tickets_metodo": ",".join(tickets_metodo_str),
     }
     return render(request, "admin/dashboard.html", context)
 

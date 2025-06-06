@@ -1,4 +1,5 @@
 import random
+from typing import Optional
 
 from django.db import models
 from django.utils import timezone
@@ -50,7 +51,9 @@ class Evento(models.Model):
         return Promocion.objects.filter(evento=self)
 
     @classmethod
-    def obtener_actual(cls):
+    def obtener_actual(cls, evento_id: Optional[str] = None):
+        if evento_id is not None:
+            return Evento.objects.get(id=evento_id)
         hoy = timezone.now()
         return Evento.objects.filter(fecha_inicio__lte=hoy, fecha_fin__gte=hoy).first()
 
@@ -134,6 +137,7 @@ class Comprobante(models.Model):
     monto = models.FloatField(default=0)
     fecha_verificacion = models.DateTimeField(null=True, blank=True)
     nota = models.TextField(null=True, blank=True)
+    fecha_creado = models.DateField(auto_now_add=True)
 
     @property
     def boletos(self):
