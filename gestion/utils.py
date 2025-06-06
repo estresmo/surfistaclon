@@ -130,7 +130,7 @@ def generar_estadisticas(evento: Evento):
         .values(
             "nombre",
             "telefono",
-            "numerorifa__numero",
+            "tickets",
             "fecha_creado",
             "monto",
             "metodo__banco",
@@ -147,7 +147,7 @@ def generar_estadisticas(evento: Evento):
     tickets_metodo_d = {}
     total_numeros = 0
     for c in comprobantes:
-        c_numeros = len(c["numerorifa__numero"])
+        c_numeros = len(c["tickets"])
         total_numeros += c_numeros
         participante = f"{c['telefono']} {c['nombre']}"
         fecha = c["fecha_creado"].strftime("%Y-%m-%d")

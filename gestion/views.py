@@ -34,7 +34,7 @@ from .models import (
     StatusChoices,
     Visualizacion,
 )
-from .utils import calcular_monto, send_whatsapp
+from .utils import calcular_monto, generar_estadisticas, send_whatsapp
 
 
 @login_required
@@ -258,6 +258,9 @@ def verificar_comprobante(request: HttpRequest, pk: int):
     return render(request, "admin/verificar.html")
 
 
+import time
+
+
 @login_required
 def dashboardView(request: HttpRequest):
     eventos = Evento.objects.only("id", "nombre", "fecha_fin").all()
@@ -265,6 +268,12 @@ def dashboardView(request: HttpRequest):
     evento_actual = Evento.obtener_actual(evento_id)
     if evento_actual is None:
         return render(request, "admin/dashboard.html", {"eventos": eventos})
+    start_time = time.time()
+    generar_estadisticas(evento_actual)
+    end_time = time.time()
+    elapsed_ms = (end_time - start_time) * 1000
+    print(f"1 Function executed in {elapsed_ms:.2f} milliseconds")
+    start_time = time.time()
     comprobantes = (
         Comprobante.objects.filter(evento=evento_actual)
         .select_related("numerorifa")
@@ -324,6 +333,9 @@ def dashboardView(request: HttpRequest):
         tickets_metodo_str.append(
             f"{t_m['metodo__banco']};{t_m['tickets']};{t_m['compras']}"
         )
+    end_time = time.time()
+    elapsed_ms = (end_time - start_time) * 1000
+    print(f"2 Function executed in {elapsed_ms:.2f} milliseconds")
     context = {
         "eventos": eventos,
         "evento_actual": evento_actual,
