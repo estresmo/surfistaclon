@@ -147,8 +147,6 @@ class ComprasListView(LoginRequiredMixin, ListView):
                 "cantidad",
             )
         )
-        print(comprobantes)
-
         return comprobantes
 
 
@@ -168,6 +166,9 @@ class ComprasCreateView(LoginRequiredMixin, CreateView):
         tickets = (format(t, evento.digitos) for t in range(evento.total_tickets))
         context["tickets"] = tickets
         context["agarrados"] = [str(a) for a in agarrados]
+        context["disponibles"] = [
+            n for n in range(evento.total_tickets) if n not in agarrados
+        ]
         context["status_choices"] = StatusChoices.choices
         context["metodos"] = MetodoPago.objects.all()
         context["evento"] = evento
@@ -176,7 +177,7 @@ class ComprasCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        boletos = self.request.POST["boletos"].strip(",").split(",")
+        boletos = self.request.POST.getlist("tickets")
         NumeroRifa.objects.filter(comprobante=form.instance).delete()
         if form.instance.status != StatusChoices.RECHAZADO:
             numeros = []
@@ -201,7 +202,7 @@ class ComprasUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        evento = Evento.objects.get(pk=self.kwargs["pk"])
+        evento = Evento.objects.get(pk=self.object.evento.pk)
         agarrados = NumeroRifa.objects.filter(
             comprobante__evento=evento
         ).prefetch_related("comprobante__evento")
@@ -209,10 +210,11 @@ class ComprasUpdateView(LoginRequiredMixin, UpdateView):
         seleccionados = list(
             format(b.numero, evento.digitos) for b in self.object.boletos
         )
-        print(seleccionados, tickets)
-        print(type(seleccionados[0]), type(tickets[0]))
         context["tickets"] = tickets
         context["agarrados"] = [str(a) for a in agarrados]
+        context["disponibles"] = [
+            n for n in range(evento.total_tickets) if n not in agarrados
+        ]
         context["status_choices"] = StatusChoices.choices
         context["metodos"] = MetodoPago.objects.all()
         context["evento"] = evento
@@ -221,7 +223,9 @@ class ComprasUpdateView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        boletos = self.request.POST["boletos"].strip(",").split(",")
+        boletos = self.request.POST.getlist("tickets")
+        eliminados = self.request.POST.getlist("eliminados")
+        boletos = [b for b in boletos if b not in eliminados]
         NumeroRifa.objects.filter(comprobante=form.instance).delete()
         if form.instance.status != StatusChoices.RECHAZADO:
             numeros = []
