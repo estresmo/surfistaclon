@@ -101,6 +101,13 @@ function cambiarPago(elemento) {
     .querySelector(".type.option-payment.selected")
     .classList.remove("selected");
   elemento.classList.add("selected");
+  if (elemento.dataset.id != 6) {
+    document.querySelector("#referencia-div").style.display = "none";
+    document.querySelector("#referencia").required = false;
+  } else {
+    document.querySelector("#referencia-div").style.display = "block";
+    document.querySelector("#referencia").required = true;
+  }
 }
 document.querySelectorAll(".type.option-payment").forEach(function (elemento) {
   elemento.onclick = function () {

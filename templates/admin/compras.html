@@ -16,6 +16,41 @@
       font-size: 8px;
     }
   </style>
+  <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css"
+    rel="stylesheet"
+    type="text/css" />
+  <style>
+    .datatable-sorter {
+      background: unset !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+    .datatable-sorter::after {
+      border-bottom: 4px solid #fff;
+    }
+    .datatable-sorter::before {
+      border-top: 4px solid #fff;
+    }
+    .datatable-pagination-list button {
+      background-image: none;
+      box-shadow: none;
+      text-shadow: none;
+      box-shadow: none;
+      border: none;
+      background-color: #e6e9ee;
+      border-radius: 4px;
+      padding: 5px 10px;
+    }
+    .datatable-pagination .datatable-active a,
+    .datatable-pagination .datatable-active a:focus,
+    .datatable-pagination .datatable-active a:hover,
+    .datatable-pagination .datatable-active button,
+    .datatable-pagination .datatable-active button:focus,
+    .datatable-pagination .datatable-active button:hover {
+      color: #efefef;
+      background-color: #4b0505 !important;
+    }
+  </style>
 {% endblock %}
 {% block content %}
   <div id="active_admin_content" class="with_sidebar">
@@ -62,28 +97,16 @@
                   <thead>
                     <tr>
                       <th class="col col-buyer">Participante</th>
-                      <th class="sortable col col-created_at">
-                        <a href="?order=created_at_desc">Fecha</a>
-                      </th>
-                      <th class="sortable col col-verify_date">
-                        <a href="?order=verify_date_desc">Verificación</a>
-                      </th>
+                      <th class="sortable col col-created_at">Fecha</th>
+                      <th class="sortable col col-verify_date">Verificación</th>
                       <th class="col col-payment_type">Cuenta</th>
-                      <th class="sortable col col-quantity">
-                        <a href="?order=quantity_desc">Cant.</a>
-                      </th>
-                      <th class="sortable col col-amount">
-                        <a href="?order=amount_desc">Monto</a>
-                      </th>
-                      <th class="col col-verify"></th>
-                      <th class="col col-whatsapp"></th>
-                      <th class="sortable col col-tickets">
-                        <a href="?order=tickets_desc">Números</a>
-                      </th>
-                      <th class="sortable col col-notes">
-                        <a href="?order=notes_desc">Notas</a>
-                      </th>
-                      <th class="col col-actions"></th>
+                      <th class="sortable col col-quantity">Cant.</th>
+                      <th class="sortable col col-amount">Monto</th>
+                      <th data-sortable="false" class="col col-verify"></th>
+                      <th data-sortable="false" class="col col-whatsapp"></th>
+                      <th class="sortable col col-tickets">Números</th>
+                      <th class="sortable col col-notes">Notas</th>
+                      <th data-sortable="false" class="col col-actions"></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -113,12 +136,12 @@
                           </small>
                         </td>
                         <td class="col col-payment_type">
-                          {{ compra.metodo }} <br />
+                          {{ compra.metodo__banco }} <br />
                         </td>
-                        <td class="col col-quantity">{{ compra.boletos.count }}</td>
+                        <td class="col col-quantity">{{ compra.cantidad }}</td>
                         <td class="col col-amount">
                           <a rel="modal:open"
-                            onclick="loadImageModal('{{ compra.foto.url }}')"
+                            onclick="loadImageModal('/media/{{ compra.foto }}')"
                             href="#containerDivVoucher">
                             <strong>${{ compra.monto }}</strong>
                           </a>
@@ -174,41 +197,6 @@
                   </tbody>
                 </table>
               </div>
-            </div>
-          </div>
-          <div id="index_footer">
-            <!--           <nav class="pagination">
-              <span class="page current">1</span>
-
-              <span class="page">
-                <a rel="next" href="?order=id_desc&amp;page=2">2</a>
-              </span>
-
-              <span class="page">
-                <a href="?order=id_desc&amp;page=3">3</a>
-              </span>
-
-              <span class="page">
-                <a href="?order=id_desc&amp;page=4">4</a>
-              </span>
-
-              <span class="page">
-                <a href="?order=id_desc&amp;page=5">5</a>
-              </span>
-
-              <span class="page gap">…</span>
-
-              <span class="next">
-                <a rel="next" href="?order=id_desc&amp;page=2">Sig ›</a>
-              </span>
-
-              <span class="last">
-                <a href="?order=id_desc&amp;page=74">Fin</a>
-              </span>
-            </nav>           -->
-            <div class="pagination_information">
-              Mostrando Compras <b>1&nbsp;-&nbsp;0</b> de un total de
-              <b>0</b>
             </div>
           </div>
         </div>
@@ -354,7 +342,11 @@
   </div>
 {% endblock %}
 {% block javascript %}
+  <script src="/static/admin/simple-datatables.js"></script>
+
   <script>
+    const dataTable = new simpleDatatables.DataTable(".index_table");
+
     const crsf_token = document.querySelector(
       "[name=csrfmiddlewaretoken]"
     ).value;

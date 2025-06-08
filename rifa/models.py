@@ -28,12 +28,14 @@ class Dolar(models.Model):
         if ultima_fecha < corte_1 and hoy > corte_1:
             try:
                 ultimo = cls.actualizar()
-            except Exception:
+            except Exception as e:
+                print(e)
                 logger.warning("No se pudo actualizar el dolar")
         if ultima_fecha < corte_2 and hoy > corte_2:
             try:
                 ultimo = cls.actualizar()
-            except Exception:
+            except Exception as e:
+                print(e)
                 logger.warning("No se pudo actualizar el dolar")
         return round(ultimo.valor_bs, 2)
 
