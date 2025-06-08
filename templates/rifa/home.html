@@ -345,14 +345,12 @@
     <div class="wrapper">
       {% if evento %}
         {% include 'rifa_detalle/header.html' %}
+        {% include 'rifa/lista_boletos.html' %}
+        {% include 'rifa/verificar_pago.html' %}
       {% else %}
         {% include 'rifa/header.html' %}
       {% endif %}
-      <!-- CLIENTS -->
-      <!-- LISTA BOLETOS -->
-      {% include 'rifa/lista_boletos.html' %}
-      <!-- VERIFICADOR -->
-      {% include 'rifa/verificar_pago.html' %}
+
       <!-- FINALIZADOS -->
       {% include 'rifa/finalizados.html' %}
       <!-- FOOTER -->

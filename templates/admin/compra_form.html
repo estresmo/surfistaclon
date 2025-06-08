@@ -55,6 +55,66 @@
       height: 500px;
       overflow: auto;
     }
+
+    .has_many_container.raffle_tickets > fieldset.has_many_fields {
+      background: #f7f9fb;
+      width: 100px;
+      height: auto;
+      border-radius: 14px;
+      margin: 2px 2px;
+      display: inline-flex;
+    }
+    @media screen {
+      form fieldset > ol > li fieldset.inputs ol {
+        float: left;
+        width: 100%;
+        margin: 0;
+      }
+    }
+    .has_many_container.raffle_tickets
+      > fieldset.has_many_fields
+      > ol
+      > li.stringish
+      > input {
+      background: white;
+      width: 76px;
+      text-align: center;
+      font-size: 14px !important;
+      font-weight: 600;
+      font-family: inherit;
+    }
+    .has_many_container.raffle_tickets
+      > fieldset.has_many_fields
+      > ol
+      > li.has_many_delete
+      > label {
+      color: #273547;
+      background: #ffffff;
+      display: block;
+      width: 66px;
+      border: 2px solid #f8fcff;
+      border-radius: 11px;
+      padding: 0;
+      position: absolute;
+      left: 20px;
+      bottom: 4px;
+      line-height: 18px;
+      text-align: center;
+      cursor: pointer;
+    }
+    .has_many_container.raffle_tickets
+      > fieldset.has_many_fields
+      > ol
+      > li.has_many_delete
+      > label
+      > input {
+      width: 22px;
+      height: 18px;
+      margin-top: 0px;
+      margin-left: -24px;
+      position: absolute;
+      cursor: pointer;
+    }
   </style>
 {% endblock %}
 
@@ -124,8 +184,72 @@
                   {% endfor %}
                 </select>
               </li>
+
+              <li class="has_many_container raffle_tickets elegible-tickets"
+                data-sortable-start="0">
+                <h3>Tickets</h3>
+                <div style="margin-bottom: 10px;">
+                  <a class="button has_many_add" href="#" onclick="addTicket()">
+                    Añadir Número
+                  </a>
+                </div>
+                {% for n in seleccionados %}
+                  <fieldset class="inputs has_many_fields">
+                    <ol>
+                      <li class="string input required stringish"
+                        id="purchase_raffle_tickets_attributes_0_ticket_number_input">
+                        <label class="label">
+                          <abbr title="requerido">*</abbr>
+                        </label>
+                        <input pattern="[0-9]*"
+                          oninput="onInputTicket(this)"
+                          type="text"
+                          name="tickets"
+                          required
+                          value="{{ n }}" />
+                      </li>
+                      <li class="has_many_delete boolean input optional">
+                        <label>
+                          <input type="checkbox"
+                            name="eliminados"
+                            value="{{ n }}" />Eliminar
+                        </label>
+                      </li>
+                    </ol>
+                  </fieldset>
+                {% endfor %}
+              </li>
+              <script>
+                /** @param {HTMLInputElement} ticket */
+                function onInputTicket(ticket) {
+                  ticket.value = ticket.value.replace(/[^0-9]/g, "");
+                  ticket.parentElement.nextElementSibling.querySelector(
+                    'input[name="eliminados"]'
+                  ).value = ticket.value;
+                }
+                function addTicket() {
+                  const html = document.createElement("fieldset");
+                  html.classList.add("inputs", "has_many_fields");
+                  html.innerHTML = `
+                      <ol>
+                        <li class="string input required stringish">
+                          <label class="label"><abbr title="requerido">*</abbr></label>
+                          <input pattern="[0-9]*"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                            type="text"
+                            required
+                            name="tickets" />
+                        </li>
+                        <li>
+                          <a class="button has_many_remove" href="#">Quitar</a>
+                        </li>
+                      </ol>
+                    `;
+                  document.querySelector(".elegible-tickets").appendChild(html);
+                }
+              </script>
               <div class="columns">
-                <div class="column" style="width: 100.0%;">
+                <div class="column" style="width: 100%;">
                   <fieldset class="inputs">
                     <legend>
                       <span>DISPONIBLES ONLINE</span>
@@ -135,40 +259,13 @@
                       placeholder="Buscar..."
                       style="width: 200px;"
                       id="buscador" />
-                    <button onclick="buscarTicket(this)" type="button">
-                      Buscar
-                    </button>
+                    <button id="btnBuscar" type="button">Buscar</button>
                     <input type="hidden"
                       name="boletos"
                       id="boletosName"
                       value="" />
-                    <div id="lista" class="input-field col s12 containtickets">
-                      {% for numero in tickets %}
-                        {% if numero|stringformat:'s' in seleccionados %}
-                          <button type="button"
-                            class="ticket-opcion seleccionado"
-                            onclick="seleccionarTicket(this)"
-                            data-ticket="{{ numero }}">
-                            {{ numero }}
-                          </button>
-                        {% elif numero in agarrados %}
-                          <button type="button"
-                            class="ticket-opcion"
-                            disabled
-                            data-ticket="{{ numero }}"
-                            data-disabled="true">
-                            {{ numero }}
-                          </button>
-                        {% else %}
-                          <button type="button"
-                            class="ticket-opcion"
-                            onclick="seleccionarTicket(this)"
-                            data-ticket="{{ numero }}">
-                            {{ numero }}
-                          </button>
-                        {% endif %}
-                      {% endfor %}
-                    </div>
+                    <div id="lista"
+                      class="input-field col s12 containtickets"></div>
                   </fieldset>
                 </div>
                 <div style="clear:both;"></div>
@@ -255,19 +352,6 @@
       }
     }
 
-    function buscarTicket() {
-      const input = document.getElementById("buscador");
-      document.querySelectorAll(".ticket-opcion").forEach((element) => {
-        if (
-          element.innerText.toLowerCase().includes(input.value.toLowerCase())
-        ) {
-          element.hidden = false;
-        } else {
-          element.hidden = true;
-        }
-      });
-    }
-
     function seleccionarTicket(btn) {
       let ticket = btn.dataset.ticket;
       if (tickets_seleccionados.includes(ticket)) {
@@ -282,5 +366,51 @@
       document.querySelector("#boletosName").value =
         tickets_seleccionados.join(",");
     }
+  </script>
+  <script type="module">
+    import morphdom from "https://cdn.jsdelivr.net/npm/morphdom@2.7.5/+esm";
+    import VirtualizedList from "https://cdn.jsdelivr.net/npm/virtualized-list@2.2.0/+esm";
+    const list = document.querySelector("#lista");
+    const total = parseInt("{{ evento.total_tickets }}");
+    const rows = "{{ disponibles|join:',' }}".split(",");
+    const container = document.querySelector("#lista");
+
+    let virtual_list = new VirtualizedList(container, {
+      height: 5000, // The height of the container
+      rowCount: rows.length,
+      renderRow: (index) => {
+        const element = document.createElement("button");
+        element.classList.add("ticket-opcion");
+        element.innerHTML = rows[index];
+        element.type = "button";
+        return element;
+      },
+      rowHeight: 10,
+    });
+
+    function buscarTicket() {
+      const input = document.getElementById("buscador");
+      const new_rows = rows.filter((row) => {
+        return row.toLowerCase().includes(input.value.toLowerCase());
+      });
+      virtual_list.destroy();
+      virtual_list = new VirtualizedList(container, {
+        height: 5000, // The height of the container
+        rowCount: new_rows.length,
+        renderRow: (index) => {
+          const element = document.createElement("button");
+          element.classList.add("ticket-opcion");
+          element.innerHTML = new_rows[index];
+          element.type = "button";
+          return element;
+        },
+        rowHeight: 10,
+      });
+
+      console.log("hola");
+    }
+    document
+      .querySelector("#btnBuscar")
+      .addEventListener("click", buscarTicket);
   </script>
 {% endblock %}
