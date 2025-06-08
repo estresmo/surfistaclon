@@ -29,6 +29,7 @@ class FormEvento(forms.ModelForm):
             "precio_unidad",
             "total_tickets",
             "minimo",
+            "valor_dolar",
         ]
 
 

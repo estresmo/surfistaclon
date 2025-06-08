@@ -31,7 +31,7 @@ class Evento(models.Model):
     foto = models.ImageField(upload_to="eventos/")
     total_tickets = models.IntegerField()
     minimo = models.IntegerField(default=0)
-
+    valor_dolar = models.DecimalField(max_digits=10,decimal_places=2,  default=0.00)
     color_principal = models.CharField(max_length=50)
     color_secundario = models.CharField(max_length=50)
     color_oscuro = models.CharField(max_length=50)
