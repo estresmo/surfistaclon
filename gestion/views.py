@@ -121,6 +121,7 @@ class ComprasListView(LoginRequiredMixin, ListView):
     model = Comprobante
     context_object_name = "compras"
 
+
     def get_queryset(self):
         evento_actual = Evento.obtener_actual()
         comprobantes = (
@@ -128,7 +129,8 @@ class ComprasListView(LoginRequiredMixin, ListView):
             .select_related("numerorifa")
             .prefetch_related("numerorifa__numero")
             .annotate(
-                boletos=ArrayAgg("numerorifa__numero"), cantidad=Count("numerorifa")
+                boletos=ArrayAgg("numerorifa__numero"),
+                cantidad=Count("numerorifa")
             )
             .values(
                 "id",
@@ -143,11 +145,40 @@ class ComprasListView(LoginRequiredMixin, ListView):
                 "monto",
                 "metodo__banco",
                 "nota",
-                "referencia",
                 "cantidad",
             )
         )
+         #filtro
+        nombre = self.request.GET.get('nombre')
+        telefono = self.request.GET.get('telefono')
+        referencia = self.request.GET.get('referencia')
+        status = self.request.GET.get('status')
+        fecha = self.request.GET.get('fecha')
+        creados_hace_mas_de = self.request.GET.get('creados_hace_mas_de')
+        metodo_pago = self.request.GET.get('metodo_pago')
+
+
+        if nombre:
+            comprobantes = comprobantes.filter(nombre__icontains=nombre)
+        if telefono:
+            comprobantes = comprobantes.filter(telefono__icontains=telefono)
+        if referencia:
+            comprobantes = comprobantes.filter(referencia__icontains=referencia)
+        if status:
+            comprobantes = comprobantes.filter(status__icontains=status)
+        if fecha:
+            comprobantes = comprobantes.filter(fecha=fecha)
+        if creados_hace_mas_de:
+            from datetime import timedelta
+            from django.utils import timezone
+            date_threshold = timezone.now() - timedelta(days=int(creados_hace_mas_de))
+            comprobantes = comprobantes.filter(fecha__lt=date_threshold)
+        if metodo_pago:
+            comprobantes = comprobantes.filter(metodo__banco__icontains=metodo_pago)
+
+
         return comprobantes
+
 
 
 class ComprasCreateView(LoginRequiredMixin, CreateView):
