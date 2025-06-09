@@ -6,7 +6,7 @@ from urllib.parse import urljoin
 import requests
 from django.contrib.postgres.aggregates import ArrayAgg  # Import this!
 from django.db.models import Count, Sum
-
+from django.db import connection
 from gestion.models import Comprobante, Evento, Promocion, StatusChoices
 
 logger = logging.getLogger(__name__)
@@ -26,7 +26,7 @@ def send_whatsapp(num: str, msg: str):
             "linkPreviewHighQuality": False,
             "session": "default",
         }
-        response = requests.post(link, json=data)
+        response = requests.post(link, json=data, timeout=2)
         if response.status_code == 422:
             activate_session()
             response = requests.post(link, json=data)
@@ -211,3 +211,35 @@ def obtener_participantes(evento: Evento):
         )
         .order_by("-num_tickets")
     )
+
+
+def list2values(list_v: list):
+    str_list = []
+    for element in list_v:
+        element: dict
+        values = [str(v) for v in element.values()]
+        str_list.append(";".join(values))
+    return ",".join(str_list)
+
+
+def tickets_frecuentes(evento_id: int):
+    with connection.cursor() as cursor:
+        cursor.execute(
+            """
+            SELECT 
+                subquery.compras AS "count_value",
+                COUNT(*) AS "frequency"
+            FROM (
+                SELECT
+                    COUNT("gestion_numerorifa"."comprobante_id") AS "compras"
+                FROM "gestion_numerorifa"
+                INNER JOIN "gestion_comprobante"
+                    ON ("gestion_numerorifa"."comprobante_id" = "gestion_comprobante"."id")
+                WHERE "gestion_comprobante"."evento_id" = %s
+                GROUP BY "gestion_numerorifa"."comprobante_id"
+            ) AS subquery
+            GROUP BY subquery.compras ORDER BY frequency DESC;
+        """,
+            [evento_id],
+        )
+        return cursor.fetchall()

@@ -12,7 +12,7 @@ from django.views.decorators.http import require_POST
 from django.views.generic import View
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
-
+from django.db.models.functions import Round
 from rifa.models import Dolar
 
 from .forms import (
@@ -34,7 +34,7 @@ from .models import (
     StatusChoices,
     Visualizacion,
 )
-from .utils import calcular_monto, send_whatsapp
+from .utils import calcular_monto, list2values, send_whatsapp, tickets_frecuentes
 
 
 @login_required
@@ -50,7 +50,7 @@ def participantesView(request: HttpRequest):
         .values("telefono", "nombre")
         .annotate(
             num_tickets=Count("numerorifa"),
-            total=Sum("monto"),
+            total=Round(Sum("monto"), 2),
             boletos=ArrayAgg("numerorifa__numero"),
         )
         .order_by("-num_tickets")
@@ -309,8 +309,6 @@ def dashboardView(request: HttpRequest):
         comprobantes.values("telefono", "nombre")
         .annotate(
             num_tickets=Count("numerorifa"),
-            total=Sum("monto"),
-            boletos=ArrayAgg("numerorifa__numero"),
         )
         .order_by("-num_tickets")
     )
@@ -318,10 +316,10 @@ def dashboardView(request: HttpRequest):
     total_numeros = NumeroRifa.objects.filter(evento=evento_actual).count()
     total_participantes = participantes.count()
     por_cofirmar = comprobantes.filter(status=StatusChoices.NO_VERIFICADO).aggregate(
-        monto=Sum("monto"), cantidad=Count("id"), tickets=Count("numerorifa")
+        monto=Round(Sum("monto"), 2), cantidad=Count("id"), tickets=Count("numerorifa")
     )
     verificados = comprobantes.filter(status=StatusChoices.VERIFICADO).aggregate(
-        monto=Sum("monto"), cantidad=Count("id"), tickets=Count("numerorifa")
+        monto=Round(Sum("monto"), 2), cantidad=Count("id"), tickets=Count("numerorifa")
     )
     progreso = (total_numeros / evento_actual.total_tickets) * 100
     tickets_fecha = list(
@@ -349,27 +347,49 @@ def dashboardView(request: HttpRequest):
         .prefetch_related("metodo__banco")
         .values("metodo__banco")
         .annotate(
-            tickets=Count("numerorifa"),
             compras=Count("id"),
         )
     )
-    tickets_metodo_str = []
-    for t_m in tickets_metodo:
-        tickets_metodo_str.append(
-            f"{t_m['metodo__banco']};{t_m['tickets']};{t_m['compras']}"
+    tickets_metodo_str = list2values(tickets_metodo)
+    metodos_aprobados = list(
+        comprobantes.filter(status=StatusChoices.VERIFICADO)
+        .select_related("metodo")
+        .prefetch_related("metodo__banco")
+        .values("metodo__banco")
+        .annotate(
+            monto=Round(Sum("monto"), 2),
         )
+    )
+    metodos_confirmar = list(
+        comprobantes.select_related("metodo")
+        .filter(status=StatusChoices.NO_VERIFICADO)
+        .prefetch_related("metodo__banco")
+        .values("metodo__banco")
+        .annotate(
+            monto=Round(Sum("monto"), 2),
+        )
+    )
+    metodos_aprobados_str = list2values(metodos_aprobados)
+    metodos_confirmar_str = list2values(metodos_confirmar)
+    participantes = list(participantes[:10].values("nombre", "num_tickets"))
+    participantes_str = list2values(participantes)
+
+    results = tickets_frecuentes(evento_actual.pk)
+    print(list(results))
     context = {
         "eventos": eventos,
         "evento_actual": evento_actual,
         "total_participantes": total_participantes,
         "total_comprobantes": total_comprobantes,
         "total_numeros": total_numeros,
-        "participantes": participantes[:10],
+        "participantes": participantes_str,
         "por_cofirmar": por_cofirmar,
         "verificados": verificados,
         "progreso": round(progreso, 2),
         "tickets_fecha": ",".join(tickets_fecha_str),
-        "tickets_metodo": ",".join(tickets_metodo_str),
+        "tickets_metodo": tickets_metodo_str,
+        "metodos_aprobados": metodos_aprobados_str,
+        "metodos_confirmar": metodos_confirmar_str,
     }
     return render(request, "admin/dashboard.html", context)
 
@@ -607,13 +627,15 @@ def ventas_y_participantes(request: HttpRequest):
         .values("metodo")
         .annotate(
             cantidad=Count("metodo"),
-            total=Sum("monto"),
-            pagado=Sum("monto", filter=Q(status=StatusChoices.VERIFICADO)),
+            total=Round(Sum("monto"), 2),
+            pagado=Round(Sum("monto", filter=Q(status=StatusChoices.VERIFICADO))),
             cantidad_pagado=Count("metodo", filter=Q(status=StatusChoices.VERIFICADO)),
             cantidad_faltante=Count(
                 "metodo", filter=Q(status=StatusChoices.NO_VERIFICADO)
             ),
-            faltante=Sum("monto", filter=Q(status=StatusChoices.NO_VERIFICADO)),
+            faltante=Round(
+                Sum("monto", filter=Q(status=StatusChoices.NO_VERIFICADO)), 2
+            ),
         )
         .order_by("metodo")
     )

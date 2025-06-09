@@ -285,6 +285,14 @@
                 </div>
                 <script>
                   (function () {
+                    const metodos_confirmar = "{{ metodos_confirmar }}".split(
+                      ","
+                    );
+                    const METODOS_CONFIRMAR = metodos_confirmar.map((i) => {
+                      const r = i.split(";");
+                      r[0] += " " + r[1] + " $";
+                      return r;
+                    });
                     if (
                       document.documentElement.hasAttribute(
                         "data-turbolinks-preview"
@@ -299,20 +307,10 @@
                       return;
 
                     var createChart = function () {
-                      new Chartkick["BarChart"](
-                        "chart-3",
-                        [
-                          ["PagomóvilBDV - NELSON DOMINGUEZ: $40.00", "40.0"],
-                          [
-                            "Banco Falabella de Chile - Kelwis Rodriguez: $14.00",
-                            "14.0",
-                          ],
-                        ],
-                        {
-                          colors: ["#5ea3d3", "#343c46", "#aeb6c2", "#e6e9ee"],
-                          prefix: "$",
-                        }
-                      );
+                      new Chartkick["BarChart"]("chart-3", METODOS_CONFIRMAR, {
+                        colors: ["#5ea3d3", "#343c46", "#aeb6c2", "#e6e9ee"],
+                        prefix: "$",
+                      });
                     };
                     if ("Chartkick" in window) {
                       createChart();
@@ -340,6 +338,14 @@
                 </div>
                 <script>
                   (function () {
+                    const metodos_aprobados = "{{ metodos_aprobados }}".split(
+                      ","
+                    );
+                    const METODOS_APROBADOS = metodos_aprobados.map((i) => {
+                      const r = i.split(";");
+                      r[0] += " " + r[1] + " $";
+                      return r;
+                    });
                     if (
                       document.documentElement.hasAttribute(
                         "data-turbolinks-preview"
@@ -354,30 +360,10 @@
                       return;
 
                     var createChart = function () {
-                      new Chartkick["BarChart"](
-                        "chart-4",
-                        [
-                          [
-                            "PagomóvilBDV - NELSON DOMINGUEZ: $5,180.00",
-                            "5180.0",
-                          ],
-                          ["ZELLE - Wuilson Gonzalez: $1,934.00", "1934.0"],
-                          [
-                            "Banco Falabella de Chile - Kelwis Rodriguez: $304.00",
-                            "304.0",
-                          ],
-                          ["BINANCE - MarianIVR: $158.00", "158.0"],
-                          ["Bizum - España - BIZUM ESPAÑA: $74.00", "74.0"],
-                          [
-                            "BANCO SANTANDER - ESPAÑA - CHIPI BIKELIFE: $72.00",
-                            "72.0",
-                          ],
-                        ],
-                        {
-                          colors: ["#5ea3d3", "#343c46", "#aeb6c2", "#e6e9ee"],
-                          prefix: "$",
-                        }
-                      );
+                      new Chartkick["BarChart"]("chart-4", METODOS_APROBADOS, {
+                        colors: ["#5ea3d3", "#343c46", "#aeb6c2", "#e6e9ee"],
+                        prefix: "$",
+                      });
                     };
                     if ("Chartkick" in window) {
                       createChart();
@@ -408,6 +394,10 @@
                 </div>
                 <script>
                   (function () {
+                    const tickets_metodo = "{{ tickets_metodo }}".split(",");
+                    const TICKETS_METODO = tickets_metodo.map((i) =>
+                      i.split(";")
+                    );
                     if (
                       document.documentElement.hasAttribute(
                         "data-turbolinks-preview"
@@ -422,18 +412,9 @@
                       return;
 
                     var createChart = function () {
-                      new Chartkick["PieChart"](
-                        "chart-5",
-                        [
-                          ["PagomóvilBDV - NELSON DOMINGUEZ", 1139],
-                          ["ZELLE - Wuilson Gonzalez", 159],
-                          ["Banco Falabella de Chile - Kelwis Rodriguez", 37],
-                          ["BINANCE - MarianIVR", 17],
-                          ["BANCO SANTANDER - ESPAÑA - CHIPI BIKELIFE", 9],
-                          ["Bizum - España - BIZUM ESPAÑA", 8],
-                        ],
-                        { colors: ["#5ea3d3", "#343c46", "#aeb6c2", "#e6e9ee"] }
-                      );
+                      new Chartkick["PieChart"]("chart-5", TICKETS_METODO, {
+                        colors: ["#5ea3d3", "#343c46", "#aeb6c2", "#e6e9ee"],
+                      });
                     };
                     if ("Chartkick" in window) {
                       createChart();
@@ -478,9 +459,9 @@
                       new Chartkick["PieChart"](
                         "chart-6",
                         [
-                          ["Sin Voucher", 1],
-                          ["Sin Verificación", 12],
-                          ["Verificados", 1356],
+                          ["Sin Voucher", 0],
+                          ["Sin Verificación", "{{por_cofirmar.cantidad}}"],
+                          ["Verificados", "{{verificados.cantidad}}"],
                         ],
                         { colors: ["#5ea3d3", "#343c46", "#aeb6c2", "#e6e9ee"] }
                       );
@@ -514,6 +495,10 @@
                 </div>
                 <script>
                   (function () {
+                    const participantes = "{{ participantes }}".split(",");
+                    const PARTICIPANTES = participantes.map((i) =>
+                      i.split(";")
+                    );
                     if (
                       document.documentElement.hasAttribute(
                         "data-turbolinks-preview"
@@ -528,22 +513,9 @@
                       return;
 
                     var createChart = function () {
-                      new Chartkick["BarChart"](
-                        "chart-7",
-                        [
-                          ["Julio Alvarez", 83],
-                          ["Luis Moreno", 30],
-                          ["Alexis García", 25],
-                          ["Erys Rodríguez", 25],
-                          ["Jefferson  Navas", 25],
-                          ["Kelvis Gonzalez", 24],
-                          ["Yoneiker Gutierrez", 22],
-                          ["Kenji José Carpio Blanco", 22],
-                          ["Jackson Rosal", 20],
-                          ["Jose Luis Castro", 20],
-                        ],
-                        { colors: ["#8995a7", "#5ea3d3"] }
-                      );
+                      new Chartkick["BarChart"]("chart-7", PARTICIPANTES, {
+                        colors: ["#8995a7", "#5ea3d3"],
+                      });
                     };
                     if ("Chartkick" in window) {
                       createChart();
@@ -681,57 +653,7 @@
               </div>
             </div>
           </div>
-          <div class="column" style="width: 49.0%;">
-            <div class="panel">
-              <h3>Ubicaciones (Participantes)</h3>
-              <div class="panel_contents">
-                <div id="chart-10"
-                  style="height: 300px; width: 100%; text-align: center; color: #999; line-height: 300px; font-size: 14px;">
-                  <canvas style="display: block; box-sizing: border-box; height: 300px; width: 644px;"
-                    width="644"
-                    height="300"></canvas>
-                </div>
-                <script>
-                  (function () {
-                    if (
-                      document.documentElement.hasAttribute(
-                        "data-turbolinks-preview"
-                      )
-                    )
-                      return;
-                    if (
-                      document.documentElement.hasAttribute(
-                        "data-turbo-preview"
-                      )
-                    )
-                      return;
 
-                    var createChart = function () {
-                      new Chartkick["BarChart"](
-                        "chart-10",
-                        [["NINGUNO", 1076]],
-                        {
-                          colors: ["#5ea3d3", "#343c46", "#aeb6c2", "#e6e9ee"],
-                          label: "Total de Personas",
-                          max: 500,
-                          min: 1,
-                        }
-                      );
-                    };
-                    if ("Chartkick" in window) {
-                      createChart();
-                    } else {
-                      window.addEventListener(
-                        "chartkick:load",
-                        createChart,
-                        true
-                      );
-                    }
-                  })();
-                </script>
-              </div>
-            </div>
-          </div>
           <div style="clear:both;"></div>
         </div>
       </div>
