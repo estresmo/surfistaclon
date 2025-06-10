@@ -82,6 +82,15 @@
                     Americanos</option>
                 </select>
               </li>
+
+              <li class="number input required numeric stringish">
+                <label class="label">Cambio dolar a Bs</label>
+                <input step="any"
+                  type="number"
+                  name="valor_dolar"
+                  value="{{ form.valor_dolar.value|default_if_none:'' }}" />
+              </li>
+
               <li class="number input required numeric stringish">
                 <label class="label">Mínimo tickets por participante</label>
                 <input step="any"
