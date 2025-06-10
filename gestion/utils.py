@@ -26,7 +26,7 @@ def send_whatsapp(num: str, msg: str):
             "linkPreviewHighQuality": False,
             "session": "default",
         }
-        response = requests.post(link, json=data, timeout=2)
+        response = requests.post(link, json=data)
         if response.status_code == 422:
             activate_session()
             response = requests.post(link, json=data)
