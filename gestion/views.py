@@ -14,7 +14,7 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
 from django.db.models.functions import Round
 from rifa.models import Dolar
-
+from django.db.models import Case, When, BooleanField, Value
 from .forms import (
     ClienteForm,
     CompraForm,
@@ -121,7 +121,6 @@ class ComprasListView(LoginRequiredMixin, ListView):
     model = Comprobante
     context_object_name = "compras"
 
-
     def get_queryset(self):
         evento_actual = Evento.obtener_actual()
         comprobantes = (
@@ -130,7 +129,12 @@ class ComprasListView(LoginRequiredMixin, ListView):
             .prefetch_related("numerorifa__numero")
             .annotate(
                 boletos=ArrayAgg("numerorifa__numero"),
-                cantidad=Count("numerorifa")
+                cantidad=Count("numerorifa"),
+                verificado=Case(
+                    When(status=StatusChoices.VERIFICADO, then=Value(True)),
+                    default=Value(False),
+                    output_field=BooleanField(),
+                ),
             )
             .values(
                 "id",
@@ -146,17 +150,17 @@ class ComprasListView(LoginRequiredMixin, ListView):
                 "metodo__banco",
                 "nota",
                 "cantidad",
+                "verificado",
             )
         )
-         #filtro
-        nombre = self.request.GET.get('nombre')
-        telefono = self.request.GET.get('telefono')
-        referencia = self.request.GET.get('referencia')
-        status = self.request.GET.get('status')
-        fecha = self.request.GET.get('fecha')
-        creados_hace_mas_de = self.request.GET.get('creados_hace_mas_de')
-        metodo_pago = self.request.GET.get('metodo_pago')
-
+        # filtro
+        nombre = self.request.GET.get("nombre")
+        telefono = self.request.GET.get("telefono")
+        referencia = self.request.GET.get("referencia")
+        status = self.request.GET.get("status")
+        fecha = self.request.GET.get("fecha")
+        creados_hace_mas_de = self.request.GET.get("creados_hace_mas_de")
+        metodo_pago = self.request.GET.get("metodo_pago")
 
         if nombre:
             comprobantes = comprobantes.filter(nombre__icontains=nombre)
@@ -171,14 +175,13 @@ class ComprasListView(LoginRequiredMixin, ListView):
         if creados_hace_mas_de:
             from datetime import timedelta
             from django.utils import timezone
+
             date_threshold = timezone.now() - timedelta(days=int(creados_hace_mas_de))
             comprobantes = comprobantes.filter(fecha__lt=date_threshold)
         if metodo_pago:
             comprobantes = comprobantes.filter(metodo__banco__icontains=metodo_pago)
 
-
         return comprobantes
-
 
 
 class ComprasCreateView(LoginRequiredMixin, CreateView):
@@ -260,11 +263,11 @@ class ComprasUpdateView(LoginRequiredMixin, UpdateView):
         boletos = [b for b in boletos if b not in eliminados]
         NumeroRifa.objects.filter(comprobante=form.instance).delete()
         msg = (
-                "Su comprobante ha sido "
-                + form.instance.get_status_display()
-                + ". Los boletos verificados son "
-                + " ,".join(boletos)
-            )
+            "Su comprobante ha sido "
+            + form.instance.get_status_display()
+            + ". Los boletos verificados son "
+            + " ,".join(boletos)
+        )
         if ultimo_status != form.instance.status:
             send_whatsapp(form.instance.telefono, msg)
         if form.instance.status != StatusChoices.RECHAZADO:
