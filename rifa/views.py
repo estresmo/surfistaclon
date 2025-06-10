@@ -143,7 +143,4 @@ def comprobantes(request: HttpRequest):
         + ". Se le notificará cuando su pago sea aprobado"
     )
     send_whatsapp(telefono, msg)
-    admin_msg = "Ha recibido un nuevo comprobante. \
-        Verificar en https://www.mundobikelife-vzla.com/gestion/comprobantes/"
-    send_whatsapp(settings.ADMIN_PHONE, admin_msg)
     return JsonResponse({"ok": "ok"})

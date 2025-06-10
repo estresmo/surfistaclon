@@ -222,11 +222,20 @@ class ComprasUpdateView(LoginRequiredMixin, UpdateView):
         return context
 
     def form_valid(self, form):
+        ultimo_status = Comprobante.objects.get(id=form.instance.id).status
         response = super().form_valid(form)
         boletos = self.request.POST.getlist("tickets")
         eliminados = self.request.POST.getlist("eliminados")
         boletos = [b for b in boletos if b not in eliminados]
         NumeroRifa.objects.filter(comprobante=form.instance).delete()
+        msg = (
+                "Su comprobante ha sido "
+                + form.instance.get_status_display()
+                + ". Los boletos verificados son "
+                + " ,".join(boletos)
+            )
+        if ultimo_status != form.instance.status:
+            send_whatsapp(form.instance.telefono, msg)
         if form.instance.status != StatusChoices.RECHAZADO:
             numeros = []
             for boleto in boletos:
