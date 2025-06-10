@@ -8,44 +8,93 @@
         <h6>Transferencia o depósito</h6>
       </div>
     </div>
-    <div id="container-payments"
-      class="types flex justify-space-between payments-options mb-30">
+    <div
+      id="container-payments"
+      class="types flex justify-space-between payments-options mb-30"
+    >
       {% for metodo in metodos %}
-        <div data-id="{{ metodo.pk }}"
-          class="type option-payment"
-          onclick="cambiarPago(this)">
-          <div class="logo">
-            <img src="{{ metodo.imagen.url }}"
-              width="86"
-              alt="{{ metodo.banco }}" />
-          </div>
-          <div class="text" hidden>{{ metodo.banco }}</div>
-          <div class="content" hidden>
+      <div
+        data-id="{{ metodo.pk }}"
+        class="type option-payment"
+        onclick="cambiarPago(this)"
+      >
+        <div class="logo">
+          <img
+            src="{{ metodo.imagen.url }}"
+            width="86"
+            alt="{{ metodo.banco }}"
+          />
+        </div>
+        <div class="text" hidden>{{ metodo.banco }}</div>
+        <div class="content" hidden>
+          <div>
             <div>
-              <div>
-                {% for titulo, contenido in metodo.contenidos %}
-                  {% if titulo %}
-                    <span class="nameAccountNumber">{{ metodo.titulo }}</span>
-                  {% endif %}
-                  {% if contenido %}
-                    <h3>
-                      {{ contenido }}
-                      {% include 'components/copyButton.html' %}
-                    </h3>
-                  {% endif %}
-                {% endfor %}
-              </div>
-              <div class="titularBank">
-                <span>TITULAR</span>{{ metodo.titular }}
-              </div>
+              {% for titulo, contenido in metodo.contenidos %} {% if titulo %}
+              <span class="nameAccountNumber">{{ metodo.titulo }}</span>
+              {% endif %} {% if contenido %}
+              <h3>
+                {{ contenido }} {% include 'components/copyButton.html' %}
+              </h3>
+              {% endif %} {% endfor %}
+            </div>
+            <div class="titularBank">
+              <span>TITULAR</span>{{ metodo.titular }}
+              <h6 id="montoCorrecto">
+                <strong class="total-boleto">
+                  {{ evento.precio_unidad }}$
+                </strong>
+                o
+                <strong
+                  class="precio-bs"
+                  id="precio-bs"
+                  onclick="actionButtonAccounts('copy', this, 'rojo'); copiarPrecio();"
+                  class="magic_button"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title
+                  data-original-title="Copiar"
+                >
+                  150bs
+                </strong>
+                (
+                <span class="cantidad-boleto">1</span>
+                boleto )
+              </h6>
             </div>
           </div>
         </div>
+      </div>
       {% endfor %}
       <script>
         document
           .getElementById("container-payments")
           .firstElementChild.classList.add("selected");
+      </script>
+      <script>
+        function copiarPrecio() {
+          // Obtiene el elemento que contiene el precio
+          const precioElement = document.getElementById("precio-bs");
+
+          // Crea un elemento de texto temporal para copiar el precio
+          const tempInput = document.createElement("input");
+          tempInput.value = precioElement.innerText; // Obtiene el texto del elemento
+
+          // Añade el elemento al DOM
+          document.body.appendChild(tempInput);
+
+          // Selecciona el texto del elemento
+          tempInput.select();
+          tempInput.setSelectionRange(0, 99999); // Para dispositivos móviles
+
+          // Copia el texto al portapapeles
+          document.execCommand("copy");
+
+          // Elimina el elemento temporal
+          document.body.removeChild(tempInput);
+
+          // Opcional: Notificar al usuario que el precio ha sido copiado
+          alert("Precio copiado: " + tempInput.value);
+        }
       </script>
     </div>
   </div>
