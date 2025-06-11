@@ -143,5 +143,5 @@ def comprobantes(request: HttpRequest):
         + ", ".join(boletos)
         + ". Se le notificará cuando su pago sea aprobado"
     )
-    send_whatsapp(telefono, msg)
+
     return JsonResponse({"ok": "ok"})
