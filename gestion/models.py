@@ -5,8 +5,6 @@ from django.db import models
 from django.utils import timezone
 from simple_history.models import HistoricalRecords
 
-from rifa.models import Dolar
-
 
 class StatusChoices(models.TextChoices):
     NO_VERIFICADO = "No verificado"
@@ -122,7 +120,7 @@ class MetodoPago(models.Model):
 class Comprobante(models.Model):
     nombre = models.CharField(max_length=500)
     telefono = models.CharField(max_length=500)
-    referencia = models.CharField(max_length=100, blank=True)
+    referencia = models.CharField(max_length=100, blank=True, unique=True)
     fecha = models.DateTimeField(default=timezone.now)
     foto = models.ImageField(upload_to="comprobantes/")
     status = models.CharField(

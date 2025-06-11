@@ -1,3 +1,4 @@
+from datetime import timedelta
 from typing import Optional
 
 from django.contrib.auth.decorators import login_required
@@ -129,10 +130,69 @@ class ComprasListView(LoginRequiredMixin, ListView):
     model = Comprobante
     context_object_name = "compras"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["eventos"] = Evento.objects.values("id", "nombre")
+        context["statuses"] = StatusChoices.choices
+        context["metodos"] = MetodoPago.objects.values("id", "banco")
+        context["evento_actual"] = Evento.obtener_actual()
+        return context
+
     def get_queryset(self):
+        evento_id = self.request.GET.get("evento_id")
         evento_actual = Evento.obtener_actual()
+        comprobantes = Comprobante.objects.all()
+        if evento_id != "todos":
+            comprobantes = Comprobante.objects.filter(evento__id=evento_id)
+        elif evento_id == "inactivas":
+            evento_actual = Evento.obtener_actual()
+            if evento_actual:
+                comprobantes = Comprobante.objects.exclude(evento=evento_actual)
+        else:
+            evento_actual = Evento.obtener_actual()
+            if evento_actual:
+                comprobantes = Comprobante.objects.filter(evento=evento_actual)
+
+        if evento_actual or evento_id != "todos":
+            comprobantes = Comprobante.objects.filter(evento=evento_actual)
+        else:
+            comprobantes = Comprobante.objects.all()
+        filtros = {}
+        # filtro
+        ticket = self.request.GET.get("ticket")
+        nombre = self.request.GET.get("nombre")
+        telefono = self.request.GET.get("telefono")
+        referencia = self.request.GET.get("referencia")
+        fecha_desde = self.request.GET.get("fecha_desde")
+        fecha_hasta = self.request.GET.get("fecha_desde")
+        creados_hace_mas_de = self.request.GET.get("creados_hace_mas_de")
+        status = self.request.GET.get("status")
+        metodo_pago = self.request.GET.get("metodo_pago")
+        nota = self.request.GET.get("nota")
+        tipo_nota = self.request.GET.get("tipo_nota")
+
+        if ticket:
+            filtros["numerorifa__numero"] = ticket
+        if nombre:
+            filtros["nombre__icontains"] = nombre
+        if telefono:
+            filtros["telefono__icontains"] = telefono
+        if referencia:
+            filtros["referencia__icontains"] = referencia
+        if fecha_desde and fecha_hasta:
+            filtros["fecha_creado__range"] = (fecha_desde, fecha_hasta)
+        if creados_hace_mas_de:
+            current_time = timezone.now()
+            time_result = current_time - timedelta(hours=4)
+            filtros["fecha_creado__lte"] = time_result
+        if status:
+            filtros["status"] = status
+        if metodo_pago:
+            filtros["metodo"] = metodo_pago
+        if nota and tipo_nota:
+            filtros[tipo_nota] = nota
         comprobantes = (
-            Comprobante.objects.filter(evento=evento_actual)
+            comprobantes.filter(**filtros)
             .select_related("numerorifa")
             .prefetch_related("numerorifa__numero")
             .annotate(
@@ -161,35 +221,6 @@ class ComprasListView(LoginRequiredMixin, ListView):
                 "verificado",
             )
         )
-        # filtro
-        nombre = self.request.GET.get("nombre")
-        telefono = self.request.GET.get("telefono")
-        referencia = self.request.GET.get("referencia")
-        status = self.request.GET.get("status")
-        fecha = self.request.GET.get("fecha")
-        creados_hace_mas_de = self.request.GET.get("creados_hace_mas_de")
-        metodo_pago = self.request.GET.get("metodo_pago")
-
-        if nombre:
-            comprobantes = comprobantes.filter(nombre__icontains=nombre)
-        if telefono:
-            comprobantes = comprobantes.filter(telefono__icontains=telefono)
-        if referencia:
-            comprobantes = comprobantes.filter(referencia__icontains=referencia)
-        if status:
-            comprobantes = comprobantes.filter(status__icontains=status)
-        if fecha:
-            comprobantes = comprobantes.filter(fecha=fecha)
-        if creados_hace_mas_de:
-            from datetime import timedelta
-
-            from django.utils import timezone
-
-            date_threshold = timezone.now() - timedelta(days=int(creados_hace_mas_de))
-            comprobantes = comprobantes.filter(fecha__lt=date_threshold)
-        if metodo_pago:
-            comprobantes = comprobantes.filter(metodo__banco__icontains=metodo_pago)
-
         return comprobantes
 
 

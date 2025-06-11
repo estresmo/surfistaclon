@@ -64,15 +64,16 @@
           <div class="scopes">
             <ul class="table_tools_segmented_control scope-default-group">
               <li class="scope all">
-                <a href="?scope=all" class="table_tools_button">Todos</a>
+                <a href="?evento_id=todos" class="table_tools_button">Todos</a>
               </li>
               <li class="scope rifas_activas selected">
-                <a href="?scope=rifas_activas" class="table_tools_button">
+                <a href="?evento_id={{ evento_actual.id }}"
+                  class="table_tools_button">
                   Rifas Activas
                 </a>
               </li>
               <li class="scope rifas_inactivas">
-                <a href="?scope=rifas_inactivas" class="table_tools_button">
+                <a href="?evento_id=inactivas" class="table_tools_button">
                   Rifas Inactivas
                 </a>
               </li>
@@ -208,61 +209,68 @@
         <div class="panel_contents">
           <form class="filter_form"
             id="new_q"
-            action="/admin/purchases"
             accept-charset="UTF-8"
             method="get">
             <div class="select input optional filter_form_field filter_select"
               id="q_raffle_id_eq_input">
-              <label for="q_raffle_id_eq" class="label">Rifa</label><select name="q[raffle_id_eq]"
+              <label for="q_raffle_id_eq" class="label">Rifa</label><select name="evento_id"
                 id="q_raffle_id_eq">
-                <option value="" selected="selected">Cualquiera</option>
-                <option value="3834">EL COMBO MALIANTEO</option>
-                <option value="3523">COMBO DEL SHOW</option>
-                <option value="3927">COMBO AMOROSO</option>
-                <option value="3636">COMBO FAMILIAR</option>
+                <option value="todos">Cualquiera</option>
+                {% for evento in eventos %}
+                  {% if request.GET.evento_id == evento.id %}
+                    <option value="{{ evento.id }}">{{ evento.nombre }}</option>
+                  {% else %}
+                    <option value="{{ evento.id }}" selected>{{ evento.nombre }}</option>
+                  {% endif %}
+                {% endfor %}
               </select>
             </div>
             <div class="string input optional stringish filter_form_field filter_string"
               id="q_tickets_in_input">
-              <label for="q_tickets_in" class="label">Ticket</label><input id="q_tickets_in"
+              <label for="q_tickets_in" class="label">Ticket</label><input id="ticket"
                 type="text"
-                name="q[tickets_in]" />
+                value="{{ request.GET.ticket }}"
+                name="ticket" />
             </div>
             <div class="string input optional stringish filter_form_field filter_string"
               id="q_name_contains_input">
               <label for="q_name_contains" class="label">Participante</label><input id="q_name_contains"
                 type="text"
-                name="q[name_contains]" />
+                value="{{ request.GET.nombre }}"
+                name="nombre" />
             </div>
             <div class="string input optional stringish filter_form_field filter_string"
               id="q_buyer_phone_contains_input">
               <label for="q_buyer_phone_contains" class="label">TELÉFONO</label><input id="q_buyer_phone_contains"
                 type="text"
-                name="q[buyer_phone_contains]" />
+                value="request.GET.telefono"
+                name="telefono" />
+            </div>
+            <div class="string input optional stringish filter_form_field filter_string"
+              id="q_buyer_phone_contains_input">
+              <label class="label">Referencia</label><input type="text"
+                value="{{ request.GET.referencia }}"
+                name="referencia" />
             </div>
             <div class="date_range input optional stringish filter_form_field filter_date_range"
               id="q_created_at_input">
               <label class="label">Fecha</label>
               <input placeholder="Desde"
-                size="12"
-                class="datepicker"
-                maxlength="10"
-                type="text"
-                name="q[created_at_gteq_datetime]"
+                type="date"
+                value="{{ request.GET.fecha_desde }}"
+                name="fecha_desde"
                 id="q_created_at_gteq_datetime" />
               <input placeholder="Hasta"
-                size="12"
-                class="datepicker"
-                maxlength="10"
-                type="text"
-                name="q[created_at_lteq_datetime]"
+                type="date"
+                value="{{ request.GET.fecha_hasta }}"
+                name="fecha_hasta"
                 id="q_created_at_lteq_datetime" />
             </div>
             <div class="select input optional filter_form_field filter_select"
               id="q_expireds_input">
-              <label for="q_expireds" class="label">Creados hace más de:</label><select name="q[expireds]"
+              <label for="q_expireds" class="label">Creados hace más de:</label><select name="creados_hace_mas_de"
                 id="q_expireds">
-                <option value="" selected="selected">Cualquiera</option>
+                <option value="">Cualquiera</option>
                 <option value="2">2 horas</option>
                 <option value="12">12 horas</option>
                 <option value="24">24 horas (1 día)</option>
@@ -270,64 +278,70 @@
                 <option value="72">72 horas (3 días)</option>
                 <option value="96">96 horas (4 días)</option>
               </select>
+              <script>
+                (function () {
+                  const element = document
+                    .getElementById("q_expireds")
+                    .querySelector(
+                      "[value={{request.GET.creados_hace_mas_de}}]"
+                    );
+                  if (element) {
+                    element.selected = true;
+                  }
+                })();
+              </script>
             </div>
             <div class="select input optional filter_form_field filter_select"
               id="q_status_input">
-              <label for="q_status" class="label">Status</label><select name="q[status_eq]"
+              <label for="q_status" class="label">Status</label><select name="status"
                 id="q_status">
                 <option value="" selected="selected">Cualquiera</option>
-                <option value="0">Sin Voucher</option>
-                <option value="1">Sin Verificación</option>
-                <option value="2">Verificados</option>
+                {% for status_id, status in statuses %}
+                  {% if status_id == request.GET.status %}
+                    <option value="{{ status_id }}" selected>{{ status }}</option>
+                  {% else %}
+                    <option value="{{ status_id }}">{{ status }}</option>
+                  {% endif %}
+                {% endfor %}
               </select>
             </div>
             <div class="select input optional filter_form_field filter_select"
               id="q_payment_type_input">
-              <label for="q_payment_type_id" class="label">Tipo de Pago</label><select name="q[payment_type_id_eq]"
+              <label for="q_payment_type_id" class="label">Tipo de Pago</label><select name="metodo"
                 id="q_payment_type_id">
                 <option value="" selected="selected">Cualquiera</option>
-                <option value="4153">NELSON DOMINGUEZ</option>
-                <option value="4481">Wuilson Gonzalez</option>
-                <option value="4483">MarianIVR</option>
-                <option value="4482">Kelwis Rodriguez</option>
-                <option value="4956">CHIPI BIKELIFE</option>
-                <option value="4958">BIZUM ESPAÑA</option>
-              </select>
-            </div>
-            <div class="select input optional filter_form_field filter_select"
-              id="q_mode_input">
-              <label for="q_mode" class="label">Modo</label><select name="q[mode_eq]"
-                id="q_mode">
-                <option value="" selected="selected">Cualquiera</option>
-                <option value="0">online</option>
-                <option value="1">offline</option>
-              </select>
-            </div>
-            <div class="select input optional filter_form_field filter_select"
-              id="q_creator_user_input">
-              <label for="q_creator_user_id" class="label">Creador</label><select name="q[creator_user_id_eq]"
-                id="q_creator_user_id">
-                <option value="" selected="selected">Cualquiera</option>
+                {% for metodo in metodos %}
+                {% if metodo.id == request.GET.metodo %}
+                  <option value="{{ metodo.id }}" selected=>
+                    {{ metodo.banco}}
+                  </option>
+                {% else %}
+                  <option value="{{ metodo.id }}" >
+                    {{ metodo.banco}}
+                  </option>
+                {% endif %}
+                  
+                {% endfor %}
               </select>
             </div>
             <div class="string input optional stringish filter_form_field filter_string select_and_search"
               id="q_notes_input">
-              <label for="q_notes" class="label">Notas</label><select name=""
+              <label for="q_notes" class="label">Notas</label><select name="tipo_nota"
                 id="">
                 <option selected="selected"
-                  value="notes_contains">Contiene</option>
-                <option value="notes_equals">Igual a</option>
-                <option value="notes_starts_with">Empieza con</option>
-                <option value="notes_ends_with">Termina con</option>
+                  value="nota__icontains">Contiene</option>
+                <option value="nota">Igual a</option>
+                <option value="nota__istartswith">Empieza con</option>
+                <option value="nota__iendswith">Termina con</option>
               </select>
-              <input id="q_notes" type="text" name="q[notes_contains]" />
+              <input id="q_notes" type="text" name="nota" />
             </div>
             <div class="buttons">
               <input type="submit"
                 name="commit"
                 value="Filtrar"
-                data-disable-with="Filtrar" /><a class="clear_filters_btn"
-                href="javascript:void(0)">
+                data-disable-with="Filtrar" />
+              <a class="clear_filters_btn" href="javascript:void(0)">
                 Quitar Filtros
               </a><input type="hidden"
                 name="order"
