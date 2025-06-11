@@ -137,4 +137,4 @@ def comprobantes(request: HttpRequest):
     NumeroRifa.objects.bulk_create(numeros_comprados)
     comprobante.monto = calcular_monto(comprobante)
     comprobante.save(update_fields=["monto"])
-    return JsonResponse({"ok": "ok", "boletos": boletos})
+    return JsonResponse({"ok": "ok", "boletos": list(boletos)})

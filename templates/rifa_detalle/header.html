@@ -2,22 +2,21 @@
   <div class="container header-container">
     <div class="col-lg-6 header-img-section">
       <img id="raffleImage"
-        alt="{{evento.nombre}}"
+        alt="{{ evento.nombre }}"
         src="{{ evento.foto.url }}"
-        style="width: 100%"
-       />
+        style="width: 100%" />
     </div>
     <div class="col-lg-6 offset-lg-0 header-title-section">
       <p class="header-subtitle">
         <i class="fa fa-calendar" aria-hidden="true"></i>
-        <span class="raffleDrawDate">{{ evento.fecha_inicio|date:'d F Y' }}</span> &nbsp;
+        <span class="raffleDrawDate">
+          {{ evento.fecha_inicio|date:'d F Y' }}
+        </span> &nbsp;
         <i class="fa fa-clock-o" aria-hidden="true"></i>
         <span class="raffleDrawHour">11:59 PM</span>
       </p>
-      <h1 id="raffleName" class="header-title mt-2">{{ evento.nombre }}</h1>
-      <span id="raffleDescription">
-        <pre>{{ evento.descripcion }}</pre>
-      </span>
+      <h1 id="nombre-rifa" class="header-title mt-2">{{ evento.nombre }}</h1>
+      <span id="raffleDescription"><pre>{{ evento.descripcion }}</pre></span>
     </div>
   </div>
 </div>

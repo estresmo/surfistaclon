@@ -193,10 +193,17 @@ async function confirmarTickets(form, event) {
     body: formData,
   });
   if (response.ok) {
+    const result = await response.json();
+    const txt = getWhatsappText(result.boletos);
+    const url = "https://wa.me/584125689351?text=" + txt;
+    document.getElementById("nombre-rifa").href = url;
+    document.getElementById("countdown").innerText = "5";
+    whatsappTimer(url, 5);
     const modal = new bootstrap.Modal(
       document.getElementById("confirmationModal"),
       {}
     );
+
     modal.show();
   } else if (response.status == 403) {
     alert("Error al ordenar los boletos. Por favor intente nuevamente");
@@ -204,6 +211,29 @@ async function confirmarTickets(form, event) {
   } else {
     alert("Error al ordenar los boletos. Por favor intente nuevamente");
   }
+}
+
+function whatsappTimer(url, countdown) {
+  setTimeout(() => {
+    let seconds = countdown - 1;
+    document.getElementById("countdown").innerText = seconds;
+    if (seconds == 0) {
+      window.open(url, "_blank");
+    } else {
+      whatsappTimer(url, seconds);
+    }
+  }, 1000);
+}
+
+function getWhatsappText(boletos) {
+  const nombre = document.getElementById("nombre").value;
+  const celular = document.getElementById("celular").value;
+  const cod_t = document.querySelector("#lista_boletos #country_code").value;
+  const telefono = cod_t + celular;
+  const tickets = boletos.join(", ");
+  const rifa = document.getElementById("nombre-rifa").innerText;
+  const txt = `Hola, soy ${nombre}. Con mi celular ${telefono} registre estos números ${tickets}. En  ${rifa}`;
+  return encodeURIComponent(txt);
 }
 
 function copyToClipboard(text) {
