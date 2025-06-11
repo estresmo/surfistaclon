@@ -195,7 +195,7 @@ async function confirmarTickets(form, event) {
   if (response.ok) {
     const result = await response.json();
     const txt = getWhatsappText(result.boletos);
-    const url = "https://wa.me/584125689351?text=" + txt;
+    const url = "https://wa.me/584242558344?text=" + txt;
     document.getElementById("nombre-rifa").href = url;
     document.getElementById("countdown").innerText = "5";
     whatsappTimer(url, 5);

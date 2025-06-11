@@ -105,6 +105,8 @@ def comprobantes(request: HttpRequest):
     metodo = request.POST["metodo"]
     cantidad_tickets = request.POST["productQty"]
     referencia = request.POST["referencia"]
+    if not referencia:
+        referencia = None
     if country_code == "+58" and celular.startswith("0"):
         celular = celular[1:]
     telefono = country_code + celular
