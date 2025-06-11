@@ -194,6 +194,10 @@ async function confirmarTickets(form, event) {
   });
   if (response.ok) {
     const result = await response.json();
+    if (result.error) {
+      alert(result.error);
+      return;
+    }
     const txt = getWhatsappText(result.boletos);
     const url = "https://wa.me/584242558344?text=" + txt;
     document.getElementById("nombre-rifa").href = url;
@@ -218,7 +222,7 @@ function whatsappTimer(url, countdown) {
     let seconds = countdown - 1;
     document.getElementById("countdown").innerText = seconds;
     if (seconds == 0) {
-      window.open(url, "_blank");
+      location.href = url;
     } else {
       whatsappTimer(url, seconds);
     }
