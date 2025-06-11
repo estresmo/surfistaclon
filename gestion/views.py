@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.postgres.aggregates import ArrayAgg  # Import this!
 from django.db.models import BooleanField, Case, CharField, Count, Q, Sum, Value, When
-from django.db.models.functions import Concat, Round
+from django.db.models.functions import Concat, ExtractWeekDay, Round
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
@@ -366,12 +366,27 @@ def dashboardView(request: HttpRequest):
     )
     total_comprobantes = comprobantes.count()
     total_numeros = NumeroRifa.objects.filter(evento=evento_actual).count()
+    total_disponibles = evento_actual.total_tickets - total_numeros
     total_participantes = participantes.count()
-    por_cofirmar = comprobantes.filter(status=StatusChoices.NO_VERIFICADO).aggregate(
-        monto=Round(Sum("monto"), 2), cantidad=Count("id"), tickets=Count("numerorifa")
+    por_cofirmar = (
+        comprobantes.filter(status=StatusChoices.NO_VERIFICADO)
+        .values("id", "monto")
+        .annotate(boletos=Count("numerorifa"))
+        .aggregate(
+            monto=Round(Sum("monto"), 2),
+            cantidad=Count("id"),
+            tickets=Sum("boletos"),
+        )
     )
-    verificados = comprobantes.filter(status=StatusChoices.VERIFICADO).aggregate(
-        monto=Round(Sum("monto"), 2), cantidad=Count("id"), tickets=Count("numerorifa")
+    verificados = (
+        comprobantes.filter(status=StatusChoices.VERIFICADO)
+        .values("id", "monto")
+        .annotate(boletos=Count("numerorifa"))
+        .aggregate(
+            monto=Round(Sum("monto"), 2),
+            cantidad=Count("id"),
+            tickets=Sum("boletos"),
+        )
     )
     progreso = (total_numeros / evento_actual.total_tickets) * 100
     tickets_fecha = list(
@@ -429,10 +444,24 @@ def dashboardView(request: HttpRequest):
     tickets_frecuentes = calcular_tickets_frecuentes(evento_actual.pk)
     tickets_frecuentes = [f"{t[0]} tickets;{t[1]}" for t in tickets_frecuentes]
     tickets_frecuentes = ",".join(tickets_frecuentes)
-
-    today = date.today()
-    seven_day_before = today - timedelta(days=7)
-    dias_ventas = comprobantes.filter(fecha_creado__)
+    dias_ventas = list(
+        comprobantes.annotate(
+            weekday=ExtractWeekDay("fecha_creado"),
+            weekday_string=Case(
+                When(weekday=1, then=Value("Domingo")),
+                When(weekday=2, then=Value("Lunes")),
+                When(weekday=3, then=Value("Martes")),
+                When(weekday=4, then=Value("Miércoles")),
+                When(weekday=5, then=Value("Jueves")),
+                When(weekday=6, then=Value("Viernes")),
+                When(weekday=7, then=Value("Sábado")),
+                output_field=CharField(),
+            ),
+        )
+        .values("weekday_string")
+        .annotate(cantidad=Count("numerorifa__id"))
+    )
+    dias_ventas_str = list2values(dias_ventas)
 
     context = {
         "eventos": eventos,
@@ -449,6 +478,8 @@ def dashboardView(request: HttpRequest):
         "metodos_aprobados": metodos_aprobados_str,
         "metodos_confirmar": metodos_confirmar_str,
         "tickets_frecuentes": tickets_frecuentes,
+        "total_disponibles": total_disponibles,
+        "dias_ventas": dias_ventas_str,
     }
     return render(request, "admin/dashboard.html", context)
 

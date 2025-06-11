@@ -72,9 +72,9 @@
             <div class="panel">
               <h3>Total Tickets Registrados</h3>
               <div class="panel_contents">
-                <h1>{{ total_comprobantes }} tickets</h1>
+                <h1>{{ total_numeros }} tickets</h1>
                 <span>
-                  Disponibles: {{ total_numeros }}/{{ evento_actual.total_tickets }}
+                  Disponibles: {{ total_disponibles }}/{{ evento_actual.total_tickets }}
                 </span>
               </div>
             </div>
@@ -543,6 +543,8 @@
                 </div>
                 <script>
                   (function () {
+                    const dias_ventas = "{{ dias_ventas }}".split(",");
+                    const DIAS_VENTAS = dias_ventas.map((i) => i.split(";"));
                     if (
                       document.documentElement.hasAttribute(
                         "data-turbolinks-preview"
@@ -557,19 +559,9 @@
                       return;
 
                     var createChart = function () {
-                      new Chartkick["ColumnChart"](
-                        "chart-8",
-                        [
-                          ["dom", 128],
-                          ["lun", 162],
-                          ["mar", 198],
-                          ["mié", 375],
-                          ["jue", 154],
-                          ["vie", 183],
-                          ["sáb", 169],
-                        ],
-                        { colors: ["#8995a7", "#5ea3d3"] }
-                      );
+                      new Chartkick["ColumnChart"]("chart-8", DIAS_VENTAS, {
+                        colors: ["#8995a7", "#5ea3d3"],
+                      });
                     };
                     if ("Chartkick" in window) {
                       createChart();
