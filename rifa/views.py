@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.http import HttpRequest, JsonResponse
 from django.shortcuts import render
 from django.views.decorators.http import require_POST
@@ -11,7 +10,7 @@ from gestion.models import (
     NumeroRifa,
     Visualizacion,
 )
-from gestion.utils import calcular_monto, send_whatsapp
+from gestion.utils import calcular_monto
 
 
 def home(request: HttpRequest):
@@ -138,10 +137,4 @@ def comprobantes(request: HttpRequest):
     NumeroRifa.objects.bulk_create(numeros_comprados)
     comprobante.monto = calcular_monto(comprobante)
     comprobante.save(update_fields=["monto"])
-    msg = (
-        "Usted ha comprado los tickets: "
-        + ", ".join(boletos)
-        + ". Se le notificará cuando su pago sea aprobado"
-    )
-
-    return JsonResponse({"ok": "ok"})
+    return JsonResponse({"ok": "ok", "boletos": boletos})

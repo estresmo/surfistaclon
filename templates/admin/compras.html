@@ -243,7 +243,7 @@
               id="q_buyer_phone_contains_input">
               <label for="q_buyer_phone_contains" class="label">TELÉFONO</label><input id="q_buyer_phone_contains"
                 type="text"
-                value="request.GET.telefono"
+                value="{{ request.GET.telefono }}"
                 name="telefono" />
             </div>
             <div class="string input optional stringish filter_form_field filter_string"
@@ -255,16 +255,18 @@
             <div class="date_range input optional stringish filter_form_field filter_date_range"
               id="q_created_at_input">
               <label class="label">Fecha</label>
-              <input placeholder="Desde"
-                type="date"
-                value="{{ request.GET.fecha_desde }}"
-                name="fecha_desde"
-                id="q_created_at_gteq_datetime" />
-              <input placeholder="Hasta"
-                type="date"
-                value="{{ request.GET.fecha_hasta }}"
-                name="fecha_hasta"
-                id="q_created_at_lteq_datetime" />
+              <div style="display: flex;">
+                <input placeholder="Desde"
+                  type="date"
+                  value="{{ request.GET.fecha_desde }}"
+                  name="fecha_desde"
+                  id="q_created_at_gteq_datetime" />
+                <input placeholder="Hasta"
+                  type="date"
+                  value="{{ request.GET.fecha_hasta }}"
+                  name="fecha_hasta"
+                  id="q_created_at_lteq_datetime" />
+              </div>
             </div>
             <div class="select input optional filter_form_field filter_select"
               id="q_expireds_input">
@@ -309,18 +311,13 @@
               id="q_payment_type_input">
               <label for="q_payment_type_id" class="label">Tipo de Pago</label><select name="metodo"
                 id="q_payment_type_id">
-                <option value="" selected="selected">Cualquiera</option>
+                <option value="">Cualquiera</option>
                 {% for metodo in metodos %}
-                {% if metodo.id == request.GET.metodo %}
-                  <option value="{{ metodo.id }}" selected=>
-                    {{ metodo.banco}}
-                  </option>
-                {% else %}
-                  <option value="{{ metodo.id }}" >
-                    {{ metodo.banco}}
-                  </option>
-                {% endif %}
-                  
+                  {% if metodo.id == request.GET.metodo %}
+                    <option value="{{ metodo.id }}" selected>{{ metodo.banco }}</option>
+                  {% else %}
+                    <option value="{{ metodo.id }}">{{ metodo.banco }}</option>
+                  {% endif %}
                 {% endfor %}
               </select>
             </div>

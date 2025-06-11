@@ -193,10 +193,11 @@ async function confirmarTickets(form, event) {
     body: formData,
   });
   if (response.ok) {
-    alert(
-      "Boletos ordenados con exito. Se verificará su pago en las próximas horas"
+    const modal = new bootstrap.Modal(
+      document.getElementById("confirmationModal"),
+      {}
     );
-    location.reload();
+    modal.show();
   } else if (response.status == 403) {
     alert("Error al ordenar los boletos. Por favor intente nuevamente");
     location.reload();
