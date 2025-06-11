@@ -30,9 +30,7 @@
                           data-original-title="Promoción 0x-1">
                           <i class="fa fa-ticket" aria-hidden="true"></i>
                           <span class="quantityTotalTicketsPromos">
-                            <!-- prettier-ignore -->
                             {{ promocion.cantidad_tickets }} boletos por
-                            <!-- prettier-ignore -->
                             <b>{{ promocion.precio }}$</b>
                           </span>
                         </h3>
@@ -350,4 +348,94 @@
     </form>
   </article>
 </div>
+
+<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmationModalLabel">Confirmar Compra</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ¡BOLETOS REGISTRADOS CORRECTAMENTE! Serán enviados a WhatsApp.
+        <br><br>
+        Redirigiendo en <span id="countdown">5</span> segundos...
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button type="button" class="btn btn-primary" id="redirectToWhatsappButton">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="/static/rifas/lista-boletos.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const originalConfirmButton = document.getElementById('confirmTickets');
+    const redirectToWhatsappButton = document.getElementById('redirectToWhatsappButton');
+    const countdownSpan = document.getElementById('countdown');
+    const form = originalConfirmButton.closest('form'); // Get the form element
+
+    let countdownInterval;
+
+    // Function to handle redirection to WhatsApp
+    function redirectToWhatsApp() {
+      // You might want to dynamically generate the phone number and message
+      // based on your `evento` data or user input.
+      const whatsappLink = 'https://wa.me/584242558344?text=¡Hola!%20Mis%20boletos%20han%20sido%20registrados%20correctamente.';
+      window.open(whatsappLink, '_blank');
+      $('#confirmationModal').modal('hide');
+    }
+
+    // When the modal is about to be shown, reset the countdown
+    $('#confirmationModal').on('show.bs.modal', function (e) {
+      if (countdownInterval) {
+        clearInterval(countdownInterval);
+      }
+      countdownSpan.textContent = '5';
+    });
+
+    // When the modal is fully shown, start the countdown
+    $('#confirmationModal').on('shown.bs.modal', function () {
+      let seconds = 5;
+      countdownInterval = setInterval(() => {
+        seconds--;
+        countdownSpan.textContent = seconds;
+        if (seconds <= 0) {
+          clearInterval(countdownInterval);
+          redirectToWhatsApp();
+        }
+      }, 1000);
+    });
+
+    // Handle click on the "Ir a WhatsApp" button in the modal
+    if (redirectToWhatsappButton) {
+      redirectToWhatsappButton.addEventListener('click', function() {
+        clearInterval(countdownInterval);
+        redirectToWhatsApp();
+      });
+    }
+
+    // Override the form's onsubmit to handle AJAX submission and modal display
+    if (form) {
+      form.onsubmit = function(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        // You would typically use AJAX here to submit the form data
+        // For demonstration, let's simulate a successful submission after a short delay
+        console.log("Form submission initiated...");
+
+        // Simulate an AJAX call
+        setTimeout(() => {
+          console.log("Form submission simulated successfully!");
+          // On successful form submission (replace with your actual success logic):
+          $('#confirmationModal').modal('show'); // Show the confirmation modal
+        }, 1000); // Simulate 1 second for form processing
+
+        return false; // Prevent default form submission
+      };
+    }
+  });
+</script>
