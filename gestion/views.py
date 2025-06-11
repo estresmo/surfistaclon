@@ -63,6 +63,11 @@ class RifasListView(LoginRequiredMixin, ListView):
     model = Evento
     context_object_name = "rifas"
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.order_by("-id")
+        return queryset
+
 
 class RifasCreateView(LoginRequiredMixin, CreateView):
     template_name = "admin/rifa_form.html"
@@ -206,7 +211,7 @@ class ComprasCreateView(LoginRequiredMixin, CreateView):
         context["status_choices"] = StatusChoices.choices
         context["metodos"] = MetodoPago.objects.all()
         context["evento"] = evento
-        context["dolar"] = Dolar.dolar_actual()
+        context["dolar"] = evento.valor_dolar
         return context
 
     def form_valid(self, form):

@@ -131,7 +131,7 @@ class Comprobante(models.Model):
         default=StatusChoices.NO_VERIFICADO,
     )
     metodo = models.ForeignKey(MetodoPago, models.RESTRICT, null=True)
-    dolar = models.ForeignKey(Dolar, on_delete=models.CASCADE, null=True)
+    dolar = models.FloatField(default=0, blank=True)
     historial = HistoricalRecords()
     evento = models.ForeignKey(Evento, models.RESTRICT, null=False)
     monto = models.FloatField(default=0)

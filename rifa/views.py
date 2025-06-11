@@ -13,8 +13,6 @@ from gestion.models import (
 )
 from gestion.utils import calcular_monto, send_whatsapp
 
-from .models import Dolar
-
 
 def home(request: HttpRequest):
     cliente = Cliente.objects.first()
@@ -31,7 +29,7 @@ def home(request: HttpRequest):
     if evento:
         total_tickets = evento.total_tickets
         tickets = [format(t, evento.digitos) for t in range(total_tickets)]
-    dolar = Dolar.obtener_dolar()
+    dolar = evento.valor_dolar if evento else 0
     metodos = MetodoPago.objects.all()
     context = {
         "agarrados": agarrados,
@@ -75,7 +73,11 @@ def verificar(request: HttpRequest):
 
 @require_POST
 def obtener_dolar(request):
-    dolar = Dolar.obtener_dolar()
+    evento = Evento.obtener_actual()
+    if evento is None:
+        dolar = 0
+    else:
+        dolar = evento.valor_dolar
     return JsonResponse({"dolar": dolar})
 
 
@@ -107,8 +109,7 @@ def comprobantes(request: HttpRequest):
     if country_code == "+58" and celular.startswith("0"):
         celular = celular[1:]
     telefono = country_code + celular
-    Dolar.obtener_dolar()
-    dolar = Dolar.objects.last()
+    dolar = evento.valor_dolar
     comprobante = Comprobante.objects.create(
         nombre=nombre,
         telefono=telefono,

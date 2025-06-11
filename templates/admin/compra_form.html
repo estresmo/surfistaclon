@@ -140,9 +140,9 @@
           {% if form.instance.pk %}
             <input type="hidden"
               name="dolar"
-              value="{{ form.instance.dolar.pk }}" />
+              value="{{ form.instance.dolar }}" />
           {% else %}
-            <input type="hidden" name="dolar" value="{{ dolar.pk }}" />
+            <input type="hidden" name="dolar" value="{{ dolar }}" />
           {% endif %}
           <fieldset class="inputs">
             <legend>
