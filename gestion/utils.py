@@ -5,8 +5,9 @@ from urllib.parse import urljoin
 
 import requests
 from django.contrib.postgres.aggregates import ArrayAgg  # Import this!
-from django.db.models import Count, Sum
 from django.db import connection
+from django.db.models import Count, Sum
+
 from gestion.models import Comprobante, Evento, Promocion, StatusChoices
 
 logger = logging.getLogger(__name__)
@@ -222,7 +223,14 @@ def list2values(list_v: list):
     return ",".join(str_list)
 
 
-def tickets_frecuentes(evento_id: int):
+def calcular_tickets_frecuentes(evento_id: int):
+    """
+    Devuelve la cantidad de tickets que más se compran en este formato
+    (cant_tickets, frecuencia)
+    Ejemplo si hay 7 comprobantes, 3 de ellos tienen 2 boletos y 4 tienen 1 boleto el resultado
+    sería
+    ((1,4), (2,3))
+    """
     with connection.cursor() as cursor:
         cursor.execute(
             """

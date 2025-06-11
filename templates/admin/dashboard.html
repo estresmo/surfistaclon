@@ -600,6 +600,12 @@
                 </div>
                 <script>
                   (function () {
+                    const tickets_frecuentes = "{{ tickets_frecuentes }}".split(
+                      ","
+                    );
+                    const TICKETS_FRECUENTES = tickets_frecuentes.map((i) =>
+                      i.split(";")
+                    );
                     if (
                       document.documentElement.hasAttribute(
                         "data-turbolinks-preview"
@@ -614,30 +620,9 @@
                       return;
 
                     var createChart = function () {
-                      new Chartkick["BarChart"](
-                        "chart-9",
-                        [
-                          ["2 tickets", 597],
-                          ["1 tickets", 361],
-                          ["5 tickets", 171],
-                          ["3 tickets", 98],
-                          ["10 tickets", 61],
-                          ["4 tickets", 42],
-                          ["6 tickets", 11],
-                          ["7 tickets", 8],
-                          ["15 tickets", 4],
-                          ["8 tickets", 3],
-                          ["20 tickets", 3],
-                          ["9 tickets", 2],
-                          ["11 tickets", 2],
-                          ["25 tickets", 2],
-                          ["0 tickets", 1],
-                          ["12 tickets", 1],
-                          ["16 tickets", 1],
-                          ["22 tickets", 1],
-                        ],
-                        { colors: ["#5ea3d3", "#343c46", "#aeb6c2", "#e6e9ee"] }
-                      );
+                      new Chartkick["BarChart"]("chart-9", TICKETS_FRECUENTES, {
+                        colors: ["#5ea3d3", "#343c46", "#aeb6c2", "#e6e9ee"],
+                      });
                     };
                     if ("Chartkick" in window) {
                       createChart();

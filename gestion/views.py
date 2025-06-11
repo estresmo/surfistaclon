@@ -3,8 +3,8 @@ from typing import Optional
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.postgres.aggregates import ArrayAgg  # Import this!
-from django.db.models import CharField, Count, Q, Sum, Value
-from django.db.models.functions import Concat
+from django.db.models import BooleanField, Case, CharField, Count, Q, Sum, Value, When
+from django.db.models.functions import Concat, Round
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
@@ -12,9 +12,7 @@ from django.views.decorators.http import require_POST
 from django.views.generic import View
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
-from django.db.models.functions import Round
-from rifa.models import Dolar
-from django.db.models import Case, When, BooleanField, Value
+
 from .forms import (
     ClienteForm,
     CompraForm,
@@ -34,7 +32,12 @@ from .models import (
     StatusChoices,
     Visualizacion,
 )
-from .utils import calcular_monto, list2values, send_whatsapp, tickets_frecuentes
+from .utils import (
+    calcular_monto,
+    calcular_tickets_frecuentes,
+    list2values,
+    send_whatsapp,
+)
 
 
 @login_required
@@ -179,6 +182,7 @@ class ComprasListView(LoginRequiredMixin, ListView):
             comprobantes = comprobantes.filter(fecha=fecha)
         if creados_hace_mas_de:
             from datetime import timedelta
+
             from django.utils import timezone
 
             date_threshold = timezone.now() - timedelta(days=int(creados_hace_mas_de))
@@ -422,8 +426,14 @@ def dashboardView(request: HttpRequest):
     participantes = list(participantes[:10].values("nombre", "num_tickets"))
     participantes_str = list2values(participantes)
 
-    results = tickets_frecuentes(evento_actual.pk)
-    print(list(results))
+    tickets_frecuentes = calcular_tickets_frecuentes(evento_actual.pk)
+    tickets_frecuentes = [f"{t[0]} tickets;{t[1]}" for t in tickets_frecuentes]
+    tickets_frecuentes = ",".join(tickets_frecuentes)
+
+    today = date.today()
+    seven_day_before = today - timedelta(days=7)
+    dias_ventas = comprobantes.filter(fecha_creado__)
+
     context = {
         "eventos": eventos,
         "evento_actual": evento_actual,
@@ -438,6 +448,7 @@ def dashboardView(request: HttpRequest):
         "tickets_metodo": tickets_metodo_str,
         "metodos_aprobados": metodos_aprobados_str,
         "metodos_confirmar": metodos_confirmar_str,
+        "tickets_frecuentes": tickets_frecuentes,
     }
     return render(request, "admin/dashboard.html", context)
 
