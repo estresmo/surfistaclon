@@ -107,7 +107,9 @@ def comprobantes(request: HttpRequest):
     referencia = request.POST["referencia"]
     if referencia:
         if Comprobante.objects.filter(referencia=referencia).exists():
-            return JsonResponse({"error": "Ya existe un comprobante con esa referencia"})
+            return JsonResponse(
+                {"error": "Ya existe un comprobante con esa referencia"}
+            )
     if country_code == "+58" and celular.startswith("0"):
         celular = celular[1:]
     telefono = country_code + celular
@@ -140,4 +142,5 @@ def comprobantes(request: HttpRequest):
     NumeroRifa.objects.bulk_create(numeros_comprados)
     comprobante.monto = calcular_monto(comprobante)
     comprobante.save(update_fields=["monto"])
+    boletos = [format(int(boleto), evento.digitos) for boleto in boletos]
     return JsonResponse({"ok": "ok", "boletos": list(boletos)})

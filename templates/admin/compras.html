@@ -196,7 +196,13 @@
                         </td>
                         <td class="col col-tickets">
                           <!-- prettier-ignore -->
-                          {{ compra.boletos|join:', ' }}
+                           {% for boleto in compra.boletos %}
+                            {{ boleto|stringformat:"04d" }}
+                            {% if not forloop.last %}
+                              ,
+                            {% endif %}
+                            
+                           {% endfor %}
                         </td>
                         <td class="col">{{ compra.notas }}</td>
                         <td class="col col-actions">

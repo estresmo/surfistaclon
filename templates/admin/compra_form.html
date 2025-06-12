@@ -381,7 +381,8 @@
       renderRow: (index) => {
         const element = document.createElement("button");
         element.classList.add("ticket-opcion");
-        element.innerHTML = rows[index];
+        const value = String(rows[index]).padStart(4, "0");
+        element.innerHTML = value;
         element.type = "button";
         return element;
       },
@@ -400,7 +401,8 @@
         renderRow: (index) => {
           const element = document.createElement("button");
           element.classList.add("ticket-opcion");
-          element.innerHTML = new_rows[index];
+          const value = String(rows[index]).padStart(4, "0");
+          element.innerHTML = value;
           element.type = "button";
           return element;
         },
