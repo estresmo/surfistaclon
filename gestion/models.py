@@ -18,6 +18,12 @@ class MetodosChoices(models.IntegerChoices):
     BINANCE = 3
 
 
+class MonedasChoices(models.TextChoices):
+    DOLAR = "$"
+    EURO = "€"
+    BOLIVAR = "Bs"
+
+
 class Evento(models.Model):
     nombre = models.CharField(max_length=500, unique=True)
     url = models.CharField(max_length=500, unique=True)
@@ -87,6 +93,7 @@ class MetodoPago(models.Model):
     titulo_3 = models.CharField(max_length=100, blank=True)
     contenido_3 = models.CharField(max_length=100, blank=True)
     nota = models.CharField(max_length=100, blank=True)
+    moneda = models.CharField(max_length=10, choices=MonedasChoices.choices)
 
     @property
     def contenidos(self):

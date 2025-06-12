@@ -27,6 +27,7 @@
                     <tr>
                       <th class="col col-bank_logo">Imagen</th>
                       <th class="col col-bank_name">Banco</th>
+                      <th>Moneda</th>
                       <th class="sortable col col-owner">
                         <a href="?order=owner_desc">Titular</a>
                       </th>
@@ -47,6 +48,7 @@
                             src="{{ metodo.imagen.url }}" />
                         </td>
                         <td class="col col-bank_name">{{ metodo.banco }}</td>
+                        <td>{{ metodo.moneda }}</td>
                         <td class="col col-owner">{{ metodo.titular }}</td>
                         <td class="col col-number">
                           <!-- prettier-ignore -->

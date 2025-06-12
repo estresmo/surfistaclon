@@ -28,6 +28,7 @@ from .models import (
     Evento,
     MetodoPago,
     MetodosChoices,
+    MonedasChoices,
     NumeroRifa,
     Promocion,
     StatusChoices,
@@ -117,12 +118,23 @@ class MetodoCreateView(LoginRequiredMixin, CreateView):
     success_url = "/admin/metodos"
     model = MetodoPago
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["monedas"] = MonedasChoices.choices
+        return context
+
 
 class MetodoUpdateView(LoginRequiredMixin, UpdateView):
     template_name = "admin/metodo_form.html"
     form_class = MetodoForm
     success_url = "/admin/metodos"
     model = MetodoPago
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["monedas"] = MonedasChoices.choices
+        print(MonedasChoices.choices, context["form"])
+        return context
 
 
 class ComprasListView(LoginRequiredMixin, ListView):

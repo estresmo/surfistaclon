@@ -61,6 +61,25 @@
                   value="{{ form.titular.value|default_if_none:'' }}"
                   name="titular" />
               </li>
+              <li class="select input required">
+                <label class="label">Moneda</label>
+                <select name="moneda" value="{{ moneda_sb }}" required>
+                  <option value="">-- Seleccionar --</option>
+                  {% for moneda_sb, moneda_str in monedas %}
+                    {% if moneda_sb == form.moneda.value %}
+                      <option value="{{ moneda_sb }}" selected>
+                        {# prettier-ignore #}
+                        {{  moneda_str }} ({{ moneda_sb }})
+                      </option>
+                    {% else %}
+                      <option value="{{ moneda_sb }}">
+                        {# prettier-ignore #}
+                        {{  moneda_str }} ({{ moneda_sb }})
+                      </option>
+                    {% endif %}
+                  {% endfor %}
+                </select>
+              </li>
               <li class="number input required">
                 <label class="label">Posicion</label>
                 <input type="number"

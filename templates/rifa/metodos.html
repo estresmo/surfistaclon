@@ -36,23 +36,42 @@
               <div class="titularBank">
                 <span>TITULAR</span>{{ metodo.titular }}
                 <h6 id="montoCorrecto">
-                  <strong class="total-boleto">
-                    {{ evento.precio_unidad }}$
-                  </strong>
-                  o
-                  <strong class="precio-bs">150bs</strong>
-                  <button onclick="actionButtonAccounts('copy', this, document.querySelector('.precio-bs').innerText)"
-                    class="magic_button"
-                    data-toggle="tooltip"
-                    data-placement="top"
-                    title=""
-                    type="button"
-                    data-original-title="Copiar">
-                    <i class="fa fa-file"></i>
-                  </button><br />
-                  (
-                  <span class="cantidad-boleto">1</span>
-                  boletos )
+                  <span class="nameAccountNumber">MONTO</span><br />
+                  {% if metodo.moneda == '$' %}
+                    <strong class="total-boleto precio-dolar">
+                      {{ evento.precio_unidad }}$
+                    </strong>
+                    <button onclick="actionButtonAccounts('copy', this, document.querySelector('.total-boleto').innerText)"
+                      class="magic_button"
+                      type="button">
+                      <i class="fa fa-file"></i>
+                    </button>
+                  {% endif %}
+                  {% if metodo.moneda == '€' %}
+                    <strong class="total-boleto precio-dolar">
+                      {{ evento.precio_unidad }}€
+                    </strong>
+                    <button onclick="actionButtonAccounts('copy', this, document.querySelector('.total-boleto').innerText)"
+                      class="magic_button"
+                      type="button">
+                      <i class="fa fa-file"></i>
+                    </button>
+                  {% endif %}
+                  {% if metodo.moneda == 'Bs' %}
+                    <strong class="precio-bs"></strong>
+                    <button onclick="actionButtonAccounts('copy', this, document.querySelector('.precio-bs').innerText)"
+                      class="magic_button"
+                      type="button">
+                      <i class="fa fa-file"></i>
+                    </button>
+                  {% endif %}
+
+                  <br />
+                  <div class="mt-4">
+                    (
+                    <span class="cantidad-boleto">1</span>
+                    boletos )
+                  </div>
                 </h6>
               </div>
             </div>
@@ -63,32 +82,6 @@
         document
           .getElementById("container-payments")
           .firstElementChild.classList.add("selected");
-      </script>
-      <script>
-        function copiarPrecio() {
-          // Obtiene el elemento que contiene el precio
-          const precioElement = document.getElementById("precio-bs");
-
-          // Crea un elemento de texto temporal para copiar el precio
-          const tempInput = document.createElement("input");
-          tempInput.value = precioElement.innerText; // Obtiene el texto del elemento
-
-          // Añade el elemento al DOM
-          document.body.appendChild(tempInput);
-
-          // Selecciona el texto del elemento
-          tempInput.select();
-          tempInput.setSelectionRange(0, 99999); // Para dispositivos móviles
-
-          // Copia el texto al portapapeles
-          document.execCommand("copy");
-
-          // Elimina el elemento temporal
-          document.body.removeChild(tempInput);
-
-          // Opcional: Notificar al usuario que el precio ha sido copiado
-          alert("Precio copiado: " + tempInput.value);
-        }
       </script>
     </div>
   </div>
