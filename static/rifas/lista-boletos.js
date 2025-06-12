@@ -41,6 +41,10 @@ function actualizarPrecios() {
   document.querySelectorAll(".total-boleto").forEach((elem) => {
     elem.innerHTML = calcularPrecio(ticketQty.value) + "$";
   });
+  document.querySelectorAll(".total-boleto-euro").forEach((elem) => {
+    elem.innerHTML = calcularPrecio(ticketQty.value) + "€";
+  });
+
   actualizarBs(ticketQty.value);
 }
 

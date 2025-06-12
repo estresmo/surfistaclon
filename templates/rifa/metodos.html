@@ -48,7 +48,7 @@
                     </button>
                   {% endif %}
                   {% if metodo.moneda == '€' %}
-                    <strong class="total-boleto precio-dolar">
+                    <strong class="total-boleto-euro">
                       {{ evento.precio_unidad }}€
                     </strong>
                     <button onclick="actionButtonAccounts('copy', this, document.querySelector('.total-boleto').innerText)"
