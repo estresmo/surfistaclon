@@ -142,7 +142,7 @@ class ComprasListView(LoginRequiredMixin, ListView):
         evento_id = self.request.GET.get("evento_id")
         evento_actual = Evento.obtener_actual()
         comprobantes = Comprobante.objects.all()
-        if evento_id != "todos":
+        if evento_id != "todos" and evento_id != "inactivas":
             comprobantes = Comprobante.objects.filter(evento__id=evento_id)
         elif evento_id == "inactivas":
             evento_actual = Evento.obtener_actual()
