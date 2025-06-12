@@ -367,14 +367,8 @@ def verificar_comprobante(request: HttpRequest, pk: int):
             fecha_actual = timezone.now()
             comprobante.fecha_verificacion = fecha_actual
             comprobante.save(update_fields=("status", "fecha_verificacion"))
-            queryset = comprobante.boletos.values_list("numero", flat=True)
-            boletos = (str(item) for item in queryset)
-            msg = (
-                "Su comprobante ha sido "
-                + comprobante.get_status_display()  # type: ignore
-                + ". Los boletos verificados son "
-                + " ,".join(boletos)
-            )
+            url = f"https://www.chipibikelifee.com/rifa/comboexclusivo/?phone={comprobante.telefono}"
+            msg = f"Hola {comprobante.nombre}, gracias por completar tu pago de tus números de {comprobante.evento.nombre} y los puedes verificar en {url}"
             send_whatsapp(comprobante.telefono, msg)
             hora = fecha_actual.strftime("%I:%M %p")
             fecha = fecha_actual.strftime("%d %B %Y")
@@ -683,14 +677,13 @@ class ComprobanteView(LoginRequiredMixin, View):
             )
             comprobante.save()
             boletos = request.POST["boletos"].strip(",").split(",")
-            msg = (
-                "Su comprobante ha sido "
-                + comprobante.get_status_display()
-                + ". Los boletos verificados son "
-                + " ,".join(boletos)
-            )
+            url = f"https://www.chipibikelifee.com/rifa/comboexclusivo/?phone={comprobante.telefono}"
+            msg = f"Hola {comprobante.nombre}, gracias por completar tu pago de tus números de {comprobante.evento.nombre} y los puedes verificar en {url}"
             if pk:
-                if ultimo_status != comprobante.status:
+                if (
+                    ultimo_status != comprobante.status
+                    and comprobante.status == StatusChoices.VERIFICADO
+                ):
                     send_whatsapp(comprobante.telefono, msg)
             NumeroRifa.objects.filter(evento=evento, comprobante=form.instance).delete()
             if form.instance.status != StatusChoices.RECHAZADO:
