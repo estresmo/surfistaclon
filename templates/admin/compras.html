@@ -391,7 +391,7 @@
       const response = await fetch(`/admin/verificar/${id}`, {
         method: "POST",
         headers: {
-          "X-CSRFToken": crsf_token,
+          "X-CSRFToken": "{% csrf_token %}",
         },
       });
       try {
@@ -416,7 +416,7 @@
         const response = await fetch(`/admin/compras/eliminar/${id}`, {
           method: "POST",
           headers: {
-            "X-CSRFToken": crsf_token,
+            "X-CSRFToken": "{% csrf_token %}" ,
           },
         });
 
