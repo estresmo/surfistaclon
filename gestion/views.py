@@ -228,6 +228,7 @@ class ComprasListView(LoginRequiredMixin, ListView):
                 "verificado",
                 "evento__url",
             )
+            .order_by("-id")
         )
         return comprobantes
 
