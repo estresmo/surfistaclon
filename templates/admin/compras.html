@@ -131,8 +131,8 @@
                     {% for compra in compras %}
                       <tr class="odd" id="row-{{ compra.id }}">
                         <td class="col col-buyer">
-                          <a title="Anthony Gutierrez"
-                            href="/admin/participantes/detalle?nombre={{ compra.nombre|urlencode }}&telefono={{ compra.telefono|urlencode }}">
+                          {# href="/admin/participantes/detalle?nombre={{ compra.nombre|urlencode }}&telefono={{ compra.telefono|urlencode }} #}
+                          <a title="Anthony Gutierrez" href="#">
                             {{ compra.nombre|title }} {{ compra.telefono }}
                           </a>
                         </td>
