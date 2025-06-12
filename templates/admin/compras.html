@@ -66,11 +66,8 @@
               <li class="scope all">
                 <a href="?evento_id=todos" class="table_tools_button">Todos</a>
               </li>
-              <li class="scope rifas_activas selected">
-                <a href="?evento_id={{ evento_actual.id }}"
-                  class="table_tools_button">
-                  Rifas Activas
-                </a>
+              <li class="scope rifas_activas">
+                <a href="?" class="table_tools_button">Rifas Activas</a>
               </li>
               <li class="scope rifas_inactivas">
                 <a href="?evento_id=inactivas" class="table_tools_button">
@@ -78,6 +75,26 @@
                 </a>
               </li>
             </ul>
+            <script>
+              (function () {
+                const eventoId = "{{ request.GET.evento_id }}";
+                console.log(eventoId);
+                if (!eventoId) {
+                  document
+                    .querySelector(".scope.rifas_activas")
+                    .classList.add("selected");
+                }
+                if (eventoId == "todos") {
+                  document
+                    .querySelector(".scope.all")
+                    .classList.add("selected");
+                } else if (eventoId == "inactivas") {
+                  document
+                    .querySelector(".scope.rifas_inactivas")
+                    .classList.add("selected");
+                }
+              })();
+            </script>
           </div>
         </div>
         <div class="paginated_collection">
