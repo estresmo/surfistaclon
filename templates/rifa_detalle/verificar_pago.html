@@ -103,7 +103,10 @@
     document.getElementById("verificar-btn").click();
   });
   document.addEventListener("DOMContentLoaded", function () {
-    const phone = "{{request.GET.phone}}";
+    let phone = "{{request.GET.phone}}";
+    if (phone.startsWith(" ")) {
+      phone = phone.replace(" ", "+");
+    }
     console.log(phone);
     const codes_list = document.querySelectorAll("#verificador option");
     for (const element of codes_list) {

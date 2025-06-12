@@ -241,7 +241,7 @@ function getWhatsappText(boletos) {
   const tickets = boletos.join(", ");
   const rifa = document.getElementById("nombre-rifa").innerText;
   const verificar_url =
-    "https://www.chipibikelifee.com/rifa/comboexclusivo/#verificador?phone=" +
+    "https://www.chipibikelifee.com/rifa/comboexclusivo/?phone=" +
     telefono.replace("+", "%2B");
   const txt = `Hola, soy ${nombre}. Con mi celular ${telefono} registre estos números ${tickets}. En  ${rifa} ${verificar_url}`;
   return encodeURIComponent(txt);

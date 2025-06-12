@@ -368,7 +368,8 @@ def verificar_comprobante(request: HttpRequest, pk: int):
             fecha_actual = timezone.now()
             comprobante.fecha_verificacion = fecha_actual
             comprobante.save(update_fields=("status", "fecha_verificacion"))
-            url = f"https://www.chipibikelifee.com/rifa/comboexclusivo/?phone={comprobante.telefono}"
+            telefono_url = comprobante.telefono.replace("+", "%2B")
+            url = f"https://www.chipibikelifee.com/rifa/comboexclusivo/?phone={telefono_url}"
             msg = f"Hola {comprobante.nombre}, gracias por completar tu pago de tus números de {comprobante.evento.nombre} y los puedes verificar en {url}"
             send_whatsapp(comprobante.telefono, msg)
             hora = fecha_actual.strftime("%I:%M %p")
@@ -678,7 +679,8 @@ class ComprobanteView(LoginRequiredMixin, View):
             )
             comprobante.save()
             boletos = request.POST["boletos"].strip(",").split(",")
-            url = f"https://www.chipibikelifee.com/rifa/comboexclusivo/?phone={comprobante.telefono}"
+            telefono_url = comprobante.telefono.replace("+", "%2B")
+            url = f"https://www.chipibikelifee.com/rifa/comboexclusivo/?phone={telefono_url}"
             msg = f"Hola {comprobante.nombre}, gracias por completar tu pago de tus números de {comprobante.evento.nombre} y los puedes verificar en {url}"
             if pk:
                 if (
