@@ -204,7 +204,7 @@ async function confirmarTickets(form, event) {
     }
     const txt = getWhatsappText(result.boletos);
     const url = "https://wa.me/584242558344?text=" + txt;
-    document.getElementById("nombre-rifa").href = url;
+    document.getElementById("whatsapp-link").href = url;
     document.getElementById("countdown").innerText = "5";
     whatsappTimer(url, 5);
     const modal = new bootstrap.Modal(
@@ -240,7 +240,9 @@ function getWhatsappText(boletos) {
   const telefono = cod_t + celular;
   const tickets = boletos.join(", ");
   const rifa = document.getElementById("nombre-rifa").innerText;
-  const txt = `Hola, soy ${nombre}. Con mi celular ${telefono} registre estos números ${tickets}. En  ${rifa}`;
+  const verificar_url =
+    "https://www.chipibikelifee.com/rifa/comboexclusivo/?phone=" + telefono;
+  const txt = `Hola, soy ${nombre}. Con mi celular ${telefono} registre estos números ${tickets}. En  ${rifa} ${verificar_url}`;
   return encodeURIComponent(txt);
 }
 

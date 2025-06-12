@@ -49,6 +49,22 @@ def detalle_evento(request: HttpRequest, link: str):
         "evento": evento,
         "cliente": cliente,
     }
+    if evento.es_actual:
+        metodos = MetodoPago.objects.all()
+        agarrados = NumeroRifa.objects.filter(
+            comprobante__evento=evento
+        ).prefetch_related("comprobante__evento")
+        agarrados = [str(a) for a in agarrados]
+        tickets = [format(t, evento.digitos) for t in range(evento.total_tickets)]
+        dolar = evento.valor_dolar if evento else 0
+        context.update(
+            {
+                "agarrados": agarrados,
+                "tickets": tickets,
+                "dolar": dolar,
+                "metodos": metodos,
+            }
+        )
     return render(request, "rifa_detalle/home.html", context)
 
 
@@ -67,6 +83,7 @@ def verificar(request: HttpRequest):
             "comprobante__evento"
         )
         c["boletos"] = [str(n) for n in numeros]
+        c["fecha"] = c["fecha"].strftime("%Y-%m-%d %I:%M %p")
     return JsonResponse({"result": comprobantes})
 
 

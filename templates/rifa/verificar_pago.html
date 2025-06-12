@@ -11,15 +11,16 @@
           <input type="tel"
             id="telefonoInput"
             placeholder="Ingrese su número de teléfono"
-            class="px-3" />
+            class="px-3"
+            value="{{ request.GET.cel }}" />
 
           <label for="findPhone" class="active">Número de Teléfono</label>
         </div>
-
         <div class="input-field col s12 m6">
           <button class="btn-large"
             onclick="searchBuyer()"
             data-toggle="modal"
+            id="verificar-btn"
             data-target="#modalVerificar">
             <i class="fa fa-search" aria-hidden="true"></i> Buscar
           </button>
@@ -92,4 +93,26 @@
     }
     document.querySelector("#modalVerificarBody").innerHTML = html;
   }
+  document.addEventListener("DOMContentLoaded", function () {
+    const cod = "{{request.GET.cod}}";
+    if (cod == "") return;
+    const cod_elem = document.querySelector(`#verificador [value='+${cod}']`);
+    if (!cod_elem) return;
+    cod_elem.selected = true;
+    document.getElementById("verificar-btn").click();
+  });
+  document.addEventListener("DOMContentLoaded", function () {
+    const phone = "{{request.GET.phone}}";
+    const codes_list = document.querySelectorAll("#verificador option");
+    for (const element of codes_list) {
+      const code = element.value;
+      if (phone.startsWith(code)) {
+        element.selected = true;
+        const clean_phone = phone.replace(code, "");
+        document.querySelector("#telefonoInput").value = clean_phone;
+        document.getElementById("verificar-btn").click();
+        break;
+      }
+    }
+  });
 </script>

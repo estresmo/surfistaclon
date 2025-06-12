@@ -133,7 +133,6 @@ class MetodoUpdateView(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["monedas"] = MonedasChoices.choices
-        print(MonedasChoices.choices, context["form"])
         return context
 
 
@@ -201,8 +200,8 @@ class ComprasListView(LoginRequiredMixin, ListView):
             filtros[tipo_nota] = nota
         comprobantes = (
             comprobantes.filter(**filtros)
-            .select_related("numerorifa")
-            .prefetch_related("numerorifa__numero")
+            .select_related("numerorifa", "evento")
+            .prefetch_related("numerorifa__numero", "evento__url")
             .annotate(
                 boletos=ArrayAgg("numerorifa__numero"),
                 cantidad=Count("numerorifa"),
@@ -227,6 +226,7 @@ class ComprasListView(LoginRequiredMixin, ListView):
                 "nota",
                 "cantidad",
                 "verificado",
+                "evento__url",
             )
         )
         return comprobantes
