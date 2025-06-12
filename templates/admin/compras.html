@@ -387,11 +387,13 @@
     async function verificarCompra(id) {
       const element = document.getElementById("verificar-" + id);
       element.classList.replace("pending", "processing");
-
+      const crsf_token = document.querySelector(
+        "[name=csrfmiddlewaretoken]"
+      ).value;
       const response = await fetch(`/admin/verificar/${id}`, {
         method: "POST",
         headers: {
-          "X-CSRFToken": "{% csrf_token %}",
+          "X-CSRFToken": crsf_token,
         },
       });
       try {
@@ -411,12 +413,14 @@
     async function eliminarCompra(id) {
       const confirmed = confirm("¿Estas seguro de eliminar esta compra?");
       if (!confirmed) return;
-
+      const crsf_token = document.querySelector(
+        "[name=csrfmiddlewaretoken]"
+      ).value;
       try {
         const response = await fetch(`/admin/compras/eliminar/${id}`, {
           method: "POST",
           headers: {
-            "X-CSRFToken": "{% csrf_token %}" ,
+            "X-CSRFToken": crsf_token,
           },
         });
 
