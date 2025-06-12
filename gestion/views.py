@@ -174,7 +174,7 @@ class ComprasListView(LoginRequiredMixin, ListView):
         fecha_hasta = self.request.GET.get("fecha_desde")
         creados_hace_mas_de = self.request.GET.get("creados_hace_mas_de")
         status = self.request.GET.get("status")
-        metodo_pago = self.request.GET.get("metodo_pago")
+        metodo_pago = self.request.GET.get("metodo")
         nota = self.request.GET.get("nota")
         tipo_nota = self.request.GET.get("tipo_nota")
 

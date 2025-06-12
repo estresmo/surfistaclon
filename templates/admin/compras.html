@@ -309,7 +309,7 @@
                   const element = document
                     .getElementById("q_expireds")
                     .querySelector(
-                      "[value={{request.GET.creados_hace_mas_de}}]"
+                      "[value='{{request.GET.creados_hace_mas_de}}']"
                     );
                   if (element) {
                     element.selected = true;
@@ -337,7 +337,7 @@
                 id="q_payment_type_id">
                 <option value="">Cualquiera</option>
                 {% for metodo in metodos %}
-                  {% if metodo.id == request.GET.metodo %}
+                  {% if metodo.id|stringformat:'d' == request.GET.metodo %}
                     <option value="{{ metodo.id }}" selected>{{ metodo.banco }}</option>
                   {% else %}
                     <option value="{{ metodo.id }}">{{ metodo.banco }}</option>
@@ -345,17 +345,34 @@
                 {% endfor %}
               </select>
             </div>
-            <div class="string input optional stringish filter_form_field filter_string select_and_search"
-              id="q_notes_input">
-              <label for="q_notes" class="label">Notas</label><select name="tipo_nota"
-                id="">
-                <option selected="selected"
-                  value="nota__icontains">Contiene</option>
-                <option value="nota">Igual a</option>
-                <option value="nota__istartswith">Empieza con</option>
-                <option value="nota__iendswith">Termina con</option>
-              </select>
-              <input id="q_notes" type="text" name="nota" />
+            <div class="string input optional stringish filter_form_field filter_string">
+              <label for="q_notes" class="label">Notas</label>
+              <div style="display: flex;">
+                <select name="tipo_nota" id="select-nota">
+                  <option value="">-- Elegir --</option>
+
+                  <option value="nota__icontains">Contiene</option>
+                  <option value="nota">Igual a</option>
+                  <option value="nota__istartswith">Empieza con</option>
+                  <option value="nota__iendswith">Termina con</option>
+                </select>
+                <input type="text"
+                  name="nota"
+                  value="{{ request.GET.nota }}"
+                  style="width: 150px;" />
+              </div>
+
+              <script>
+                (function () {
+                  const element = document
+                    .getElementById("select-nota")
+                    .querySelector("[value='{{request.GET.tipo_nota}}']");
+                  console.log(element);
+                  if (element) {
+                    element.selected = true;
+                  }
+                })();
+              </script>
             </div>
             <div class="buttons">
               <input type="submit"
