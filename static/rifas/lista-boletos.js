@@ -206,6 +206,25 @@ async function confirmarTickets(form, event) {
     alert("Debes seleccionar los boletos que quieres comprar");
     return;
   }
+  if (formData.get("productQty") == "0" && formData.get("cantidad2") == "0") {
+    alert(
+      "Hubo un error al procesar la cantidad de tickets. Ingrese la cantidad de tickets a comprar nuevamente por favor"
+    );
+    document.getElementById("cantidad2-div").hidden = false;
+    btnConfirm.disabled = false;
+    btnConfirm.innerText = "Confirmar";
+    return;
+  }
+  if (formData.get("productQty") == "0") {
+    const new_qty = parseInt(formData.get("cantidad2"));
+    if (isNaN(new_qty)) {
+      alert("Coloque caracteres numericos por favor");
+      btnConfirm.disabled = false;
+      btnConfirm.innerText = "Confirmar";
+      return;
+    }
+    formData.set("productQty", formData.get("cantidad2"));
+  }
   tickets_seleccionados.forEach((ticket) => {
     formData.append("boletos", ticket);
   });
