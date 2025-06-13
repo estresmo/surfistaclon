@@ -303,7 +303,7 @@ async function copiarTodo(copyElement, id) {
   txt += parentElement
     .querySelector(".monto-metodo")
     .innerText.replaceAll(" ", "")
-    .relace("bs", "");
+    .replace("bs", "");
   if (navigator.clipboard && navigator.clipboard.writeText) {
     copyElement.classList.add("copiado");
     navigator.clipboard
