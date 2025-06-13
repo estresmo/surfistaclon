@@ -302,7 +302,8 @@ async function copiarTodo(copyElement, id) {
   });
   txt += parentElement
     .querySelector(".monto-metodo")
-    .innerText.replaceAll(" ", "");
+    .innerText.replaceAll(" ", "")
+    .relace("Bs", "");
   if (navigator.clipboard && navigator.clipboard.writeText) {
     copyElement.classList.add("copiado");
     navigator.clipboard
