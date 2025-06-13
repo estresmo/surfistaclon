@@ -194,7 +194,10 @@ function get_random(list) {
 async function confirmarTickets(form, event) {
   event.preventDefault();
   const formData = new FormData(form);
+  const btnConfirm = document.getElementById("confirmTickets");
   const ticketQty = document.querySelector("#ticketQty");
+  btnConfirm.disabled = true;
+  btnConfirm.innerText = "Cargando....";
   const total_tickets = parseInt(
     document.getElementById("total_tickets").value
   );
@@ -228,12 +231,17 @@ async function confirmarTickets(form, event) {
     );
 
     modal.show();
+    form.reset();
   } else if (response.status == 403) {
     alert("Error al ordenar los boletos. Por favor intente nuevamente");
     location.reload();
   } else {
     alert("Error al ordenar los boletos. Por favor intente nuevamente");
+    location.reload();
   }
+
+  btnConfirm.disabled = false;
+  btnConfirm.innerText = "Confirmar";
 }
 
 function whatsappTimer(url, countdown) {
@@ -280,5 +288,32 @@ function copyToClipboard(text) {
     document.execCommand("copy");
     document.body.removeChild(textArea);
     alert("¡Copiado al portapapeles!");
+  }
+}
+/**
+ * @param {HTMLElement} copyElement
+ * @param {string} id */
+async function copiarTodo(copyElement, id) {
+  const parentElement = document.querySelector(`[data-id='${id}']`);
+  const contenidos = parentElement.querySelectorAll(".metodo-contenido");
+  let txt = "";
+  contenidos.forEach((element) => {
+    txt += element.innerText.replaceAll("\n", "").replaceAll(" ", "") + " ";
+  });
+  txt += parentElement
+    .querySelector(".monto-metodo")
+    .innerText.replaceAll(" ", "");
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    copyElement.classList.add("copiado");
+    navigator.clipboard
+      .writeText(txt)
+      .then(() => {
+        setTimeout(() => {
+          copyElement.classList.remove("copiado");
+        }, 3000);
+      })
+      .catch(() => alert("No se puede copiar"));
+  } else {
+    alert("No se puede copiar");
   }
 }

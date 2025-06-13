@@ -4,7 +4,17 @@ from typing import Optional
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.postgres.aggregates import ArrayAgg  # Import this!
-from django.db.models import BooleanField, Case, CharField, Count, Q, Sum, Value, When
+from django.db.models import (
+    BooleanField,
+    Case,
+    CharField,
+    Count,
+    F,
+    Q,
+    Sum,
+    Value,
+    When,
+)
 from django.db.models.functions import Concat, ExtractWeekDay, Round
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -205,8 +215,10 @@ class ComprasListView(LoginRequiredMixin, ListView):
             filtros[tipo_nota] = nota
         comprobantes = (
             comprobantes.filter(**filtros)
-            .select_related("numerorifa", "evento")
-            .prefetch_related("numerorifa__numero", "evento__url")
+            .select_related("numerorifa", "evento", "metodo")
+            .prefetch_related(
+                "numerorifa__numero", "evento__url", "metodo__banco", "metodo__moneda"
+            )
             .annotate(
                 boletos=ArrayAgg("numerorifa__numero"),
                 cantidad=Count("numerorifa"),
@@ -215,6 +227,7 @@ class ComprasListView(LoginRequiredMixin, ListView):
                     default=Value(False),
                     output_field=BooleanField(),
                 ),
+                monto_bs=F("monto") * F("dolar"),
             )
             .values(
                 "id",
@@ -232,6 +245,8 @@ class ComprasListView(LoginRequiredMixin, ListView):
                 "cantidad",
                 "verificado",
                 "evento__url",
+                "metodo__moneda",
+                "monto_bs",
             )
             .order_by("-id")
         )

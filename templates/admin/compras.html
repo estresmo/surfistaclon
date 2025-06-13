@@ -16,7 +16,7 @@
       font-size: 8px;
     }
   </style>
-  <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css"
+  <link href="/static/libs/css/simple-datatables.min.css"
     rel="stylesheet"
     type="text/css" />
   <style>
@@ -120,6 +120,7 @@
                       <th class="col col-payment_type">Cuenta</th>
                       <th class="sortable col col-quantity">Cant.</th>
                       <th class="sortable col col-amount">Monto</th>
+                      <th class="sortable col col-amount">Referencia</th>
                       <th data-sortable="false" class="col col-verify"></th>
                       <th data-sortable="false" class="col col-whatsapp"></th>
                       <th class="sortable col col-tickets">Números</th>
@@ -163,7 +164,13 @@
                             href="#containerDivVoucher">
                             <strong>${{ compra.monto }}</strong>
                           </a>
+                          <span style="display: block;margin-top: 5px;">
+                            {% if compra.metodo__moneda == 'Bs' %}
+                              ({{ compra.monto_bs }}Bs)
+                            {% endif %}
+                          </span>
                         </td>
+                        <td>{{ compra.referencia }}</td>
                         <td class="col col-verify">
                           <!-- prettier-ignore -->
                           <a onclick="verificarCompra('{{ compra.id }}')"

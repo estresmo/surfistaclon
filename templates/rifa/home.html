@@ -333,6 +333,46 @@
         background-size: cover;
         background-color: #817ed5;
       }
+
+      [type="button"]::-moz-focus-inner,
+      [type="reset"]::-moz-focus-inner,
+      [type="submit"]::-moz-focus-inner,
+      button::-moz-focus-inner {
+        padding: 0;
+        border-style: none;
+      }
+      #datosBanco button.magic_button.copied::before {
+        content: "COPIADO";
+        width: 67px;
+        position: absolute;
+        font-size: 12px;
+        font-weight: 700;
+        color: #000;
+        margin-top: 30px;
+        margin-left: -24px;
+        background: white;
+      }
+      .cuenta-copiable {
+        font-size: 12px;
+        display: block;
+        color: #d62828;
+        font-weight: bold;
+        text-decoration: underline;
+      }
+      .cuenta-copiable.copiado::after {
+        content: "COPIADO";
+        width: 67px;
+        position: absolute;
+        font-size: 12px;
+        font-weight: 700;
+        color: #000;
+        margin-top: 15px;
+        margin-left: -73px;
+        background: white;
+        border: 1px solid #e6a2a2ab;
+        border-radius: 5px;
+        background: #e6a2a2;
+      }
     </style>
   </head>
 

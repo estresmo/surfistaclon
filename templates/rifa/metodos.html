@@ -25,9 +25,17 @@
               <div>
                 {% for titulo, contenido in metodo.contenidos %}
                   {% if titulo %}
+                    {% if forloop.counter == 1 and metodo.moneda == 'Bs' %}
+                      <a href="javascript:void(0)"
+                        id="copiar-todo-btn"
+                        class="cuenta-copiable"
+                        onclick="copiarTodo(this, '{{ metodo.pk }}')">
+                        COPIAR TODO
+                      </a>
+                    {% endif %}
                     <span class="nameAccountNumber">{{ titulo }}</span>
                   {% endif %} {% if contenido %}
-                    <h3>
+                    <h3 class="metodo-contenido">
                       {{ contenido }} {% include 'components/copyButton.html' %}
                     </h3>
                   {% endif %}
@@ -36,30 +44,36 @@
               <div class="titularBank">
                 <span>TITULAR</span>{{ metodo.titular }}
                 <h6 id="montoCorrecto">
-                  <span class="nameAccountNumber">MONTO</span><br />
+                  <span class="nameAccountNumber">MONTO</span>
                   {% if metodo.moneda == '$' %}
-                    <strong class="total-boleto precio-dolar">
+                    <strong class="total-boleto precio-dolar monto-metodo">
                       {{ evento.precio_unidad }}$
                     </strong>
-                    <button onclick="actionButtonAccounts('copy', this, document.querySelector('.total-boleto').innerText)"
+                    <button style="box-shadow: 0 0 2px 1px #d6282880;"
+                      title="Copiar"
+                      onclick="actionButtonAccounts('copy', this, document.querySelector('.total-boleto').innerText)"
                       class="magic_button"
                       type="button">
                       <i class="fa fa-file"></i>
                     </button>
                   {% endif %}
                   {% if metodo.moneda == '€' %}
-                    <strong class="total-boleto-euro">
+                    <strong class="total-boleto-euro monto-metodo">
                       {{ evento.precio_unidad }}€
                     </strong>
                     <button onclick="actionButtonAccounts('copy', this, document.querySelector('.total-boleto').innerText)"
                       class="magic_button"
-                      type="button">
+                      title="Copiar"
+                      type="button"
+                      style="box-shadow: 0 0 2px 1px #d6282880;">
                       <i class="fa fa-file"></i>
                     </button>
                   {% endif %}
                   {% if metodo.moneda == 'Bs' %}
-                    <strong class="precio-bs"></strong>
-                    <button onclick="actionButtonAccounts('copy', this, document.querySelector('.precio-bs').innerText)"
+                    <strong class="precio-bs monto-metodo"></strong>
+                    <button style="box-shadow: 0 0 2px 1px #d6282880;"
+                      title="Copiar"
+                      onclick="actionButtonAccounts('copy', this, document.querySelector('.precio-bs').innerText)"
                       class="magic_button"
                       type="button">
                       <i class="fa fa-file"></i>
@@ -67,7 +81,7 @@
                   {% endif %}
 
                   <br />
-                  <div class="mt-4">
+                  <div class="mt-2">
                     (
                     <span class="cantidad-boleto">1</span>
                     boletos )
@@ -79,9 +93,11 @@
         </div>
       {% endfor %}
       <script>
-        document
-          .getElementById("container-payments")
-          .firstElementChild.classList.add("selected");
+        document.addEventListener("DOMContentLoaded", () => {
+          document
+            .getElementById("container-payments")
+            .firstElementChild.classList.add("selected");
+        });
       </script>
     </div>
   </div>
