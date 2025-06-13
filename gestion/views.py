@@ -259,8 +259,18 @@ class ComprasCreateView(LoginRequiredMixin, CreateView):
         return context
 
     def form_valid(self, form):
-        response = super().form_valid(form)
         boletos = self.request.POST.getlist("tickets")
+        numeros_existentes = NumeroRifa.objects.exclude(
+            comprobante=form.instance
+        ).filter(numero__in=boletos)
+        if numeros_existentes.exists():
+            form.add_error(
+                "Boletos",
+                "Ya existe un boleto con estos números"
+                + " ".join(numeros_existentes.values_list("numero", flat=True)),
+            )
+            return self.form_invalid(form)
+        response = super().form_valid(form)
         NumeroRifa.objects.filter(comprobante=form.instance).delete()
         if form.instance.status != StatusChoices.RECHAZADO:
             numeros = []
@@ -306,8 +316,18 @@ class ComprasUpdateView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         ultimo_status = Comprobante.objects.get(id=form.instance.id).status
-        response = super().form_valid(form)
         boletos = self.request.POST.getlist("tickets")
+        numeros_existentes = NumeroRifa.objects.exclude(
+            comprobante=form.instance
+        ).filter(numero__in=boletos)
+        if numeros_existentes.exists():
+            values = numeros_existentes.values_list("numero", flat=True)
+            values = [f"{v}" for v in values]
+            form.add_error(
+                None, "Ya existe un boleto con estos números" + " ".join(values)
+            )
+            return self.form_invalid(form)
+        response = super().form_valid(form)
         eliminados = self.request.POST.getlist("eliminados")
         boletos = [b for b in boletos if b not in eliminados]
         NumeroRifa.objects.filter(comprobante=form.instance).delete()

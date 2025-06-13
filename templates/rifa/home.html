@@ -467,7 +467,9 @@
     <link rel="stylesheet" href="/static/rifas/owl.carousel.min.css" />
     <link rel="stylesheet" href="/static/rifas/owl.theme.default.min.css" />
     <script>
-      document.querySelector("#container-payments").firstElementChild.click();
+      document.addEventListener("DOMContentLoaded", function () {
+        document.querySelector("#container-payments").firstElementChild.click();
+      });
     </script>
   </body>
 </html>

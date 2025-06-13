@@ -18,18 +18,23 @@ function obtenerPromociones() {
 obtenerPromociones();
 
 function addTicket() {
+  const ticketQty = document.querySelector("#ticketQty");
   /* @type {HTMLInputElement} */
   ticketQty.value = parseInt(ticketQty.value) + 1;
   actualizarPrecios();
 }
 
 function removeTicket() {
+  const ticketQty = document.querySelector("#ticketQty");
   /* @type {HTMLInputElement} */
   ticketQty.value = parseInt(ticketQty.value) - 1;
   actualizarPrecios();
 }
 
 function actualizarPrecios() {
+  const ticketQty = document.querySelector("#ticketQty");
+  const btnMinus = document.querySelector("#btnMinus");
+  const minimo = parseInt(document.getElementById("minimo-tickets-js").value);
   if (ticketQty.value > minimo) {
     btnMinus.disabled = false;
   } else {
@@ -49,6 +54,9 @@ function actualizarPrecios() {
 }
 
 function calcularPrecio(boletos, index = promociones.length - 1, total = 0) {
+  const precio_unidad = parseFloat(
+    document.getElementById("precio-unidad-js").value
+  );
   if (index < 0) {
     return total + boletos * precio_unidad;
   }
@@ -73,6 +81,7 @@ function calcularPrecio(boletos, index = promociones.length - 1, total = 0) {
 let dolar;
 async function obtenerDolar() {
   const crsf_token = document.querySelector("[name=csrfmiddlewaretoken]").value;
+  const ticketQty = document.querySelector("#ticketQty");
   const response = await fetch("/obtener_dolar/", {
     method: "POST",
     headers: {
@@ -127,6 +136,7 @@ document.querySelectorAll(".type.option-payment").forEach(function (elemento) {
 /** @param {HTMLButtonElement} btn */
 function seleccionarTicket(btn) {
   let ticket = btn.dataset.ticket;
+  const ticketQty = document.querySelector("#ticketQty");
   if (tickets_seleccionados.includes(ticket)) {
     btn.classList.remove("seleccionado");
     tickets_seleccionados = tickets_seleccionados.filter(
@@ -144,6 +154,7 @@ function seleccionarTicket(btn) {
 
 function randomTickets() {
   const old_selected = document.querySelectorAll(".ticket-opcion.seleccionado");
+  const ticketQty = document.querySelector("#ticketQty");
   old_selected.forEach((ticket) => {
     ticket.classList.remove("seleccionado");
   });
@@ -183,7 +194,11 @@ function get_random(list) {
 async function confirmarTickets(form, event) {
   event.preventDefault();
   const formData = new FormData(form);
-  const total_tickets = parseInt(document.getElementById("total_tickets"));
+  const ticketQty = document.querySelector("#ticketQty");
+  const total_tickets = parseInt(
+    document.getElementById("total_tickets").value
+  );
+
   if (tickets_seleccionados.length < ticketQty.value && total_tickets < 201) {
     alert("Debes seleccionar los boletos que quieres comprar");
     return;
