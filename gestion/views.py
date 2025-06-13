@@ -111,6 +111,11 @@ class MetodosListView(LoginRequiredMixin, ListView):
     model = MetodoPago
     context_object_name = "metodos"
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.order_by("posicion")
+        return queryset
+
 
 class MetodoCreateView(LoginRequiredMixin, CreateView):
     template_name = "admin/metodo_form.html"
@@ -253,7 +258,7 @@ class ComprasCreateView(LoginRequiredMixin, CreateView):
             n for n in range(evento.total_tickets) if n not in agarrados
         ]
         context["status_choices"] = StatusChoices.choices
-        context["metodos"] = MetodoPago.objects.all()
+        context["metodos"] = MetodoPago.objects.all().order_by("posicion")
         context["evento"] = evento
         context["dolar"] = evento.valor_dolar
         return context
@@ -309,7 +314,7 @@ class ComprasUpdateView(LoginRequiredMixin, UpdateView):
             n for n in range(evento.total_tickets) if n not in agarrados
         ]
         context["status_choices"] = StatusChoices.choices
-        context["metodos"] = MetodoPago.objects.all()
+        context["metodos"] = MetodoPago.objects.all().order_by("posicion")
         context["evento"] = evento
         context["seleccionados"] = seleccionados
         return context

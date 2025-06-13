@@ -25,6 +25,7 @@
                   paginator="true">
                   <thead>
                     <tr>
+                      <th class="col">Posicion</th>
                       <th class="col col-bank_logo">Imagen</th>
                       <th class="col col-bank_name">Banco</th>
                       <th>Moneda</th>
@@ -43,6 +44,7 @@
                   <tbody>
                     {% for metodo in metodos %}
                       <tr class="odd" id="row-{{ metodo.id }}">
+                        <td>{{ metodo.posicion }}</td>
                         <td class="col col-bank_logo">
                           <img class="avatar_image"
                             src="{{ metodo.imagen.url }}" />

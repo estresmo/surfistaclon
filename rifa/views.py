@@ -29,7 +29,7 @@ def home(request: HttpRequest):
         total_tickets = evento.total_tickets
         tickets = [format(t, evento.digitos) for t in range(total_tickets)]
     dolar = evento.valor_dolar if evento else 0
-    metodos = MetodoPago.objects.all()
+    metodos = MetodoPago.objects.all().order_by("posicion")
     context = {
         "agarrados": agarrados,
         "tickets": tickets,
@@ -50,7 +50,7 @@ def detalle_evento(request: HttpRequest, link: str):
         "cliente": cliente,
     }
     if evento.es_actual:
-        metodos = MetodoPago.objects.all()
+        metodos = MetodoPago.objects.all().order_by("posicion")
         agarrados = NumeroRifa.objects.filter(
             comprobante__evento=evento
         ).prefetch_related("comprobante__evento")
