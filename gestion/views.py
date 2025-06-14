@@ -23,7 +23,7 @@ from django.views.decorators.http import require_POST
 from django.views.generic import View
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
-
+from django.db.models import Count, Min
 from .forms import (
     ClienteForm,
     CompraForm,
@@ -62,11 +62,12 @@ def participantesView(request: HttpRequest):
     evento = Evento.obtener_actual()
     participantes = (
         Comprobante.objects.filter(evento=evento)
-        .values("telefono", "nombre")
+        .values("telefono")
         .annotate(
             num_tickets=Count("numerorifa"),
             total=Round(Sum("monto"), 2),
             boletos=ArrayAgg("numerorifa__numero"),
+            nombre=Min("nombre"),
         )
         .order_by("-num_tickets")
     )
@@ -433,9 +434,10 @@ def dashboardView(request: HttpRequest):
     )
 
     participantes = (
-        comprobantes.values("telefono", "nombre")
+        comprobantes.values("telefono")
         .annotate(
             num_tickets=Count("numerorifa"),
+            nombre=Min("nombre"),
         )
         .order_by("-num_tickets")
     )
@@ -515,7 +517,6 @@ def dashboardView(request: HttpRequest):
     metodos_confirmar_str = list2values(metodos_confirmar)
     participantes = list(participantes[:10].values("nombre", "num_tickets"))
     participantes_str = list2values(participantes)
-
     tickets_frecuentes = calcular_tickets_frecuentes(evento_actual.pk)
     tickets_frecuentes = [f"{t[0]} tickets;{t[1]}" for t in tickets_frecuentes]
     tickets_frecuentes = ",".join(tickets_frecuentes)
