@@ -51,7 +51,7 @@
                           name="productQty"
                           value="{{ evento.minimo }}"
                           min="{{ evento.minimo }}"
-                          max="100" />
+                          max="{{ evento.disponibles }}" />
                         <span class="ticket_name">BOLETO</span>
                       </div>
                       <button type="button" id="btnPlus" onclick="addTicket()">

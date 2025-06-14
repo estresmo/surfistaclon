@@ -74,6 +74,10 @@ class Evento(models.Model):
     def digitos(self):
         return "0" + str(len(str(self.total_tickets - 1))) + "d"
 
+    @property
+    def disponibles(self):
+        return self.total_tickets - self.vendidos
+
     def __str__(self):
         return self.nombre
 
