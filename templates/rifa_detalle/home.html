@@ -6,15 +6,16 @@
 
     <!-- META DATA -->
     <title>{{ cliente.nombre }}</title>
-    <meta name="description" content="{{ cliente.descripcion }}" />
+    <meta name="description" content="{{ descripcion }}" />
     <meta property="og:title"
-       content="{{ cliente.nombre }} | {{ cliente.descripcion }} | <strong>Combo Exclusivo</strong>" />
-    <meta property="og:description" content="{{ cliente.descripcion }}" />
+      content="{{ evento.nombre }} | {{ cliente.nombre }}" />
+    <meta property="og:description" content="{{ evento.descripcion }}" />
     <meta name="viewport"
       content="width=device-width,minimum-scale=1,initial-scale=1" />
     <!-- FAVICON -->
-    <link rel="icon" type="image/png" href="{{ evento.imagen.url }}" />
-    <meta property="og:image" content="{{ evento.image.url }}" />
+    <link rel="icon" type="image/png" href="{{ cliente.logo.url }}" />
+    <meta property="og:image" content="{{ evento.foto.url }}" />
+    <meta property="og:type" content="website" />
     <!-- STYLESHEETS -->
     <link rel="stylesheet" href="/static/rifas/bootstrap.min.css" />
     <link rel="stylesheet"
