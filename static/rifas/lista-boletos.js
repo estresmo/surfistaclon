@@ -337,3 +337,18 @@ async function copiarTodo(copyElement, id) {
     alert("No se puede copiar");
   }
 }
+function fileChange(input) {
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+      document
+        .getElementById("comprobante-preview")
+        .setAttribute("src", e.target.result);
+    };
+
+    reader.readAsDataURL(input.files[0]);
+    document.getElementById("file-label").hidden = true;
+    document.getElementById("file-btn").hidden = true;
+  }
+}

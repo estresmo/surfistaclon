@@ -267,23 +267,6 @@
                     name="foto"
                     onchange="fileChange(this)" />
                 </div>
-                <script>
-                  function fileChange(input) {
-                    if (input.files && input.files[0]) {
-                      const reader = new FileReader();
-
-                      reader.onload = function (e) {
-                        document
-                          .getElementById("comprobante-preview")
-                          .setAttribute("src", e.target.result);
-                      };
-
-                      reader.readAsDataURL(input.files[0]);
-                      document.getElementById("file-label").hidden = true;
-                      document.getElementById("file-btn").hidden = true;
-                    }
-                  }
-                </script>
                 <h6 id="montoCorrecto">
                   <strong class="total-boleto">
                     {{ evento.precio_unidad }}$
@@ -342,8 +325,7 @@
       </div>
       <div class="col-lg-12 mb-30 text-center">
         <div id="cantidad2-div" hidden>
-          Cantidad de boletos:
-          <input type="text" value="0" name="cantidad2">
+          Cantidad de boletos:<input type="text" value="0" name="cantidad2" />
         </div>
         <button type="submit" class="btn-large" id="confirmTickets">
           Confirmar
@@ -353,20 +335,27 @@
   </article>
 </div>
 
-<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+<div class="modal fade"
+  id="confirmationModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="confirmationModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-body">
         <div class="text-center">
-        <i class="fa fa-check-circle" aria-hidden="true" style="font-size: 32px;"></i>
+          <i class="fa fa-check-circle"
+            aria-hidden="true"
+            style="font-size: 32px;">
+
+          </i>
         </div>
         <h2>¡BOLETOS REGISTRADOS CORRECTAMENTE!</h2>
-         Serás enviados a <a href="" id="whatsapp-link">WhatsApp</a> .
-        <br><br>
+        Serás enviados a <a href="" id="whatsapp-link">WhatsApp</a> .
+        <br /><br />
         Redirigiendo en <span id="countdown">5</span> segundos...
       </div>
     </div>
   </div>
 </div>
-
-<script src="/static/rifas/lista-boletos.js"></script>
