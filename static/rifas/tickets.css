@@ -72,6 +72,9 @@ button::-moz-focus-inner {
   border-radius: 5px;
   background: #e6a2a2;
 }
+.plusminus.horiz input[type="number"] {
+  pointer-events: unset;
+}
 div.container_ticket {
   display: inline-block;
   width: 282px;

@@ -52,7 +52,8 @@
                       <th class="sortable col col-total_tickets">
                         <a href="?order=total_tickets_desc">Total</a>
                       </th>
-                      <th class="col col-purchases">Tickets</th>
+                      <th class="col col-purchases"
+                        style="max-width: 300px;">Tickets</th>
                       <th class="col col-actions"></th>
                     </tr>
                   </thead>
@@ -72,7 +73,8 @@
                           <!-- prettier-ignore -->
                           {{ participante.num_tickets }}
                         </td>
-                        <td class="col col-purchases">
+                        <td class="col col-purchases"
+                          style="max-width: 200px;max-height: 100px;overflow: auto;">
                           <!-- prettier-ignore -->
                           {% for boleto in participante.boletos %}
                             {{ boleto|stringformat:"04d" }}
@@ -84,7 +86,7 @@
                         </td>
                         <td class="col col-actions">
                           <div class="table_actions">
-                            <!--       <a href="/1914825">
+                            <!--          <a href="/1914825">
                             <i class="fas fa-eye"></i>
                           </a><a href="/1914825/edit">
                             <i class="fas fa-pen"></i>
@@ -94,7 +96,7 @@
                             data-method="delete"
                             href="/1914825">
                             <i class="fas fa-trash"></i>
-                          </a>       -->
+                          </a>          -->
                           </div>
                         </td>
                       </tr>
