@@ -11,8 +11,18 @@
     <div id="container-payments"
       class="types flex justify-space-between payments-options mb-30">
       {% for metodo in metodos %}
+        {% if forloop.counter == 1 %}
+          <input type="hidden"
+            name="metodo"
+            id="metodo-value"
+            value="{{ metodo.pk }}" />
+        {% endif %}
+        <!-- prettier-ignore -->
+
         <div data-id="{{ metodo.pk }}"
-          class="type option-payment"
+          class="type option-payment 
+          {% if forloop.counter == 1 %}
+          selected{% endif %}"
           onclick="cambiarPago(this)">
           <div class="logo">
             <img src="{{ metodo.imagen.url }}"

@@ -78,11 +78,8 @@ function actionButtonAccounts(action_type, elemnt, text) {
   }
 }
 document.addEventListener("DOMContentLoaded", function () {
-  document.querySelector("#container-payments").firstElementChild.click();
-});
-document.addEventListener("DOMContentLoaded", () => {
   const firstElement =
     document.getElementById("container-payments").firstElementChild;
   firstElement.classList.add("selected");
-  cambiarPago(firstElement);
+  firstElement.click();
 });

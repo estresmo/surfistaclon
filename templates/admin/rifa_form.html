@@ -110,7 +110,7 @@
                   <ol class="fragments-group">
                     <li class="fragment">
                       <!-- prettier-ignore -->
-                      <input type="date" name="fecha_inicio" value="{{ form.fecha_inicio.value|date:'Y-m-d'|default_if_none:'' }}" />
+                      <input type="datetime-local" name="fecha_inicio" value="{{ form.fecha_inicio.value|date:'Y-m-d\TH:i' }}" />
                     </li>
                   </ol>
                 </fieldset>
@@ -123,7 +123,7 @@
                   <ol class="fragments-group">
                     <li class="fragment">
                       <!-- prettier-ignore -->
-                      <input type="date" name="fecha_fin" value="{{ form.fecha_fin.value|date:'Y-m-d'|default_if_none:'' }}" />
+                      <input type="datetime-local" name="fecha_fin" value="{{ form.fecha_fin.value|date:'Y-m-d\TH:i' }}" />
                     </li>
                   </ol>
                 </fieldset>

@@ -17,11 +17,7 @@
           <label for="findPhone" class="active">Número de Teléfono</label>
         </div>
         <div class="input-field col s12 m6">
-          <button class="btn-large"
-            onclick="searchBuyer()"
-            data-toggle="modal"
-            id="verificar-btn"
-            data-target="#modalVerificar">
+          <button class="btn-large" onclick="searchBuyer()" id="verificar-btn">
             <i class="fa fa-search" aria-hidden="true"></i> Buscar
           </button>
         </div>
@@ -30,95 +26,35 @@
     </div>
     <div id="resultTickets"
       class="col-md-12 col s12 m12 mt-4"
-      style="display: block;">
+      style="display: block;"
+      hidden>
       <h5>
-        <strong id="msjNombre"></strong>
-        <br />
         <img id="qrCode" class="qr" src="" alt="QR" width="120" height="120" />
         <br />
         <div class="switch">
           <div class="custom-control custom-switch">
             <input type="checkbox"
               class="custom-control-input"
+              checked
+              onchange="verBoletos(this)"
               id="soloNumeros" />
             <label class="custom-control-label" for="soloNumeros">
               Sólo números
             </label>
           </div>
         </div>
+        <div>
+          <button data-toggle="modal"
+            data-target="#modalVerificar"
+            class="btn-modal">
+            Mostrar detalles
+          </button>
+        </div>
       </h5>
       <div id="misticketsdiv" class="input-field col s12">
-        <div id="numbersContain" style="display: block;">
-          <div class="chip misticketsson">1000</div>
-        </div>
-        <div id="ticketsContain">
-          <div class="container_ticket">
-            <widget id="widgetTicketDownload-1000"
-              type="ticket"
-              class="--flex-column">
-              <div class="top --flex-column container_banner">
-                <div class="buy"
-                  data-toggle="tooltip"
-                  data-placement="bottom"
-                  title=""
-                  data-original-title="BOLETO DIGITAL">
-                  <i class="fa fa-globe" aria-hidden="true"></i>
-                </div>
-                <div class="status"
-                  data-toggle="tooltip"
-                  data-placement="bottom"
-                  title=""
-                  data-original-title="Pago Verificado">
-                  <i class="fa fa-check-circle" aria-hidden="true"></i>
-                </div>
-                <div class="bandname -bold">
-                  <img src="{{ evento.logo.url }}"
-                    alt="Logo"
-                    width="55"
-                    height="55" /><br />
-                  PEGANDO CORRIENTE440<br />
-                </div>
-                <div class="tourname">COMBO PAPÁ GUERRERO</div>
-                <div class="imagenfondo">
-                  <img src="https://rifarito.s3.amazonaws.com/uploads/raffle/image/3989/b91001876714.jpg?cross"
-                    crossorigin="anonymous"
-                    alt="Banner"
-                    width="280"
-                    height="330" />
-                </div>
-                <div id="nombres" class="nombres">
-                  <span class="ticket_status">
-                    <i class="fa fa-check-circle" aria-hidden="true"></i> Pago Verificado
-                  </span>
-
-                  <span>
-                    <i class="fa fa-user-circle" aria-hidden="true"></i> Beiker j
-                    si...
-                  </span>
-                  <span>
-                    <i class="fa fa-whatsapp fa-lg" aria-hidden="true"></i>+1
-                    3478****6
-                  </span>
-                  <span>
-                    <i class="fa fa-calendar" aria-hidden="true"></i> 2025-06-09
-                    14:16:07
-                  </span>
-                </div>
-                <div class="deetz --flex-row-j!sb">
-                  <div class="ticket-date event --flex-column">
-                    <div class="date -bold">13 JUN 2025</div>
-                  </div>
-                  <div class="ticket-date --flex-column">
-                    <div class="cost -bold">10:00 PM</div>
-                  </div>
-                </div>
-              </div>
-              <div class="rip"></div>
-              <div class="bottom --flex-row-j!sb">
-                <strong style="font-size:22px"><b>1000</b></strong>
-              </div>
-            </widget>
-          </div>
+        <div id="numbersContain" style="display: block;"></div>
+        <div id="ticketsContain" hidden>
+          <div class="container_ticket"></div>
         </div>
       </div>
     </div>
@@ -144,6 +80,12 @@
 </div>
 
 <script>
+  const verificar_participante = {
+    status: "",
+    boletos: [],
+    telefono: "",
+    nombre: "",
+  };
   async function searchBuyer() {
     const telefono = document.querySelector("#telefonoInput").value;
     const country_code = document.querySelector(
@@ -166,6 +108,10 @@
       html = `<h5 class="mx-auto mb-3">No se han encontrado boletos asociados</h5>`;
     }
     let cont = 0;
+    const numbersContain = document.getElementById("numbersContain");
+    numbersContain.innerHTML = "";
+    const ticketsContain = document.getElementById("ticketsContain");
+    ticketsContain.innerHTML = "";
     for (let comprobante of data.result) {
       cont++;
       html += `
@@ -184,8 +130,68 @@
             <b>Boletos</b> <br />${comprobante.boletos.join(", ")}
           </div>
         </div>`;
+      verificar_participante["nombre"] = comprobante.nombre;
+      verificar_participante["telefono"] = comprobante.telefono;
+      verificar_participante["status"] = comprobante.status;
+      verificar_participante["boletos"].push({
+        fecha: comprobante.fecha,
+        numeros: comprobante.boletos,
+      });
+      comprobante.boletos.forEach((element) => {
+        createNumberV(numbersContain, element);
+      });
     }
+    const resultDiv = document.getElementById("resultTickets");
+    resultDiv.hidden = false;
+    resultDiv.scrollIntoView({ behavior: "smooth" });
     document.querySelector("#modalVerificarBody").innerHTML = html;
+  }
+
+  /**
+   * @param {HTMLDivElement} parent
+   * @param {number} num
+   */
+  function createNumberV(parent, num) {
+    const div = document.createElement("div");
+    div.classList.add("chip", "misticketsson", "verificar-tickets");
+    div.innerText = num;
+    parent.appendChild(div);
+  }
+
+  /**
+   * @param {HTMLInputElement} checkbox
+   */
+  function verBoletos(checkbox) {
+    const numbersContain = document.getElementById("numbersContain");
+    const ticketsContain = document.getElementById("ticketsContain");
+
+    if (checkbox.checked) {
+      numbersContain.hidden = false;
+      ticketsContain.hidden = true;
+    } else {
+      numbersContain.hidden = true;
+      ticketsContain.hidden = false;
+      if (!ticketsContain.classList.contains("rendered")) {
+        renderTickets();
+      }
+    }
+  }
+
+  function renderTickets() {
+    const ticketsContain = document.getElementById("ticketsContain");
+    ticketsContain.classList.add("rendered");
+    for (const element of verificar_participante.boletos) {
+      for (const numero of element.numeros) {
+        appendTicket(
+          ticketsContain,
+          verificar_participante.status,
+          verificar_participante.nombre,
+          verificar_participante.telefono,
+          numero,
+          element.fecha
+        );
+      }
+    }
   }
   document.addEventListener("DOMContentLoaded", function () {
     const cod = "{{request.GET.cod}}";
@@ -212,4 +218,79 @@
       }
     }
   });
+
+  /**
+   * @param {HTMLElement} parent
+   * @param {string} status
+   * @param {string} nombre
+   * @param {string} telefono
+   * @param {string} numero
+   * @param {string} fecha
+   */
+  function appendTicket(parent, status, nombre, telefono, numero, fecha) {
+    const element = document.createElement("widget");
+    element.classList.add("--flex-column", "mt-2");
+    element.type = "ticket";
+    element.innerHTML = `
+        <div class="top --flex-column container_banner">
+          <div class="buy"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title=""
+            data-original-title="BOLETO DIGITAL">
+            <i class="fa fa-globe" aria-hidden="true"></i>
+          </div>
+          <div class="status"
+            data-toggle="tooltip"
+            data-placement="bottom"
+            title=""
+            data-original-title="Pago Verificado">
+            <i class="fa fa-check-circle" aria-hidden="true"></i>
+          </div>
+          <div class="bandname -bold">
+            <img src="{{ cliente.logo.url }}"
+              alt="Logo"
+              width="55"
+              height="55" /><br />
+            {{ cliente.nombre }}<br />
+          </div>
+          <div class="tourname">{{ evento.nombre }}</div>
+          <div class="imagenfondo">
+            <img src="{{ evento.foto.url }}"
+              alt="Banner"
+              width="280"
+              height="330" />
+          </div>
+          <div id="nombres" class="nombres">
+            <span class="ticket_status">
+              <i class="fa fa-check-circle" aria-hidden="true"></i> Pago ${status}
+            </span>
+
+            <span>
+              <i class="fa fa-user-circle" aria-hidden="true"></i> ${nombre}
+            </span>
+            <span>
+              <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+              ${telefono}
+            </span>
+            <span>
+              <i class="fa fa-calendar" aria-hidden="true"></i> ${fecha}
+            </span>
+          </div>
+          <div class="deetz --flex-row-j!sb">
+            <div class="ticket-date event --flex-column">
+              <div class="date -bold">{{ evento.fecha_fin|date:'d F Y' }}</div>
+            </div>
+            <div class="ticket-date --flex-column">
+              <div class="cost -bold">10:00 PM</div>
+            </div>
+          </div>
+        </div>
+        <div class="rip"></div>
+        <div class="bottom --flex-row-j!sb">
+          <strong style="font-size:22px"><b>${numero}</b></strong>
+        </div>
+    `;
+    parent.appendChild(element);
+  }
 </script>

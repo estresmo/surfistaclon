@@ -7,14 +7,23 @@
     <!-- META DATA -->
     <title>{{ cliente.nombre }}</title>
     <meta name="description" content="{{ evento.descripcion }}" />
-    <meta property="og:title"
-      content="{{ evento.nombre }} | {{ cliente.nombre }}" />
-    <meta property="og:description" content="{{ evento.descripcion }}" />
+    {% if evento %}
+      <meta property="og:title"
+        content="{{ evento.nombre }} | {{ cliente.nombre }}" />
+      <meta property="og:image" content="{{ evento.foto.url }}" />
+      <meta property="og:description" content="{{ evento.descripcion }}" />
+    {% else %}
+      <meta property="og:title"
+        content="{{ cliente.nombre }} | {{ cliente.descripcion }}" />
+      <meta property="og:image" content="{{ cliente.logo.url }}" />
+      <meta property="og:description" content="{{ cliente.descripcion }}" />
+    {% endif %}
+
     <meta name="viewport"
       content="width=device-width,minimum-scale=1,initial-scale=1" />
     <!-- FAVICON -->
     <link rel="icon" type="image/png" href="{{ cliente.logo.url }}" />
-    <meta property="og:image" content="{{ evento.foto.url }}" />
+
     <meta property="og:type" content="website" />
     <!-- STYLESHEETS -->
     <link rel="stylesheet" href="/static/rifas/bootstrap4.6.min.css" />
