@@ -91,8 +91,17 @@
     nombre: "",
     total: 0,
   };
+
+  function resetParticipante() {
+    verificar_participante.boletos = [];
+    verificar_participante.nombre = "";
+    verificar_participante.telefono = "";
+    verificar_participante.status = "";
+    verificar_participante.total = 0;
+  }
   async function searchBuyer() {
-    const telefono = document.querySelector("#telefonoInput").value;
+    resetParticipante();
+    const telefono = document.querySelector("#telefonoInput").value.trim();
     const country_code = document.querySelector(
       ".verificar-box #country_code"
     ).value;
@@ -120,6 +129,7 @@
     numbersContain.innerHTML = "";
     const ticketsContain = document.getElementById("container_ticket");
     ticketsContain.innerHTML = "";
+    ticketsContain.classList.remove("rendered");
     for (let comprobante of data.result) {
       cont++;
       html += `
@@ -152,7 +162,9 @@
     }
     const resultDiv = document.getElementById("resultTickets");
     resultDiv.hidden = false;
-    resultDiv.scrollIntoView({ behavior: "smooth" });
+    document
+      .getElementById("verificador")
+      .scrollIntoView({ behavior: "smooth" });
     document.querySelector("#modalVerificarBody").innerHTML = html;
     qrcode.makeCode(
       "https://www.chipibikelifee.com/rifa/{{evento.url}}/?phone=" +

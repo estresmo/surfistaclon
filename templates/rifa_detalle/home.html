@@ -17,7 +17,8 @@
     <meta property="og:image" content="{{ evento.foto.url }}" />
     <meta property="og:type" content="website" />
     <!-- STYLESHEETS -->
-    <link rel="stylesheet" href="/static/rifas/bootstrap.min.css" />
+    <link rel="stylesheet" href="/static/rifas/bootstrap4.6.min.css" />
+
     <link rel="stylesheet"
       type="text/css"
       href="/static/rifas/style_rifarito.css" />
@@ -30,6 +31,7 @@
     <link rel="stylesheet" href="/static/rifas/custom.css" />
     <link rel="stylesheet" href="/static/rifas/style_original.css" />
     <link rel="stylesheet" href="/static/rifas/tickets.css" />
+
     <link rel="stylesheet" href="/static/rifas/owl.carousel.min.css" />
     <link rel="stylesheet" href="/static/rifas/owl.theme.default.min.css" />
     <style>
@@ -51,7 +53,7 @@
         {% include 'rifa/lista_boletos.html' %}
       {% endif %}
       <!-- VERIFICADOR -->
-      {% include 'rifa_detalle/verificar_pago.html' %}
+      {% include 'rifa/verificar_pago.html' %}
       <!-- FOOTER -->
       {% include 'rifa/footer.html' %}
 
@@ -80,92 +82,13 @@
     <script src="/static/rifas/popper.min.js"></script>
     <script src="/static/rifas/bootstrap.min.js"></script>
     <script src="/static/rifas/owl.carousel.min.js"></script>
+    <script src="/static/rifas/lista-boletos.js"></script>
+    <script src="/static/rifas/jquery.min.js"></script>
+    <script src="/static/rifas/popper.min.js"></script>
+    <script src="/static/rifas/bootstrap4.6.bundle.min.js"></script>
+    <script src="/static/rifas/owl.carousel.min.js"></script>
+    <script src="/static/rifas/qrcode.min.js"></script>
 
-    <script type="text/javascript">
-      $("#buttfixed").on("click", function () {
-        $("#linksfixed").toggle();
-      });
-      $(window).scroll(function () {
-        if ($(this).scrollTop() > 20) {
-          $("#navbar").addClass("header-scrolled");
-        } else {
-          $("#navbar").removeClass("header-scrolled");
-        }
-      });
-
-      $("#navbarNav").on("click", "a", function () {
-        $(".navbar-toggle").click();
-      });
-      $(".nav-item").on("click", "a", function () {
-        $("#navbarNav").removeClass("show");
-      });
-      $(document).ready(function () {
-        $("#owl-carousel-clients").owlCarousel({
-          items: 3,
-          loop: false,
-          nav: true,
-          autoplay: true,
-          autoplayTimeout: 3000,
-          autoplayHoverPause: true,
-          responsiveClass: true,
-          responsive: {
-            0: {
-              items: 1,
-            },
-            600: {
-              items: 2,
-            },
-            1000: {
-              items: 3,
-            },
-          },
-        });
-      });
-      $(document).ready(function () {
-        $("#owl-carousel-raffles").owlCarousel({
-          items: 3,
-          loop: false,
-          nav: false,
-          autoplay: false,
-          autoplayTimeout: 3000,
-          autoplayHoverPause: true,
-          responsiveClass: true,
-          responsive: {
-            0: {
-              items: 1,
-            },
-            600: {
-              items: 2,
-            },
-            1000: {
-              items: 3,
-            },
-          },
-        });
-      });
-
-      function actionButtonAccounts(action_type, elemnt, text) {
-        if (action_type == "copy") {
-          $(elemnt).addClass("copied");
-          setTimeout(function () {
-            $(elemnt).removeClass("copied");
-          }, 1200);
-          var sampleTextarea = document.createElement("textarea");
-          document.body.appendChild(sampleTextarea);
-          sampleTextarea.value = text;
-          // sampleTextarea.value = text.replace(/ /g,'');
-          sampleTextarea.select();
-          document.execCommand("copy");
-          document.body.removeChild(sampleTextarea);
-        } else if (action_type == "link") {
-          window.open(text, "_blank").focus();
-        }
-      }
-    </script>
-    <script></script>
-
-    <script>
-      document.querySelector("#container-payments").firstElementChild.click();
-    </script>
+    <script src="/static/rifas/rifas.js"></script>
   </body>
 </html>
