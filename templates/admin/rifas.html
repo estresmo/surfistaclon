@@ -143,10 +143,6 @@
 {% endblock %}
 {% block javascript %}
   <script>
-    const crsf_token = document.querySelector(
-      "[name=csrfmiddlewaretoken]"
-    ).value;
-
     function editarDolar(id, valor) {
       const element = document.getElementById("valor_dolar_" + id);
       element.value = valor;
@@ -159,7 +155,7 @@
         const response = await fetch(`/admin/rifas/eliminar/${id}`, {
           method: "POST",
           headers: {
-            "X-CSRFToken": crsf_token,
+            "X-CSRFToken": "{{ csrf_token }}",
           },
         });
 

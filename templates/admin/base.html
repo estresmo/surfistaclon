@@ -31,9 +31,10 @@
     <script src="/static/admin/modal-fde6df0d09a4d957047f4268039e42109dd83c040f3b4228792d250.js"></script>
     <script src="/static/admin/coloris-bcfbc6a6ac557a151c1f5d91ce62beeabd6db1797783b1b494482.js"></script>
     <link rel="shortcut icon" href="/static/img/logo.png" type="image/x-icon" />
-    {% block head %}
+    <link href="/static/libs/css/simple-datatables.min.css"
+      rel="stylesheet"
+      type="text/css" />
 
-    {% endblock %}
     <style>
       .logito {
         width: 40px;
@@ -69,7 +70,49 @@
       #header {
         height: unset !important;
       }
+      td.col.col-verify > a.processing::before {
+        content: "PROCESANDO";
+        position: absolute;
+        color: #ca7c23;
+        font-weight: 700;
+        top: 14px;
+        left: -20px;
+        font-size: 8px;
+      }
+      .datatable-sorter {
+        background: unset !important;
+        border: none !important;
+        box-shadow: none !important;
+      }
+      .datatable-sorter::after {
+        border-bottom: 4px solid #fff;
+      }
+      .datatable-sorter::before {
+        border-top: 4px solid #fff;
+      }
+      .datatable-pagination-list button {
+        background-image: none;
+        box-shadow: none;
+        text-shadow: none;
+        box-shadow: none;
+        border: none;
+        background-color: #e6e9ee;
+        border-radius: 4px;
+        padding: 5px 10px;
+      }
+      .datatable-pagination .datatable-active a,
+      .datatable-pagination .datatable-active a:focus,
+      .datatable-pagination .datatable-active a:hover,
+      .datatable-pagination .datatable-active button,
+      .datatable-pagination .datatable-active button:focus,
+      .datatable-pagination .datatable-active button:hover {
+        color: #efefef;
+        background-color: #4b0505 !important;
+      }
     </style>
+    {% block head %}
+
+    {% endblock %}
   </head>
   <body class="index admin_purchases active_admin logged_in admin_namespace"
     cz-shortcut-listen="true">
@@ -165,6 +208,8 @@
         });
       }
     </script>
+    <script src="/static/admin/simple-datatables.js"></script>
+
     {% block javascript %}
 
     {% endblock %}

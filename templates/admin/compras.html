@@ -4,54 +4,6 @@
 {% block subtitle %}
   Compras
 {% endblock %}
-{% block head %}
-  <style>
-    td.col.col-verify > a.processing::before {
-      content: "PROCESANDO";
-      position: absolute;
-      color: #ca7c23;
-      font-weight: 700;
-      top: 14px;
-      left: -20px;
-      font-size: 8px;
-    }
-  </style>
-  <link href="/static/libs/css/simple-datatables.min.css"
-    rel="stylesheet"
-    type="text/css" />
-  <style>
-    .datatable-sorter {
-      background: unset !important;
-      border: none !important;
-      box-shadow: none !important;
-    }
-    .datatable-sorter::after {
-      border-bottom: 4px solid #fff;
-    }
-    .datatable-sorter::before {
-      border-top: 4px solid #fff;
-    }
-    .datatable-pagination-list button {
-      background-image: none;
-      box-shadow: none;
-      text-shadow: none;
-      box-shadow: none;
-      border: none;
-      background-color: #e6e9ee;
-      border-radius: 4px;
-      padding: 5px 10px;
-    }
-    .datatable-pagination .datatable-active a,
-    .datatable-pagination .datatable-active a:focus,
-    .datatable-pagination .datatable-active a:hover,
-    .datatable-pagination .datatable-active button,
-    .datatable-pagination .datatable-active button:focus,
-    .datatable-pagination .datatable-active button:hover {
-      color: #efefef;
-      background-color: #4b0505 !important;
-    }
-  </style>
-{% endblock %}
 {% block content %}
   <div id="active_admin_content" class="with_sidebar">
     {% csrf_token %}
@@ -400,8 +352,6 @@
   </div>
 {% endblock %}
 {% block javascript %}
-  <script src="/static/admin/simple-datatables.js"></script>
-
   <script>
     const dataTable = new simpleDatatables.DataTable(".index_table");
 

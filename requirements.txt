@@ -1,9 +1,0 @@
-xhtml2pdf==0.2.16
-Django==5.1.1
-pillow==10.4.0
-psycopg2; sys_platform != 'linux'
-psycopg; sys_platform == 'linux'
-gunicorn; sys_platform == 'linux'
-django-simple-history
-pyBCV
-requests
