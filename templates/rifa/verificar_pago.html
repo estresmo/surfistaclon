@@ -50,76 +50,14 @@
             Mostrar detalles
           </button>
         </div>
+        <div>
+          Total: <span id="total-verificados"></span> tickets
+        </div>
       </h5>
       <div id="misticketsdiv" class="input-field col s12">
         <div id="numbersContain" style="display: block;"></div>
         <div id="ticketsContain">
-          <div id="container_ticket" class="container_ticket" hidden>
-            <widget id="widgetTicketDownload-1000"
-              type="ticket"
-              class="--flex-column">
-              <div class="top --flex-column container_banner">
-                <div class="buy"
-                  data-toggle="tooltip"
-                  data-placement="bottom"
-                  title=""
-                  data-original-title="BOLETO DIGITAL">
-                  <i class="fa fa-globe" aria-hidden="true"></i>
-                </div>
-                <div class="status"
-                  data-toggle="tooltip"
-                  data-placement="bottom"
-                  title=""
-                  data-original-title="Pago Verificado">
-                  <i class="fa fa-check-circle" aria-hidden="true"></i>
-                </div>
-                <div class="bandname -bold">
-                  <img src="{{ cliente.logo.url }}"
-                    alt="Logo"
-                    width="55"
-                    height="55" /><br />
-                  {{ cliente.nombre }}<br />
-                </div>
-                <div class="tourname">{{ evento.nombre }}</div>
-                <div class="imagenfondo">
-                  <img src="{{ evento.foto.url }}"
-                    alt="Banner"
-                    width="280"
-                    height="330" />
-                </div>
-                <div id="nombres" class="nombres">
-                  <span class="ticket_status">
-                    <i class="fa fa-check-circle" aria-hidden="true"></i> Pago Verificado
-                  </span>
-
-                  <span>
-                    <i class="fa fa-user-circle" aria-hidden="true"></i> Beiker j
-                    si...
-                  </span>
-                  <span>
-                    <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
-                    +1 3478****6
-                  </span>
-                  <span>
-                    <i class="fa fa-calendar" aria-hidden="true"></i> 2025-06-09
-                    14:16:07
-                  </span>
-                </div>
-                <div class="deetz --flex-row-j!sb">
-                  <div class="ticket-date event --flex-column">
-                    <div class="date -bold">{{ evento.fecha_fin|date:'d F Y' }}</div>
-                  </div>
-                  <div class="ticket-date --flex-column">
-                    <div class="cost -bold">10:00 PM</div>
-                  </div>
-                </div>
-              </div>
-              <div class="rip"></div>
-              <div class="bottom --flex-row-j!sb">
-                <strong style="font-size:22px"><b>1000</b></strong>
-              </div>
-            </widget>
-          </div>
+          <div id="container_ticket" class="container_ticket" hidden></div>
         </div>
       </div>
     </div>
@@ -151,12 +89,14 @@
     boletos: [],
     telefono: "",
     nombre: "",
+    total: 0,
   };
   async function searchBuyer() {
     const telefono = document.querySelector("#telefonoInput").value;
     const country_code = document.querySelector(
       ".verificar-box #country_code"
     ).value;
+    const totalVerificados = document.getElementById("total-verificados");
     const formData = new FormData();
     formData.append("celular", telefono);
     formData.append("country_code", country_code);
@@ -170,8 +110,10 @@
     });
     const data = await response.json();
     let html = "";
+
     if (data.result.length == 0) {
       html = `<h5 class="mx-auto mb-3">No se han encontrado boletos asociados</h5>`;
+      totalVerificados.innerText = "0";
     }
     let cont = 0;
     const numbersContain = document.getElementById("numbersContain");
@@ -205,6 +147,7 @@
       });
       comprobante.boletos.forEach((element) => {
         createNumberV(numbersContain, element);
+        verificar_participante.total += 1;
       });
     }
     const resultDiv = document.getElementById("resultTickets");
@@ -215,6 +158,7 @@
       "https://www.chipibikelifee.com/rifa/{{evento.url}}/?phone=" +
         verificar_participante.telefono
     );
+    totalVerificados.innerText = verificar_participante.total;
   }
 
   /**

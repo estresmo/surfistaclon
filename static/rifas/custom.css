@@ -1006,6 +1006,30 @@ body .chip {
     width: 150px !important;
   }
 }
-#buttfixed:hover {
+.container_btn_help #buttfixed:hover {
   background: #ffa8a8;
+}
+.container_btn_help #buttfixed {
+  width: 60px;
+  height: 60px;
+  padding: 0;
+}
+.container_btn_help #buttfixed .chat-btn {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#buttfixed #linksfixed {
+  bottom: 72px;
+  right: 10px;
+  width: 60px;
+  height: 60px;
+}
+@media screen and (max-width: 991.98px) {
+  .contact-container {
+    flex-direction: column !important;
+  }
 }
