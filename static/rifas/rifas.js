@@ -77,9 +77,3 @@ function actionButtonAccounts(action_type, elemnt, text) {
     window.open(text, "_blank").focus();
   }
 }
-document.addEventListener("DOMContentLoaded", function () {
-  const firstElement =
-    document.getElementById("container-payments").firstElementChild;
-  firstElement.classList.add("selected");
-  firstElement.click();
-});

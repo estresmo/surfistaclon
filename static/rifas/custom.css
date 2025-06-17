@@ -998,3 +998,14 @@ img.loading {
 body .chip {
   width: 60px;
 }
+@media only screen and (max-width: 600px) {
+  select#country_code {
+    font-size: 0.9rem !important;
+  }
+  #telefonoInput {
+    width: 150px !important;
+  }
+}
+#buttfixed:hover {
+  background: #ffa8a8;
+}

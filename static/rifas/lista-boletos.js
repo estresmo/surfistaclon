@@ -122,16 +122,24 @@ function cambiarPago(elemento) {
     document.querySelector("#referencia").required = true;
   }
 }
-document.querySelectorAll(".type.option-payment").forEach(function (elemento) {
-  elemento.onclick = function () {
-    cambiarPago(elemento);
-    document.querySelector("#metodo-value").value = elemento.dataset.id;
-    document.querySelector("#metodo-titulo").innerHTML =
-      elemento.querySelector(".text").innerHTML;
-    document.querySelector("#contenido-pago").innerHTML =
-      elemento.querySelector(".content").innerHTML;
-  };
-});
+
+/** @param {HTMLButtonElement} elemento */
+function metodoClick(elemento) {
+  cambiarPago(elemento);
+  document.querySelector("#metodo-value").value = elemento.dataset.id;
+  document.querySelector("#metodo-titulo").innerHTML =
+    elemento.querySelector(".text").innerHTML;
+  document.querySelector("#contenido-pago").innerHTML =
+    elemento.querySelector(".content").innerHTML;
+}
+document
+  .querySelectorAll(".type.option-payment")
+  .forEach(function (elemento, index) {
+    elemento.addEventListener("click", () => metodoClick(elemento));
+    if (index == 0) {
+      metodoClick(elemento);
+    }
+  });
 
 /** @param {HTMLButtonElement} btn */
 function seleccionarTicket(btn) {
@@ -352,3 +360,10 @@ function fileChange(input) {
     document.getElementById("file-btn").hidden = true;
   }
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+  const firstElement =
+    document.getElementById("container-payments").firstElementChild;
+  firstElement.classList.add("selected");
+  firstElement.click();
+});

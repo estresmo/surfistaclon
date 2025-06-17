@@ -76,8 +76,8 @@ button::-moz-focus-inner {
   pointer-events: unset;
 }
 div.container_ticket {
-  display: inline-block;
-  width: 282px;
+  display: flex;
+  flex-wrap: wrap;
   height: auto;
   position: relative;
   margin: 4px 2px 22px;
@@ -323,4 +323,7 @@ body widget[type="ticket"] .rip::after {
   margin-bottom: 10px;
   border: none;
   background: darkred;
+}
+.qr > * {
+  margin-inline: auto;
 }

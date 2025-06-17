@@ -29,7 +29,7 @@
       style="display: block;"
       hidden>
       <h5>
-        <img id="qrCode" class="qr" src="" alt="QR" width="120" height="120" />
+        <div id="qrCode" class="qr" alt="QR" width="120" height="120"></div>
         <br />
         <div class="switch">
           <div class="custom-control custom-switch">
@@ -145,6 +145,7 @@
 </div>
 
 <script>
+  let qrcode;
   const verificar_participante = {
     status: "",
     boletos: [],
@@ -210,6 +211,10 @@
     resultDiv.hidden = false;
     resultDiv.scrollIntoView({ behavior: "smooth" });
     document.querySelector("#modalVerificarBody").innerHTML = html;
+    qrcode.makeCode(
+      "https://www.chipibikelifee.com/rifa/{{evento.url}}/?phone=" +
+        verificar_participante.telefono
+    );
   }
 
   /**
@@ -295,7 +300,7 @@
   function appendTicket(parent, status, nombre, telefono, numero, fecha) {
     const element = document.createElement("widget");
     element.classList.add("--flex-column", "mt-2");
-    element.type = "ticket";
+    element.setAttribute("type", "ticket");
     element.id = "widgetTicketDownload-1000";
     element.innerHTML = `
         <div class="top --flex-column container_banner">
@@ -359,4 +364,10 @@
     `;
     parent.appendChild(element);
   }
+  document.addEventListener("DOMContentLoaded", () => {
+    qrcode = new QRCode(document.getElementById("qrCode"), {
+      width: 100,
+      height: 100,
+    });
+  });
 </script>
