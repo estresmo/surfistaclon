@@ -532,6 +532,20 @@ def dashboardView(request: HttpRequest):
         .annotate(cantidad=Count("numerorifa__id"))
     )
     dias_ventas_str = list2values(dias_ventas)
+    participantes_comprobantes = (
+        comprobantes.values("fecha_creado")
+        .annotate(
+            num_compras=Count("id"),
+            num_participantes=Count("telefono", distinct=True),
+        )
+        .order_by("-fecha_creado")
+    )
+    participantes_comprobantes_str = []
+    for p_c in participantes_comprobantes:
+        p_c["fecha_creado"] = p_c["fecha_creado"].strftime("%Y-%m-%d")
+        participantes_comprobantes_str.append(
+            f"{p_c['fecha_creado']};{p_c['num_compras']};{p_c['num_participantes']}"
+        )
 
     context = {
         "eventos": eventos,
@@ -544,6 +558,7 @@ def dashboardView(request: HttpRequest):
         "verificados": verificados,
         "progreso": round(progreso, 2),
         "tickets_fecha": ",".join(tickets_fecha_str),
+        "participantes_comprobantes": ",".join(participantes_comprobantes_str),
         "tickets_metodo": tickets_metodo_str,
         "metodos_aprobados": metodos_aprobados_str,
         "metodos_confirmar": metodos_confirmar_str,

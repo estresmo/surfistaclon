@@ -221,12 +221,19 @@
                     height="300"></canvas>
                 </div>
                 <script>
-                  const tickets_metodo = "{{ tickets_metodo }}".split(",");
-                  const TICKETS_METODO = tickets_metodo.map((i) =>
-                    i.split(";")
-                  );
-                  const m_m_chart = TICKETS_METODO.map((i) => [i[0], i[1]]);
                   (function () {
+                    const participantes_comprobantes =
+                      "{{ participantes_comprobantes }}".split(",");
+                    const PARTICIPANTES_COMPROBANTES =
+                      participantes_comprobantes.map((i) => i.split(";"));
+                    const buyers_chart = PARTICIPANTES_COMPROBANTES.map((i) => [
+                      i[0],
+                      i[2],
+                    ]);
+                    const compras_chart = PARTICIPANTES_COMPROBANTES.map(
+                      (i) => [i[0], i[1]]
+                    );
+
                     if (
                       document.documentElement.hasAttribute(
                         "data-turbolinks-preview"
