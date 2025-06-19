@@ -1,3 +1,5 @@
+from django.contrib.postgres.aggregates import ArrayAgg
+from django.db.models import Q
 from django.http import HttpRequest, JsonResponse
 from django.shortcuts import render
 from django.views.decorators.http import require_POST
@@ -16,29 +18,32 @@ from gestion.utils import calcular_monto
 def home(request: HttpRequest):
     cliente = Cliente.objects.first()
     evento = Evento.obtener_actual()
-    eventos = Evento.objects.only("nombre", "fecha_fin", "foto", "url").all()
+    eventos = Evento.objects.only(
+        "nombre", "fecha_fin", "foto", "url", "total_tickets"
+    ).all()
     Visualizacion.objects.create(evento=evento)
-    agarrados = NumeroRifa.objects.filter(comprobante__evento=evento).prefetch_related(
-        "comprobante__evento"
-    )
+    dolar = 0
     if evento:
-        agarrados = [str(a) for a in agarrados]
         eventos = eventos.exclude(pk=evento.pk)
-    tickets = []
-    if evento:
-        total_tickets = evento.total_tickets
-        tickets = [format(t, evento.digitos) for t in range(total_tickets)]
-    dolar = evento.valor_dolar if evento else 0
+        dolar = evento.valor_dolar
     metodos = MetodoPago.objects.all().order_by("posicion")
     context = {
-        "agarrados": agarrados,
-        "tickets": tickets,
         "dolar": dolar,
         "evento": evento,
         "eventos": eventos,
         "cliente": cliente,
         "metodos": metodos,
     }
+    if evento:
+        if evento.total_tickets <= 200:
+            agarrados = NumeroRifa.objects.filter(evento=evento).values_list(
+                "numero", flat=True
+            )
+            total_tickets = evento.total_tickets
+            context["agarrados"] = [format(a, evento.digitos) for a in agarrados]
+            context["tickets"] = [
+                format(t, evento.digitos) for t in range(total_tickets)
+            ]
     return render(request, "rifa/home.html", context)
 
 
@@ -50,21 +55,15 @@ def detalle_evento(request: HttpRequest, link: str):
         "cliente": cliente,
     }
     if evento.es_actual:
-        metodos = MetodoPago.objects.all().order_by("posicion")
-        agarrados = NumeroRifa.objects.filter(
-            comprobante__evento=evento
-        ).prefetch_related("comprobante__evento")
-        agarrados = [str(a) for a in agarrados]
-        tickets = [format(t, evento.digitos) for t in range(evento.total_tickets)]
-        dolar = evento.valor_dolar if evento else 0
-        context.update(
-            {
-                "agarrados": agarrados,
-                "tickets": tickets,
-                "dolar": dolar,
-                "metodos": metodos,
-            }
-        )
+        context["metodos"] = MetodoPago.objects.all().order_by("posicion")
+        context["dolar"] = evento.valor_dolar
+        if evento.total_tickets <= 200:
+            agarrados = NumeroRifa.objects.filter(evento=evento).values_list(
+                "numero", flat=True
+            )
+            context["agarrados"] = [format(a, evento.digitos) for a in agarrados]
+            tickets = [format(t, evento.digitos) for t in range(evento.total_tickets)]
+            context["tickets"] = tickets
     return render(request, "rifa_detalle/home.html", context)
 
 
@@ -76,20 +75,26 @@ def verificar(request: HttpRequest):
     if country_code == "+58" and celular.startswith("0"):
         celular = celular[1:]
     telefono = country_code + celular
-    queryset = Comprobante.objects.filter(telefono=telefono, evento_id=evento_id)
-    comprobantes = list(queryset.values())
-    for c in comprobantes:
-        numeros = NumeroRifa.objects.filter(comprobante=c["id"]).prefetch_related(
-            "comprobante__evento"
+    evento = Evento.objects.only("total_tickets").get(id=evento_id)
+    queryset = Comprobante.objects.filter(
+        telefono=telefono, evento_id=evento_id
+    ).annotate(
+        numeros=ArrayAgg(
+            "numerorifa__numero", default=[], filter=~Q(numerorifa__numero__isnull=True)
         )
-        c["boletos"] = [str(n) for n in numeros]
+    )
+    comprobantes = list(queryset.values())
+
+    for c in comprobantes:
+        numeros = c["numeros"]
+        c["boletos"] = [format(n, evento.digitos) for n in numeros]
         c["fecha"] = c["fecha"].strftime("%Y-%m-%d %I:%M %p")
     return JsonResponse({"result": comprobantes})
 
 
 @require_POST
 def obtener_dolar(request):
-    evento = Evento.obtener_actual()
+    evento = Evento.obtener_actual(fields=["valor_dolar"])
     if evento is None:
         dolar = 0
     else:
@@ -98,7 +103,7 @@ def obtener_dolar(request):
 
 
 def obtener_promociones(request):
-    evento = Evento.obtener_actual()
+    evento = Evento.obtener_actual(fields=["id"])
     if evento is None:
         return JsonResponse({"error": "No hay ninguna rifa disponible"})
     promociones = list(
@@ -111,10 +116,10 @@ def obtener_promociones(request):
 
 @require_POST
 def comprobantes(request: HttpRequest):
-    evento = Evento.obtener_actual()
+    evento = Evento.obtener_actual(fields=["id", "valor_dolar", "total_tickets"])
     if evento is None:
         return JsonResponse({"error": "No hay ninguna rifa disponible"})
-    nombre = request.POST["nombre"].upper()
+    nombre = request.POST["nombre"].upper().strip()
     country_code = request.POST["country_code"]
     celular = request.POST["celular"].replace(" ", "")
     foto = request.FILES["foto"]
@@ -126,6 +131,13 @@ def comprobantes(request: HttpRequest):
         celular = celular[1:]
     telefono = country_code + celular
     dolar = evento.valor_dolar
+    if evento.total_tickets > 200:
+        tickets = NumeroRifa.get_random_nums(evento, int(cantidad_tickets))
+        if tickets is None:
+            error_msg = "No hay boletos suficientes para vender"
+            return JsonResponse({"error": error_msg})
+        boletos = tickets
+    monto = calcular_monto(evento, len(boletos))
     comprobante = Comprobante.objects.create(
         nombre=nombre,
         telefono=telefono,
@@ -134,25 +146,19 @@ def comprobantes(request: HttpRequest):
         dolar=dolar,
         evento=evento,
         referencia=referencia,
+        monto=monto,
     )
-    if evento.total_tickets > 200:
-        for _ in range(int(cantidad_tickets)):
-            ticket = NumeroRifa.obtener_random(evento)
-            while ticket in boletos:
-                ticket = NumeroRifa.obtener_random(evento)
-            boletos.add(str(ticket))
-    numeros_tomados = list(
-        NumeroRifa.objects.filter(evento=evento).values_list("numero", flat=True)
-    )
-    numeros_comprados = []
-    error_msg = "Ya el boleto ha sido comprado por alguien más, escoja otro número"
-    for boleto in boletos:
-        if boleto in numeros_tomados:
+    if evento.total_tickets <= 200:
+        numeros_tomados = list(
+            NumeroRifa.objects.filter(evento=evento).values_list("numero", flat=True)
+        )
+        error_msg = "Ya el boleto ha sido comprado por alguien más, escoja otro número"
+        if set(boletos) & set(numeros_tomados):
             return JsonResponse({"error": error_msg})
+    numeros_comprados = []
+    for boleto in boletos:
         numeroRifa = NumeroRifa(numero=boleto, comprobante=comprobante, evento=evento)
         numeros_comprados.append(numeroRifa)
     NumeroRifa.objects.bulk_create(numeros_comprados)
-    comprobante.monto = calcular_monto(comprobante)
-    comprobante.save(update_fields=["monto"])
     boletos = [format(int(boleto), evento.digitos) for boleto in boletos]
     return JsonResponse({"ok": "ok", "boletos": list(boletos)})

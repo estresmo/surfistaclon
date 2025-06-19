@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.postgres.aggregates import ArrayAgg  # Import this!
+from django.contrib.postgres.aggregates import ArrayAgg
 from django.db.models import (
     BooleanField,
     Case,
@@ -10,6 +10,8 @@ from django.db.models import (
     Count,
     F,
     Min,
+    OuterRef,
+    Subquery,
     Sum,
     Value,
     When,
@@ -53,17 +55,24 @@ def inicioView(request: HttpRequest):
 
 @login_required
 def participantesView(request: HttpRequest):
-    evento = Evento.obtener_actual(fields=("id",))
-    participantes = (
+    evento = Evento.obtener_actual(fields=["id"])
+    monto_query = (
+        Comprobante.objects.filter(telefono=OuterRef("telefono"), evento=evento)
+        .values("telefono")
+        .annotate(total=Sum("monto"))
+        .values("total")[:1]
+    )
+    participantes = list(
         Comprobante.objects.filter(evento=evento)
         .values("telefono")
         .annotate(
             num_tickets=Count("numerorifa"),
-            total=Round(Sum("monto"), 2),
             boletos=ArrayAgg("numerorifa__numero"),
             nombre=Min("nombre"),
+            total=Subquery(monto_query),
         )
         .order_by("-num_tickets")
+        .values("nombre", "telefono", "num_tickets", "boletos", "total")
     )
     return render(request, "admin/participantes.html", {"participantes": participantes})
 
@@ -75,7 +84,7 @@ class RifasListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.order_by("-id")
+        queryset = queryset.annotate(total_vendidos=Count("numerorifa")).order_by("-id")
         return queryset
 
 
@@ -160,7 +169,7 @@ class ComprasListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self) -> QuerySet:
         evento_id = self.request.GET.get("evento_id")
-        evento_actual = Evento.obtener_actual(fields=("id",))
+        evento_actual = Evento.obtener_actual(fields=["id"])
         comprobantes = Comprobante.objects.all()
         if evento_id and evento_id != "todos" and evento_id != "inactivas":
             comprobantes = Comprobante.objects.filter(evento__id=evento_id)
@@ -253,38 +262,48 @@ class ComprasCreateView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        evento = Evento.obtener_actual()
+        evento = Evento.obtener_actual(
+            fields=["id", "nombre", "total_tickets", "valor_dolar"]
+        )
         if evento is None:
             return context
-        agarrados = NumeroRifa.objects.filter(
-            comprobante__evento=evento
-        ).prefetch_related("comprobante__evento")
-        tickets = (format(t, evento.digitos) for t in range(evento.total_tickets))
+        agarrados = NumeroRifa.objects.filter(evento=evento).values_list(
+            "numero", flat=True
+        )
+        tickets = [format(t, evento.digitos) for t in range(evento.total_tickets)]
+        disponibles = [n for n in range(evento.total_tickets) if n not in agarrados]
+        agarrados = [format(a, evento.digitos) for a in agarrados]
+        metodos = MetodoPago.objects.values("id", "banco").order_by("posicion")
         context["tickets"] = tickets
-        context["agarrados"] = [str(a) for a in agarrados]
-        context["disponibles"] = [
-            n for n in range(evento.total_tickets) if n not in agarrados
-        ]
+        context["agarrados"] = agarrados
+        context["disponibles"] = disponibles
         context["status_choices"] = StatusChoices.choices
-        context["metodos"] = MetodoPago.objects.all().order_by("posicion")
+        context["metodos"] = metodos
         context["evento"] = evento
         context["dolar"] = evento.valor_dolar
         return context
 
     def form_valid(self, form):
         boletos = self.request.POST.getlist("tickets")
-        numeros_existentes = NumeroRifa.objects.exclude(
-            comprobante=form.instance
-        ).filter(numero__in=boletos)
-        if numeros_existentes.exists():
-            form.add_error(
-                "Boletos",
-                "Ya existe un boleto con estos números"
-                + " ".join(numeros_existentes.values_list("numero", flat=True)),
-            )
+        boletos = set(boletos)
+        evento = Evento.obtener_actual(fields=["id", "total_tickets"])
+        if not evento:
+            txt_error = "No puede agregar una compra si no hay una rifa en curso"
+            form.add_error(None, txt_error)
             return self.form_invalid(form)
+        numeros_existentes = NumeroRifa.objects.filter(
+            evento=evento, numero__in=boletos
+        ).values_list("numero", flat=True)
+        if len(numeros_existentes) > 0:
+            nums_err = [format(n, evento.digitos) for n in numeros_existentes]
+            txt_error = "Ya existe otra compra con estos números " + " ".join(nums_err)
+            form.add_error(None, txt_error)
+            return self.form_invalid(form)
+        if len(boletos) == 0:
+            form.add_error(None, "No ha agregado números a esta compra")
+            return self.form_invalid(form)
+        form.instance.monto = calcular_monto(evento, len(boletos))
         response = super().form_valid(form)
-        NumeroRifa.objects.filter(comprobante=form.instance).delete()
         if form.instance.status != StatusChoices.RECHAZADO:
             numeros = []
             for boleto in boletos:
@@ -295,7 +314,7 @@ class ComprasCreateView(LoginRequiredMixin, CreateView):
                 )
                 numeros.append(numero)
             NumeroRifa.objects.bulk_create(numeros)
-        form.instance.monto = calcular_monto(form.instance)
+
         form.instance.save(update_fields=["monto"])
         return response
 
@@ -318,40 +337,44 @@ class ComprasUpdateView(LoginRequiredMixin, UpdateView):
         seleccionados = [format(b, evento.digitos) for b in seleccionados]
         disponibles = [n for n in range(evento.total_tickets) if n not in agarrados]
         agarrados = [format(a, evento.digitos) for a in agarrados]
+        metodos = MetodoPago.objects.values("id", "banco").order_by("posicion")
         context["tickets"] = tickets
         context["agarrados"] = agarrados
         context["disponibles"] = disponibles
         context["status_choices"] = StatusChoices.choices
-        context["metodos"] = MetodoPago.objects.all().order_by("posicion")
+        context["metodos"] = metodos
         context["evento"] = evento
         context["seleccionados"] = seleccionados
         return context
 
     def form_valid(self, form):
-        ultimo_status = Comprobante.objects.get(id=form.instance.id).status
-        boletos = self.request.POST.getlist("tickets")
-        numeros_existentes = NumeroRifa.objects.exclude(
-            comprobante=form.instance
-        ).filter(numero__in=boletos)
-        if numeros_existentes.exists():
-            values = numeros_existentes.values_list("numero", flat=True)
-            values = [f"{v}" for v in values]
-            form.add_error(
-                None, "Ya existe un boleto con estos números" + " ".join(values)
-            )
+        boletos = set(self.request.POST.getlist("tickets"))
+        evento = self.object.evento
+        numeros_existentes = (
+            NumeroRifa.objects.exclude(comprobante=form.instance)
+            .filter(evento_id=evento.pk, numero__in=boletos)
+            .values_list("numero", flat=True)
+        )
+        if len(numeros_existentes) > 0:
+            nums_exist = [format(n, evento.digitos) for n in numeros_existentes]
+            txt_err = "Ya existe otra compra con estos números " + " ".join(nums_exist)
+            form.add_error(None, txt_err)
             return self.form_invalid(form)
+        if form.initial["status"] != form.data["status"]:
+            if form.data["status"] == StatusChoices.VERIFICADO:
+                form.instance.fecha_verificacion = timezone.now()
+            msg = (
+                "Su comprobante ha sido "
+                + form.instance.get_status_display()
+                + ". Los boletos verificados son "
+                + " ,".join(boletos)
+            )
+            send_whatsapp(form.instance.telefono, msg)
+        form.instance.monto = calcular_monto(evento, len(boletos))
         response = super().form_valid(form)
         eliminados = self.request.POST.getlist("eliminados")
         boletos = [b for b in boletos if b not in eliminados]
         NumeroRifa.objects.filter(comprobante=form.instance).delete()
-        msg = (
-            "Su comprobante ha sido "
-            + form.instance.get_status_display()
-            + ". Los boletos verificados son "
-            + " ,".join(boletos)
-        )
-        if ultimo_status != form.instance.status:
-            send_whatsapp(form.instance.telefono, msg)
         if form.instance.status != StatusChoices.RECHAZADO:
             numeros = []
             for boleto in boletos:
@@ -362,8 +385,6 @@ class ComprasUpdateView(LoginRequiredMixin, UpdateView):
                 )
                 numeros.append(numero)
             NumeroRifa.objects.bulk_create(numeros)
-        form.instance.monto = calcular_monto(form.instance)
-        form.instance.save(update_fields=["monto"])
         return response
 
 
@@ -392,24 +413,22 @@ def eliminar_metodo(request: HttpRequest, pk: int):
     return JsonResponse({"result": "ok"})
 
 
+@require_POST
 @login_required
 def verificar_comprobante(request: HttpRequest, pk: int):
-    if request.method == "POST":
-        comprobante = Comprobante.objects.get(pk=pk)
-        if comprobante.status != StatusChoices.VERIFICADO:
-            comprobante.status = StatusChoices.VERIFICADO
-            fecha_actual = timezone.now()
-            comprobante.fecha_verificacion = fecha_actual
-            comprobante.save(update_fields=("status", "fecha_verificacion"))
-            telefono_url = comprobante.telefono.replace("+", "%2B")
-            url = f"https://www.chipibikelifee.com/rifa/comboexclusivo/?phone={telefono_url}"
-            msg = f"Hola {comprobante.nombre}, gracias por completar tu pago de tus números de {comprobante.evento.nombre} y los puedes verificar en {url}"
-            send_whatsapp(comprobante.telefono, msg)
-            hora = fecha_actual.strftime("%I:%M %p")
-            fecha = fecha_actual.strftime("%d %B %Y")
-            return JsonResponse({"result": "ok", "fecha": fecha, "hora": hora})
-        return JsonResponse({"result": "verificado"})
-    return render(request, "admin/verificar.html")
+    comprobante = Comprobante.objects.select_related("evento").get(pk=pk)
+    if comprobante.status != StatusChoices.VERIFICADO:
+        comprobante.status = StatusChoices.VERIFICADO
+        fecha_actual = timezone.now()
+        comprobante.fecha_verificacion = fecha_actual
+        comprobante.save(update_fields=("status", "fecha_verificacion"))
+        url = comprobante.get_full_url(request)
+        msg = f"Hola {comprobante.nombre}, gracias por completar tu pago de tus números de {comprobante.evento.nombre} y los puedes verificar en {url}"
+        send_whatsapp(comprobante.telefono, msg)
+        hora = fecha_actual.strftime("%I:%M %p")
+        fecha = fecha_actual.strftime("%d %B %Y")
+        return JsonResponse({"result": "ok", "fecha": fecha, "hora": hora})
+    return JsonResponse({"result": "verificado"})
 
 
 @login_required

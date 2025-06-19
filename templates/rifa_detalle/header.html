@@ -11,7 +11,7 @@
         <i class="fa fa-calendar" aria-hidden="true"></i>
         <span class="raffleDrawDate">{{ evento.fecha_fin|date:'d F Y' }}</span> &nbsp;
         <i class="fa fa-clock-o" aria-hidden="true"></i>
-        <span class="raffleDrawHour">10:00 PM</span>
+        <span class="raffleDrawHour">{{ evento.fecha_fin|date:'h:i A' }}</span>
       </p>
       <h1 id="nombre-rifa" class="header-title mt-2">{{ evento.nombre }}</h1>
       <span id="raffleDescription"><pre>{{ evento.descripcion }}</pre></span>

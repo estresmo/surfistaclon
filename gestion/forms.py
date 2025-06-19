@@ -54,4 +54,15 @@ class MetodoForm(forms.ModelForm):
 class CompraForm(forms.ModelForm):
     class Meta:
         model = Comprobante
-        exclude = ["fecha"]
+        exclude = ["fecha", "monto"]
+
+    def clean_telefono(self):
+        telefono = self.cleaned_data.get("telefono")
+        if not telefono:
+            return telefono
+        if not telefono.startswith("+"):
+            raise forms.ValidationError(
+                "Los números de teléfono debe empezar con un más (+). Ej: +584261111111"
+            )
+        telefono = telefono.replace("+580", "+58")
+        return telefono

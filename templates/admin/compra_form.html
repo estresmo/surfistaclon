@@ -129,9 +129,11 @@
           {% csrf_token %}
           {% if form.errors %}
             <div class="error-messages">
-              {% for field, errors in form.errors.items %}
+              Error en los campos:{% for field, errors in form.errors.items %}
                 {% for error in errors %}
-                  <p>{{ field }}{{ error }}</p>
+                  <p style="font-size: 14px;color: #9f4851;">
+                    - <b>{{ field|title }}</b>: {{ error }}
+                  </p>
                 {% endfor %}
               {% endfor %}
             </div>
@@ -170,7 +172,8 @@
                 <select name="metodo">
                   <option value="">-- Seleccionar --</option>
                   {% for metodo in metodos %}
-                    {% if metodo.id == form.metodo.value %}
+                    <!-- prettier-ignore -->
+                    {% if metodo.id|stringformat:'s' == form.metodo.value or metodo.id == form.metodo.value %}
                       <option value="{{ metodo.id }}" selected>
                         <!-- prettier-ignore -->
                         {{  metodo.banco|title}}
@@ -227,7 +230,7 @@
                     'input[name="eliminados"]'
                   ).value = ticket.value;
                 }
-                function addTicket() {
+                function addTicket(value = "") {
                   const html = document.createElement("fieldset");
                   html.classList.add("inputs", "has_many_fields");
                   html.innerHTML = `
@@ -245,6 +248,7 @@
                         </li>
                       </ol>
                     `;
+                  html.querySelector("input").value = value;
                   document.querySelector(".elegible-tickets").appendChild(html);
                 }
               </script>
@@ -290,13 +294,6 @@
                 </select>
               </li>
 
-              <li class="number input optional numeric stringish">
-                <label class="label">Monto</label><input step="any"
-                  type="number"
-                  value="{{ form.monto.value|default_if_none:0 }}"
-                  name="monto" />
-              </li>
-
               <li class="string input optional stringish">
                 <label class="label">Referencia</label>
                 <input type="text"
@@ -305,9 +302,17 @@
               </li>
 
               <li class="file input optional">
-                <label class="label">Comprobante</label><input type="file"
-                  name="foto"
-                  onclick="fileChange(this, 'preview-foto')" />
+                <label class="label">Comprobante</label>
+                {% if form.instance.pk %}
+                  <input type="file"
+                    name="foto"
+                    onclick="fileChange(this, 'preview-foto')" />
+                {% else %}
+                  <input type="file"
+                    name="foto"
+                    required
+                    onclick="fileChange(this, 'preview-foto')" />
+                {% endif %}
 
                 <p class="inline-hints">
                   <img src="{{ form.foto.value.url|default_if_none:'' }}"
@@ -382,6 +387,7 @@
         const element = document.createElement("button");
         element.classList.add("ticket-opcion");
         const value = String(rows[index]).padStart(4, "0");
+        element.addEventListener("click", () => addTicket(value));
         element.innerHTML = value;
         element.type = "button";
         return element;

@@ -32,9 +32,9 @@ def send_whatsapp(num: str, msg: str):
             activate_session()
             response = requests.post(link, json=data)
         if response.status_code != 201:
-            print(f"{response.status_code} Error al enviar whatsapp: {response.text}")
-    except Exception as e:
-        print(f"Error al enviar whatsapp: {str(e)}")
+            print(f"{response.status_code} Error al enviar whatsapp")
+    except Exception:
+        print("ERROR al enviar whatsapp")
 
 
 def activate_session():
@@ -57,12 +57,9 @@ class PromocionDict(TypedDict):
     precio: int
 
 
-def calcular_monto(comprobante: Comprobante):
-    if comprobante.evento is None:
-        raise ValueError("Comprobante necesita estar asociado a un evento")
-    evento = Evento.objects.get(pk=comprobante.evento.pk)
+def calcular_monto(evento: Evento, cant_boletos: int):
+    evento = evento
     precio_unidad = evento.precio_unidad
-    boletos = comprobante.boletos.count()
     promociones = cast(
         list[PromocionDict],
         list(
@@ -71,7 +68,7 @@ def calcular_monto(comprobante: Comprobante):
     )
     index = len(promociones) - 1
     total = 0
-    return calcular_precio(boletos, precio_unidad, promociones, index, total)
+    return calcular_precio(cant_boletos, precio_unidad, promociones, index, total)
 
 
 def calcular_precio(

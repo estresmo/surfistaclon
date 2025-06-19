@@ -34,9 +34,11 @@
           {% csrf_token %}
           {% if form.errors %}
             <div class="error-messages">
-              {% for field, errors in form.errors.items %}
+              Error en los campos:{% for field, errors in form.errors.items %}
                 {% for error in errors %}
-                  <p>{{ error }}</p>
+                  <p style="font-size: 14px;color: #9f4851;">
+                    - <b>{{ field|title }}</b>: {{ error }}
+                  </p>
                 {% endfor %}
               {% endfor %}
             </div>

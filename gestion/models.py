@@ -1,7 +1,8 @@
 import random
-from typing import Optional
+from typing import List, Optional
 
 from django.db import models
+from django.http import HttpRequest
 from django.utils import timezone
 from simple_history.models import HistoricalRecords
 
@@ -63,7 +64,7 @@ class Evento(models.Model):
 
     @classmethod
     def obtener_actual(
-        cls, evento_id: Optional[str] = None, fields: Optional[tuple[str]] = None
+        cls, evento_id: Optional[str] = None, fields: Optional[List[str]] = None
     ):
         evento = Evento.objects.all()
         if fields:
@@ -80,7 +81,7 @@ class Evento(models.Model):
 
     @property
     def vendidos(self):
-        return NumeroRifa.objects.filter(comprobante__evento=self).count()
+        return NumeroRifa.objects.filter(evento=self).count()
 
     @property
     def digitos(self):
@@ -110,6 +111,11 @@ class MetodoPago(models.Model):
     contenido_3 = models.CharField(max_length=100, blank=True)
     nota = models.CharField(max_length=100, blank=True)
     moneda = models.CharField(max_length=10, choices=MonedasChoices.choices)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["posicion"], name="metodopago_posicion_idx"),
+        ]
 
     @property
     def contenidos(self):
@@ -168,6 +174,11 @@ class Comprobante(models.Model):
     def verificado(self):
         return self.status == StatusChoices.VERIFICADO
 
+    def get_full_url(self, request: HttpRequest):
+        evento_url = self.evento.url
+        telefono_url = self.telefono.replace("+", "%2B")
+        return request.build_absolute_uri(f"/rifa/{evento_url}/?phone={telefono_url}")
+
     def __str__(self):
         return self.nombre
 
@@ -201,6 +212,22 @@ class NumeroRifa(models.Model):
             numero = random.randint(0, evento.total_tickets - 1)
             if numero not in agarrados:
                 return numero
+
+    @classmethod
+    def get_random_nums(cls, evento: Evento, cantidad: int):
+        agarrados = list(
+            NumeroRifa.objects.filter(evento=evento).values_list("numero", flat=True)
+        )
+        if len(agarrados) + cantidad >= evento.total_tickets:
+            return None
+        seleccionados: list[int] = []
+        while True:
+            numero = random.randint(0, evento.total_tickets - 1)
+            if numero not in agarrados and numero not in seleccionados:
+                seleccionados.append(numero)
+            if len(seleccionados) >= cantidad:
+                break
+        return seleccionados
 
 
 class Promocion(models.Model):
