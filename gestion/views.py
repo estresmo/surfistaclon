@@ -53,7 +53,7 @@ def inicioView(request: HttpRequest):
 
 @login_required
 def participantesView(request: HttpRequest):
-    evento = Evento.obtener_actual()
+    evento = Evento.obtener_actual(fields=("id",))
     participantes = (
         Comprobante.objects.filter(evento=evento)
         .values("telefono")
@@ -156,23 +156,22 @@ class ComprasListView(LoginRequiredMixin, ListView):
         context["eventos"] = Evento.objects.values("id", "nombre")
         context["statuses"] = StatusChoices.choices
         context["metodos"] = MetodoPago.objects.values("id", "banco")
-        context["evento_actual"] = Evento.obtener_actual()
         return context
 
     def get_queryset(self) -> QuerySet:
         evento_id = self.request.GET.get("evento_id")
-        evento_actual = Evento.obtener_actual()
+        evento_actual = Evento.obtener_actual(fields=("id",))
         comprobantes = Comprobante.objects.all()
         if evento_id and evento_id != "todos" and evento_id != "inactivas":
             comprobantes = Comprobante.objects.filter(evento__id=evento_id)
         elif evento_id == "inactivas":
-            evento_actual = Evento.obtener_actual()
             if evento_actual:
-                comprobantes = Comprobante.objects.exclude(evento=evento_actual)
+                comprobantes = Comprobante.objects.exclude(evento_id=evento_actual.pk)
+            evento_id = None
         else:
-            evento_actual = Evento.obtener_actual()
             if evento_actual:
-                comprobantes = Comprobante.objects.filter(evento=evento_actual)
+                comprobantes = Comprobante.objects.filter(evento_id=evento_actual.pk)
+            evento_id = None
 
         filtros = {}
         # filtro
@@ -189,7 +188,10 @@ class ComprasListView(LoginRequiredMixin, ListView):
         tipo_nota = self.request.GET.get("tipo_nota")
 
         if ticket:
-            filtros["numerorifa__numero"] = ticket
+            numero = NumeroRifa.objects.filter(numero=ticket)
+            if evento_id:
+                numero = numero.filter(evento_id=evento_id)
+            filtros["id__in"] = numero.values_list("comprobante_id", flat=True)
         if nombre:
             filtros["nombre__icontains"] = nombre
         if telefono:
@@ -210,10 +212,6 @@ class ComprasListView(LoginRequiredMixin, ListView):
             filtros[tipo_nota] = nota
         comprobantes = (
             comprobantes.filter(**filtros)
-            .select_related("numerorifa", "evento", "metodo")
-            .prefetch_related(
-                "numerorifa__numero", "evento__url", "metodo__banco", "metodo__moneda"
-            )
             .annotate(
                 boletos=ArrayAgg("numerorifa__numero"),
                 cantidad=Count("numerorifa"),

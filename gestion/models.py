@@ -50,16 +50,28 @@ class Evento(models.Model):
     permitir_parcial = models.BooleanField()
     permitir_sin_comprobante = models.BooleanField()
 
+    class Meta:
+        indexes = [
+            models.Index(
+                fields=["fecha_inicio", "fecha_fin"], name="evento_fechas_idx"
+            ),
+        ]
+
     @property
     def promociones(self):
         return Promocion.objects.filter(evento=self)
 
     @classmethod
-    def obtener_actual(cls, evento_id: Optional[str] = None):
+    def obtener_actual(
+        cls, evento_id: Optional[str] = None, fields: Optional[tuple[str]] = None
+    ):
+        evento = Evento.objects.all()
+        if fields:
+            evento = evento.only(*fields)
         if evento_id is not None:
-            return Evento.objects.get(id=evento_id)
+            return evento.get(id=evento_id)
         hoy = timezone.now()
-        return Evento.objects.filter(fecha_inicio__lte=hoy, fecha_fin__gte=hoy).first()
+        return evento.filter(fecha_inicio__lte=hoy, fecha_fin__gte=hoy).first()
 
     @property
     def es_actual(self):
@@ -161,9 +173,10 @@ class Comprobante(models.Model):
 
 
 class NumeroRifa(models.Model):
+    comprobante_id: int
     numero = models.IntegerField()
-    evento = models.ForeignKey(Evento, models.RESTRICT, null=True)
-    comprobante = models.ForeignKey(Comprobante, on_delete=models.CASCADE, null=True)
+    evento = models.ForeignKey(Evento, models.RESTRICT)
+    comprobante = models.ForeignKey(Comprobante, on_delete=models.CASCADE)
 
     class Meta:
         indexes = [
