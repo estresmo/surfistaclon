@@ -85,7 +85,6 @@
 <script>
   let qrcode;
   const verificar_participante = {
-    status: "",
     boletos: [],
     telefono: "",
     nombre: "",
@@ -96,7 +95,6 @@
     verificar_participante.boletos = [];
     verificar_participante.nombre = "";
     verificar_participante.telefono = "";
-    verificar_participante.status = "";
     verificar_participante.total = 0;
   }
   async function searchBuyer() {
@@ -150,10 +148,10 @@
         </div>`;
       verificar_participante["nombre"] = comprobante.nombre;
       verificar_participante["telefono"] = comprobante.telefono;
-      verificar_participante["status"] = comprobante.status;
       verificar_participante["boletos"].push({
         fecha: comprobante.fecha,
         numeros: comprobante.boletos,
+        status: comprobante.status,
       });
       comprobante.boletos.forEach((element) => {
         createNumberV(numbersContain, element);
@@ -206,18 +204,21 @@
   function renderTickets() {
     const ticketsContain = document.getElementById("container_ticket");
     ticketsContain.classList.add("rendered");
-    for (const element of verificar_participante.boletos) {
-      for (const numero of element.numeros) {
+    for (const compŕobante of verificar_participante.boletos) {
+      for (const numero of compŕobante.numeros) {
         appendTicket(
           ticketsContain,
-          verificar_participante.status,
+          compŕobante.status,
           verificar_participante.nombre,
           verificar_participante.telefono,
           numero,
-          element.fecha
+          compŕobante.fecha
         );
       }
     }
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip();
+    });
   }
   document.addEventListener("DOMContentLoaded", function () {
     const cod = "{{request.GET.cod}}";
@@ -263,17 +264,12 @@
           <div class="buy"
             data-toggle="tooltip"
             data-placement="bottom"
-            title=""
-            data-original-title="BOLETO DIGITAL">
+            title="BOLETO DIGITAL">
             <i class="fa fa-globe" aria-hidden="true"></i>
           </div>
-          <div class="status"
-            data-toggle="tooltip"
-            data-placement="bottom"
-            title=""
-            data-original-title="Pago Verificado">
-            <i class="fa fa-check-circle" aria-hidden="true"></i>
-          </div>
+          <div class="status" style="color: #4a1900;"
+             data-toggle="tooltip" data-placement="bottom" 
+             title="Pago verificado"><i class="" aria-hidden="true"></i></div>
           <div class="bandname -bold">
             <img src="{{ cliente.logo.url }}"
               alt="Logo"
@@ -290,7 +286,7 @@
           </div>
           <div id="nombres" class="nombres">
             <span class="ticket_status">
-              <i class="fa fa-check-circle" aria-hidden="true"></i> Pago ${status}
+              <i aria-hidden="true"></i> <span class="status-txt"></span>
             </span>
 
             <span>
@@ -319,6 +315,22 @@
         </div>
     `;
     parent.appendChild(element);
+    const statusElement = element.querySelector(".status");
+    if (status == "Verificado") {
+      statusElement.querySelector("i").classList.add("fa", "fa-check-circle");
+      element
+        .querySelector(".ticket_status i")
+        .classList.add("fa", "fa-check-circle");
+      statusElement.title = "Pago Verificado";
+      element.querySelector(".status-txt").innerText = "Pago Verificado";
+    } else {
+      statusElement.querySelector("i").classList.add("fa-regular", "fa-clock");
+      element
+        .querySelector(".ticket_status i")
+        .classList.add("fa-regular", "fa-clock");
+      statusElement.title = "Verificación Pendiente";
+      element.querySelector(".status-txt").innerText = "Verificación Pendiente";
+    }
   }
   document.addEventListener("DOMContentLoaded", () => {
     qrcode = new QRCode(document.getElementById("qrCode"), {
