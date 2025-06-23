@@ -16,12 +16,11 @@ from django.db.models import (
     Value,
     When,
 )
-from django.db.models.functions import Concat, ExtractWeekDay, Round
+from django.db.models.functions import ExtractWeekDay, Round
 from django.db.models.query import QuerySet
-from django.http import HttpRequest, JsonResponse
-from django.shortcuts import get_object_or_404, render
+from django.http import HttpRequest
+from django.shortcuts import render
 from django.utils import timezone
-from django.views.decorators.http import require_POST
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
 
@@ -41,6 +40,7 @@ from .models import (
     StatusChoices,
 )
 from .utils import (
+    CacheInvalidationMixin,
     calcular_monto,
     calcular_tickets_frecuentes,
     list2values,
@@ -88,19 +88,19 @@ class RifasListView(LoginRequiredMixin, ListView):
         return queryset
 
 
-class RifasCreateView(LoginRequiredMixin, CreateView):
+class RifasCreateView(LoginRequiredMixin, CacheInvalidationMixin, CreateView):
     template_name = "admin/rifa_form.html"
     form_class = RifaForm
     success_url = "/admin/rifas"
 
 
-class ClienteCreateView(LoginRequiredMixin, CreateView):
+class ClienteCreateView(LoginRequiredMixin, CacheInvalidationMixin, CreateView):
     template_name = "admin/cliente_form.html"
     form_class = ClienteForm
     success_url = "/admin/cliente"
 
 
-class RifasUpdateView(LoginRequiredMixin, UpdateView):
+class RifasUpdateView(LoginRequiredMixin, CacheInvalidationMixin, UpdateView):
     template_name = "admin/rifa_form.html"
     form_class = RifaForm
     success_url = "/admin/rifas"
@@ -113,7 +113,7 @@ class ClientesListView(LoginRequiredMixin, ListView):
     context_object_name = "clientes"
 
 
-class ClienteUpdateView(LoginRequiredMixin, UpdateView):
+class ClienteUpdateView(LoginRequiredMixin, CacheInvalidationMixin, UpdateView):
     template_name = "admin/cliente_form.html"
     form_class = ClienteForm
     success_url = "/admin/clientes"
@@ -131,7 +131,7 @@ class MetodosListView(LoginRequiredMixin, ListView):
         return queryset
 
 
-class MetodoCreateView(LoginRequiredMixin, CreateView):
+class MetodoCreateView(LoginRequiredMixin, CacheInvalidationMixin, CreateView):
     template_name = "admin/metodo_form.html"
     form_class = MetodoForm
     success_url = "/admin/metodos"
@@ -143,7 +143,7 @@ class MetodoCreateView(LoginRequiredMixin, CreateView):
         return context
 
 
-class MetodoUpdateView(LoginRequiredMixin, UpdateView):
+class MetodoUpdateView(LoginRequiredMixin, CacheInvalidationMixin, UpdateView):
     template_name = "admin/metodo_form.html"
     form_class = MetodoForm
     success_url = "/admin/metodos"
@@ -389,49 +389,6 @@ class ComprasUpdateView(LoginRequiredMixin, UpdateView):
 
 
 @login_required
-@require_POST
-def eliminar_compra(request: HttpRequest, pk: int):
-    comprobante = get_object_or_404(Comprobante, pk=pk)
-    NumeroRifa.objects.filter(comprobante=comprobante).delete()
-    comprobante.delete()
-    return JsonResponse({"result": "ok"})
-
-
-@login_required
-@require_POST
-def eliminar_rifa(request: HttpRequest, pk: int):
-    evento = get_object_or_404(Evento, pk=pk)
-    evento.delete()
-    return JsonResponse({"result": "ok"})
-
-
-@login_required
-@require_POST
-def eliminar_metodo(request: HttpRequest, pk: int):
-    metodo_pago = get_object_or_404(MetodoPago, pk=pk)
-    metodo_pago.delete()
-    return JsonResponse({"result": "ok"})
-
-
-@require_POST
-@login_required
-def verificar_comprobante(request: HttpRequest, pk: int):
-    comprobante = Comprobante.objects.select_related("evento").get(pk=pk)
-    if comprobante.status != StatusChoices.VERIFICADO:
-        comprobante.status = StatusChoices.VERIFICADO
-        fecha_actual = timezone.now()
-        comprobante.fecha_verificacion = fecha_actual
-        comprobante.save(update_fields=("status", "fecha_verificacion"))
-        url = comprobante.get_full_url(request)
-        msg = f"Hola {comprobante.nombre}, gracias por completar tu pago de tus números de {comprobante.evento.nombre} y los puedes verificar en {url}"
-        send_whatsapp(comprobante.telefono, msg)
-        hora = fecha_actual.strftime("%I:%M %p")
-        fecha = fecha_actual.strftime("%d %B %Y")
-        return JsonResponse({"result": "ok", "fecha": fecha, "hora": hora})
-    return JsonResponse({"result": "verificado"})
-
-
-@login_required
 def dashboardView(request: HttpRequest):
     eventos = Evento.objects.only("id", "nombre", "fecha_fin").all()
     evento_id = request.GET.get("rifa")
@@ -477,26 +434,7 @@ def dashboardView(request: HttpRequest):
         )
     )
     progreso = (total_numeros / evento_actual.total_tickets) * 100
-    tickets_fecha = list(
-        comprobantes.annotate(
-            participante=Concat(
-                "nombre", Value("|"), "telefono", output_field=CharField()
-            )
-        )
-        .values("fecha_creado")
-        .annotate(
-            num_tickets=Count("numerorifa"),
-            num_compras=Count("id"),
-            num_participantes=Count("participante", distinct=True),
-        )
-        .order_by("-fecha_creado")
-    )
-    tickets_fecha_str = []
-    for t_f in tickets_fecha:
-        t_f["fecha_creado"] = t_f["fecha_creado"].strftime("%Y-%m-%d")
-        tickets_fecha_str.append(
-            f"{t_f['fecha_creado']};{t_f['num_tickets']};{t_f['num_compras']};{t_f['num_participantes']}"
-        )
+
     tickets_metodo = list(
         comprobantes.select_related("metodo")
         .prefetch_related("metodo__banco")
@@ -574,7 +512,6 @@ def dashboardView(request: HttpRequest):
         "por_cofirmar": por_cofirmar,
         "verificados": verificados,
         "progreso": round(progreso, 2),
-        "tickets_fecha": ",".join(tickets_fecha_str),
         "participantes_comprobantes": ",".join(participantes_comprobantes_str),
         "tickets_metodo": tickets_metodo_str,
         "metodos_aprobados": metodos_aprobados_str,

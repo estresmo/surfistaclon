@@ -7,3 +7,4 @@ gunicorn; sys_platform == 'linux'
 django-simple-history
 pyBCV
 requests
+django-redis

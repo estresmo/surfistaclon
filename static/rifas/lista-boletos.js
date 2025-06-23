@@ -80,14 +80,8 @@ function calcularPrecio(boletos, index = promociones.length - 1, total = 0) {
 
 let dolar;
 async function obtenerDolar() {
-  const crsf_token = document.querySelector("[name=csrfmiddlewaretoken]").value;
   const ticketQty = document.querySelector("#ticketQty");
-  const response = await fetch("/obtener_dolar/", {
-    method: "POST",
-    headers: {
-      "X-CSRFToken": crsf_token,
-    },
-  });
+  const response = await fetch("/obtener_dolar/");
   const data = await response.json();
   dolar = data.dolar;
   let total = dolar * calcularPrecio(ticketQty.value);

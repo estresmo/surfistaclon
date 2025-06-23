@@ -2,6 +2,7 @@ from django.contrib.postgres.aggregates import ArrayAgg
 from django.db.models import Q
 from django.http import HttpRequest, JsonResponse
 from django.shortcuts import render
+from django.views.decorators.cache import cache_page
 from django.views.decorators.http import require_POST
 
 from gestion.models import (
@@ -10,18 +11,19 @@ from gestion.models import (
     Evento,
     MetodoPago,
     NumeroRifa,
-    Visualizacion,
 )
 from gestion.utils import calcular_monto
 
+HOURS24 = 60 * 60 * 24
 
+
+@cache_page(HOURS24)
 def home(request: HttpRequest):
     cliente = Cliente.objects.first()
     evento = Evento.obtener_actual()
     eventos = Evento.objects.only(
         "nombre", "fecha_fin", "foto", "url", "total_tickets"
     ).all()
-    Visualizacion.objects.create(evento=evento)
     dolar = 0
     if evento:
         eventos = eventos.exclude(pk=evento.pk)
@@ -47,6 +49,7 @@ def home(request: HttpRequest):
     return render(request, "rifa/home.html", context)
 
 
+@cache_page(HOURS24)
 def detalle_evento(request: HttpRequest, link: str):
     evento = Evento.objects.get(url=link)
     cliente = Cliente.objects.first()
@@ -92,7 +95,7 @@ def verificar(request: HttpRequest):
     return JsonResponse({"result": comprobantes})
 
 
-@require_POST
+@cache_page(HOURS24)
 def obtener_dolar(request):
     evento = Evento.obtener_actual(fields=["valor_dolar"])
     if evento is None:
@@ -102,6 +105,7 @@ def obtener_dolar(request):
     return JsonResponse({"dolar": dolar})
 
 
+@cache_page(HOURS24)
 def obtener_promociones(request):
     evento = Evento.obtener_actual(fields=["id"])
     if evento is None:
