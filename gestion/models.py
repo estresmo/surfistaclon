@@ -67,14 +67,14 @@ class Evento(models.Model):
     def obtener_actual(
         cls, evento_id: Optional[str] = None, fields: Optional[List[str]] = None
     ):
-        cache_key = f"evento_actual{evento_id}{fields}"
+        cache_key = f"evento_actual{evento_id}{','.join(fields or [])}"
         cached_query = cache.get(cache_key)
         if cached_query:
             return cached_query
         evento = Evento.objects.all()
         if fields:
             evento = evento.only(*fields)
-        if evento_id is not None:
+        if evento_id:
             instance = evento.get(id=evento_id)
         else:
             hoy = timezone.now()

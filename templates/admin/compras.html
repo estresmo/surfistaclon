@@ -84,7 +84,7 @@
                       <tr class="odd" id="row-{{ compra.id }}">
                         <td class="col col-buyer">
                           {# href="/admin/participantes/detalle?nombre={{ compra.nombre|urlencode }}&telefono={{ compra.telefono|urlencode }} #}
-                          <a title="Anthony Gutierrez" href="#">
+                          <a href="#">
                             {{ compra.nombre|title }} {{ compra.telefono }}
                           </a>
                         </td>
@@ -325,7 +325,6 @@
                   const element = document
                     .getElementById("select-nota")
                     .querySelector("[value='{{request.GET.tipo_nota}}']");
-                  console.log(element);
                   if (element) {
                     element.selected = true;
                   }
@@ -337,12 +336,11 @@
                 name="commit"
                 value="Filtrar"
                 data-disable-with="Filtrar" />
-              <a class="clear_filters_btn" href="javascript:void(0)">
+              <a class="clear_filters_btn"
+                href="javascript:void(0)"
+                onclick="resetForm()">
                 Quitar Filtros
-              </a><input type="hidden"
-                name="order"
-                id="hidden_active_admin_order"
-                value="id_desc" />
+              </a>
             </div>
           </form>
         </div>
@@ -352,11 +350,12 @@
 {% endblock %}
 {% block javascript %}
   <script>
+    function resetForm() {
+      document.querySelector("form.filter_form").reset();
+      document.querySelector("form.filter_form").submit();
+    }
     const dataTable = new simpleDatatables.DataTable(".index_table");
 
-    const crsf_token = document.querySelector(
-      "[name=csrfmiddlewaretoken]"
-    ).value;
     async function verificarCompra(id) {
       const element = document.getElementById("verificar-" + id);
       element.classList.replace("pending", "processing");

@@ -1,7 +1,7 @@
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db.models import Q
 from django.http import HttpRequest, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.views.decorators.cache import cache_page
 from django.views.decorators.http import require_POST
 
@@ -21,9 +21,11 @@ HOURS24 = 60 * 60 * 24
 def home(request: HttpRequest):
     cliente = Cliente.objects.first()
     evento = Evento.obtener_actual()
-    eventos = Evento.objects.only(
-        "nombre", "fecha_fin", "foto", "url", "total_tickets"
-    ).all()
+    eventos = (
+        Evento.objects.only("nombre", "fecha_fin", "foto", "url", "total_tickets")
+        .all()
+        .order_by("-id")
+    )
     dolar = 0
     if evento:
         eventos = eventos.exclude(pk=evento.pk)
@@ -51,7 +53,7 @@ def home(request: HttpRequest):
 
 @cache_page(HOURS24)
 def detalle_evento(request: HttpRequest, link: str):
-    evento = Evento.objects.get(url=link)
+    evento = get_object_or_404(Evento, url=link)
     cliente = Cliente.objects.first()
     context = {
         "evento": evento,

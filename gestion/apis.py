@@ -1,9 +1,16 @@
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 from django.db.models import (
+    Case,
+    CharField,
     Count,
+    Min,
+    Sum,
+    Value,
+    When,
 )
 from django.db.models.expressions import RawSQL
+from django.db.models.functions import Concat, ExtractWeekDay, Round
 from django.http import HttpRequest, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
@@ -16,7 +23,7 @@ from .models import (
     NumeroRifa,
     StatusChoices,
 )
-from .utils import send_whatsapp
+from .utils import calcular_tickets_frecuentes, send_whatsapp
 
 
 @require_POST
@@ -71,15 +78,13 @@ def eliminar_metodo(request: HttpRequest, pk: int):
 
 
 @login_required
-def ver_fecha_stats(request: HttpRequest, evento_id: int):
-    fecha_tickets = []
-    fecha_compras = []
+def ver_fecha_compra_stats(request: HttpRequest, evento_id: int):
     fecha_participantes = []
+    fecha_compra = []
     fecha_comprobantes = (
         Comprobante.objects.filter(evento=evento_id)
         .values("fecha_creado")
         .annotate(
-            num_tickets=Count("numerorifa"),
             num_compras=Count("id"),
             num_participantes=Count("telefono", distinct=True),
             fecha=RawSQL("TO_CHAR(fecha_creado, 'YYYY-MM-DD')", ()),
@@ -87,22 +92,112 @@ def ver_fecha_stats(request: HttpRequest, evento_id: int):
         .order_by("-fecha_creado")
     )
     for comprobante in fecha_comprobantes:
-        fecha_tickets.append((comprobante["fecha"], comprobante["num_tickets"]))
-        fecha_compras.append((comprobante["fecha"], comprobante["num_compras"]))
+        fecha_compra.append((comprobante["fecha"], comprobante["num_compras"]))
         fecha_participantes.append(
             (comprobante["fecha"], comprobante["num_participantes"])
         )
+    data = {"participantes": fecha_participantes, "compras": fecha_compra}
+    return JsonResponse(data)
 
+
+@login_required
+def ver_fecha_tickets_stats(request: HttpRequest, evento_id: int):
+    """
+    No se puede juntar con ver_fecha_compra_stats, ya que el inner join numerorifa
+    distorsiona los resultados
+    """
+    fecha_tickets = list(
+        Comprobante.objects.filter(evento=evento_id)
+        .values("fecha_creado")
+        .annotate(
+            fecha=RawSQL("TO_CHAR(fecha_creado, 'YYYY-MM-DD')", ()),
+            num_tickets=Count("numerorifa"),
+        )
+        .order_by("-fecha_creado")
+        .values_list("fecha", "num_tickets")
+    )
+    data = {"tickets": fecha_tickets}
+    return JsonResponse(data)
+
+
+@login_required
+def ver_metodos_status_stats(request: HttpRequest, evento_id: int):
+    metodos_aprobados = list(
+        Comprobante.objects.filter(evento=evento_id)
+        .filter(status=StatusChoices.VERIFICADO)
+        .values("metodo__banco")
+        .annotate(
+            monto=Concat(Round(Sum("monto"), 2), Value("$"), output_field=CharField()),
+        )
+        .values_list("metodo__banco", "monto")
+    )
+    metodos_confirmar = list(
+        Comprobante.objects.filter(evento=evento_id)
+        .filter(status=StatusChoices.NO_VERIFICADO)
+        .values("metodo__banco")
+        .annotate(
+            monto=Concat(Round(Sum("monto"), 2), Value("$"), output_field=CharField()),
+        )
+        .values_list("metodo__banco", "monto")
+    )
+    tickets_metodo = list(
+        Comprobante.objects.filter(evento=evento_id)
+        .values("metodo__banco")
+        .annotate(
+            compras=Count("id"),
+        )
+        .values_list("metodo__banco", "compras")
+    )
     data = {
-        "tickets": fecha_tickets,
-        "compras": fecha_compras,
-        "participantes": fecha_participantes,
+        "aprobados": metodos_aprobados,
+        "por_confirmar": metodos_confirmar,
+        "tickets_metodo": tickets_metodo,
     }
     return JsonResponse(data)
 
 
-def ver_fecha_compras_stats(request: HttpRequest, evento_id: int):
-    """
-    No se puede juntar con ver_fecha_tickets_stats, ya que el inner join numerorifa
-    distorsiona los resultados
-    """
+@login_required
+def ver_top_participante_stats(request: HttpRequest, evento_id: int):
+    participantes = list(
+        Comprobante.objects.filter(evento=evento_id)
+        .values("telefono")
+        .annotate(
+            num_tickets=Count("numerorifa"),
+            nombre=Min("nombre"),
+        )
+        .order_by("-num_tickets")
+        .values_list("nombre", "num_tickets")[:10]
+    )
+    data = {"participantes": participantes}
+    return JsonResponse(data)
+
+
+@login_required
+def ver_dias_ventas_stats(request: HttpRequest, evento_id: int):
+    dias_ventas = list(
+        Comprobante.objects.filter(evento=evento_id)
+        .annotate(
+            weekday=ExtractWeekDay("fecha_creado"),
+            dia_semana=Case(
+                When(weekday=1, then=Value("Domingo")),
+                When(weekday=2, then=Value("Lunes")),
+                When(weekday=3, then=Value("Martes")),
+                When(weekday=4, then=Value("Miércoles")),
+                When(weekday=5, then=Value("Jueves")),
+                When(weekday=6, then=Value("Viernes")),
+                When(weekday=7, then=Value("Sábado")),
+                output_field=CharField(),
+            ),
+        )
+        .values("dia_semana")
+        .annotate(cantidad=Count("numerorifa__id"))
+        .values_list("dia_semana", "cantidad")
+    )
+    data = {"dias_ventas": dias_ventas}
+    return JsonResponse(data)
+
+
+@login_required
+def ver_tickets_frecuentes_stats(request: HttpRequest, evento_id: int):
+    tickets_frecuentes = calcular_tickets_frecuentes(evento_id)
+    return JsonResponse({"tickets_frecuentes": tickets_frecuentes})

@@ -235,7 +235,7 @@ def calcular_tickets_frecuentes(evento_id: int):
         cursor.execute(
             """
             SELECT 
-                subquery.compras AS "count_value",
+                subquery.compras  || ' tickets' AS "count_value",
                 COUNT(*) AS "frequency"
             FROM (
                 SELECT

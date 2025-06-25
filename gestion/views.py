@@ -1,4 +1,5 @@
 from datetime import timedelta
+from typing import Optional
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -6,7 +7,6 @@ from django.contrib.postgres.aggregates import ArrayAgg
 from django.db.models import (
     BooleanField,
     Case,
-    CharField,
     Count,
     F,
     Min,
@@ -16,7 +16,7 @@ from django.db.models import (
     Value,
     When,
 )
-from django.db.models.functions import ExtractWeekDay, Round
+from django.db.models.functions import Round
 from django.db.models.query import QuerySet
 from django.http import HttpRequest
 from django.shortcuts import render
@@ -42,15 +42,8 @@ from .models import (
 from .utils import (
     CacheInvalidationMixin,
     calcular_monto,
-    calcular_tickets_frecuentes,
-    list2values,
     send_whatsapp,
 )
-
-
-@login_required
-def inicioView(request: HttpRequest):
-    return render(request, "admin/compras.html")
 
 
 @login_required
@@ -170,55 +163,19 @@ class ComprasListView(LoginRequiredMixin, ListView):
     def get_queryset(self) -> QuerySet:
         evento_id = self.request.GET.get("evento_id")
         evento_actual = Evento.obtener_actual(fields=["id"])
-        comprobantes = Comprobante.objects.all()
-        if evento_id and evento_id != "todos" and evento_id != "inactivas":
-            comprobantes = Comprobante.objects.filter(evento__id=evento_id)
-        elif evento_id == "inactivas":
-            if evento_actual:
+
+        if evento_id == "inactivas" or evento_id == "todos":
+            comprobantes = Comprobante.objects.all()
+            if evento_actual and evento_id == "inactivas":
                 comprobantes = Comprobante.objects.exclude(evento_id=evento_actual.pk)
             evento_id = None
+        elif evento_id is not None:
+            comprobantes = Comprobante.objects.filter(evento__id=evento_id)
+        elif evento_actual:
+            comprobantes = Comprobante.objects.filter(evento_id=evento_actual.pk)
         else:
-            if evento_actual:
-                comprobantes = Comprobante.objects.filter(evento_id=evento_actual.pk)
-            evento_id = None
-
-        filtros = {}
-        # filtro
-        ticket = self.request.GET.get("ticket")
-        nombre = self.request.GET.get("nombre")
-        telefono = self.request.GET.get("telefono")
-        referencia = self.request.GET.get("referencia")
-        fecha_desde = self.request.GET.get("fecha_desde")
-        fecha_hasta = self.request.GET.get("fecha_desde")
-        creados_hace_mas_de = self.request.GET.get("creados_hace_mas_de")
-        status = self.request.GET.get("status")
-        metodo_pago = self.request.GET.get("metodo")
-        nota = self.request.GET.get("nota")
-        tipo_nota = self.request.GET.get("tipo_nota")
-
-        if ticket:
-            numero = NumeroRifa.objects.filter(numero=ticket)
-            if evento_id:
-                numero = numero.filter(evento_id=evento_id)
-            filtros["id__in"] = numero.values_list("comprobante_id", flat=True)
-        if nombre:
-            filtros["nombre__icontains"] = nombre
-        if telefono:
-            filtros["telefono__icontains"] = telefono
-        if referencia:
-            filtros["referencia__icontains"] = referencia
-        if fecha_desde and fecha_hasta:
-            filtros["fecha_creado__range"] = (fecha_desde, fecha_hasta)
-        if creados_hace_mas_de:
-            current_time = timezone.now()
-            time_result = current_time - timedelta(hours=4)
-            filtros["fecha_creado__lte"] = time_result
-        if status:
-            filtros["status"] = status
-        if metodo_pago:
-            filtros["metodo"] = metodo_pago
-        if nota and tipo_nota:
-            filtros[tipo_nota] = nota
+            return Comprobante.objects.filter(evento_id=None)
+        filtros = self.filtros_queryset(evento_id)
         comprobantes = (
             comprobantes.filter(**filtros)
             .annotate(
@@ -253,6 +210,47 @@ class ComprasListView(LoginRequiredMixin, ListView):
             .order_by("-id")
         )
         return comprobantes
+
+    def filtros_queryset(self, evento_id: Optional[str]):
+        filtros = {}
+        # filtro
+        ticket = self.request.GET.get("ticket")
+        nombre = self.request.GET.get("nombre")
+        telefono = self.request.GET.get("telefono")
+        referencia = self.request.GET.get("referencia")
+        fecha_desde = self.request.GET.get("fecha_desde")
+        fecha_hasta = self.request.GET.get("fecha_desde")
+        creados_hace_mas_de = self.request.GET.get("creados_hace_mas_de")
+        status = self.request.GET.get("status")
+        metodo_pago = self.request.GET.get("metodo")
+        nota = self.request.GET.get("nota")
+        tipo_nota = self.request.GET.get("tipo_nota")
+
+        if ticket:
+            numero = NumeroRifa.objects.filter(numero=ticket)
+            if evento_id:
+                numero = numero.filter(evento_id=evento_id)
+            filtros["id__in"] = numero.values_list("comprobante_id", flat=True)
+        if nombre:
+            filtros["nombre__icontains"] = nombre
+        if telefono:
+            filtros["telefono__icontains"] = telefono
+        if referencia:
+            filtros["referencia__icontains"] = referencia
+        if fecha_desde and fecha_hasta:
+            filtros["fecha_creado__range"] = (fecha_desde, fecha_hasta)
+        if creados_hace_mas_de:
+            current_time = timezone.now()
+            horas = int(creados_hace_mas_de)
+            time_result = current_time - timedelta(hours=horas)
+            filtros["fecha_creado__lte"] = time_result
+        if status:
+            filtros["status"] = status
+        if metodo_pago:
+            filtros["metodo"] = metodo_pago
+        if nota and tipo_nota:
+            filtros[tipo_nota] = nota
+        return filtros
 
 
 class ComprasCreateView(LoginRequiredMixin, CreateView):
@@ -390,7 +388,7 @@ class ComprasUpdateView(LoginRequiredMixin, UpdateView):
 
 @login_required
 def dashboardView(request: HttpRequest):
-    eventos = Evento.objects.only("id", "nombre", "fecha_fin").all()
+    eventos = Evento.objects.only("id", "nombre", "fecha_fin").all().order_by("-id")
     evento_id = request.GET.get("rifa")
     evento_actual = Evento.obtener_actual(evento_id)
     if evento_actual is None:
@@ -433,92 +431,17 @@ def dashboardView(request: HttpRequest):
             tickets=Sum("boletos"),
         )
     )
-    progreso = (total_numeros / evento_actual.total_tickets) * 100
-
-    tickets_metodo = list(
-        comprobantes.select_related("metodo")
-        .prefetch_related("metodo__banco")
-        .values("metodo__banco")
-        .annotate(
-            compras=Count("id"),
-        )
-    )
-    tickets_metodo_str = list2values(tickets_metodo)
-    metodos_aprobados = list(
-        comprobantes.filter(status=StatusChoices.VERIFICADO)
-        .select_related("metodo")
-        .prefetch_related("metodo__banco")
-        .values("metodo__banco")
-        .annotate(
-            monto=Round(Sum("monto"), 2),
-        )
-    )
-    metodos_confirmar = list(
-        comprobantes.select_related("metodo")
-        .filter(status=StatusChoices.NO_VERIFICADO)
-        .prefetch_related("metodo__banco")
-        .values("metodo__banco")
-        .annotate(
-            monto=Round(Sum("monto"), 2),
-        )
-    )
-    metodos_aprobados_str = list2values(metodos_aprobados)
-    metodos_confirmar_str = list2values(metodos_confirmar)
-    participantes = list(participantes[:10].values("nombre", "num_tickets"))
-    participantes_str = list2values(participantes)
-    tickets_frecuentes = calcular_tickets_frecuentes(evento_actual.pk)
-    tickets_frecuentes = [f"{t[0]} tickets;{t[1]}" for t in tickets_frecuentes]
-    tickets_frecuentes = ",".join(tickets_frecuentes)
-    dias_ventas = list(
-        comprobantes.annotate(
-            weekday=ExtractWeekDay("fecha_creado"),
-            weekday_string=Case(
-                When(weekday=1, then=Value("Domingo")),
-                When(weekday=2, then=Value("Lunes")),
-                When(weekday=3, then=Value("Martes")),
-                When(weekday=4, then=Value("Miércoles")),
-                When(weekday=5, then=Value("Jueves")),
-                When(weekday=6, then=Value("Viernes")),
-                When(weekday=7, then=Value("Sábado")),
-                output_field=CharField(),
-            ),
-        )
-        .values("weekday_string")
-        .annotate(cantidad=Count("numerorifa__id"))
-    )
-    dias_ventas_str = list2values(dias_ventas)
-    participantes_comprobantes = (
-        comprobantes.values("fecha_creado")
-        .annotate(
-            num_compras=Count("id"),
-            num_participantes=Count("telefono", distinct=True),
-        )
-        .order_by("-fecha_creado")
-    )
-    participantes_comprobantes_str = []
-    for p_c in participantes_comprobantes:
-        p_c["fecha_creado"] = p_c["fecha_creado"].strftime("%Y-%m-%d")
-        participantes_comprobantes_str.append(
-            f"{p_c['fecha_creado']};{p_c['num_compras']};{p_c['num_participantes']}"
-        )
-
+    progreso = round(total_numeros / evento_actual.total_tickets, 4) * 100
     context = {
         "eventos": eventos,
         "evento_actual": evento_actual,
         "total_participantes": total_participantes,
         "total_comprobantes": total_comprobantes,
         "total_numeros": total_numeros,
-        "participantes": participantes_str,
         "por_cofirmar": por_cofirmar,
         "verificados": verificados,
-        "progreso": round(progreso, 2),
-        "participantes_comprobantes": ",".join(participantes_comprobantes_str),
-        "tickets_metodo": tickets_metodo_str,
-        "metodos_aprobados": metodos_aprobados_str,
-        "metodos_confirmar": metodos_confirmar_str,
-        "tickets_frecuentes": tickets_frecuentes,
+        "progreso": progreso,
         "total_disponibles": total_disponibles,
-        "dias_ventas": dias_ventas_str,
     }
     return render(request, "admin/dashboard.html", context)
 

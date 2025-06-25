@@ -281,12 +281,12 @@ function getWhatsappText(boletos) {
   const nombre = document.getElementById("nombre").value;
   const celular = document.getElementById("celular").value;
   const cod_t = document.querySelector("#lista_boletos #country_code").value;
-  const telefono = cod_t + celular;
+  const telefono = (cod_t + celular).replace("+", "%2B");
   const tickets = boletos.join(", ");
   const rifa = document.getElementById("nombre-rifa").innerText;
-  const verificar_url =
-    "https://www.chipibikelifee.com/rifa/comboexclusivo/?phone=" +
-    telefono.replace("+", "%2B");
+  const rifaUrl = document.getElementById("evento-url-js").value;
+  const host = window.location.origin;
+  const verificar_url = `${host}/rifa/${rifaUrl}/?phone=${telefono}`;
   const txt = `Hola, soy ${nombre}. Con mi celular ${telefono} registre estos números ${tickets}. En  ${rifa} ${verificar_url}`;
   return encodeURIComponent(txt);
 }
