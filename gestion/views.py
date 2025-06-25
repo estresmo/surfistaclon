@@ -204,6 +204,7 @@ class ComprasListView(LoginRequiredMixin, ListView):
                 "cantidad",
                 "verificado",
                 "evento__url",
+                "evento__nombre",
                 "metodo__moneda",
                 "monto_bs",
             )
