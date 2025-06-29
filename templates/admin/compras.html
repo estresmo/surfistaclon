@@ -84,7 +84,7 @@
                       <tr class="odd" id="row-{{ compra.id }}">
                         <td class="col col-buyer">
                           {# href="/admin/participantes/detalle?nombre={{ compra.nombre|urlencode }}&telefono={{ compra.telefono|urlencode }} #}
-                          <a title="Anthony Gutierrez" href="#">
+                          <a href="#">
                             {{ compra.nombre|title }} {{ compra.telefono }}
                           </a>
                         </td>
@@ -179,6 +179,32 @@
                     {% endfor %}
                   </tbody>
                 </table>
+                <div id="index_footer">
+                  <nav class="pagination">
+                    {% if page_obj.has_previous  %}
+                    <span class="last">
+                      <a href="?page=1">Inicio</a>
+                    </span>
+                    <span class="next">
+                      <a rel="next" href="?page={{ page_obj.previous_page_number  }}">&lt; Ant</a>
+                    </span>
+                    {% endif %}
+                    <span class="page current">{{ page_obj.number }}</span>
+
+                   
+                    {% if page_obj.has_next %}
+                    <span class="next">
+                      <a rel="next" href="?page={{ page_obj.next_page_number }}">Sig &gt;</a>
+                    </span>
+                    <span class="last">
+                      <a href="?page={{ page_obj.paginator.num_pages }}">Fin</a>
+                    </span>
+                    {% endif %}
+                  </nav>
+                  <div class="pagination_information">
+                    Página <b>{{ page_obj.number }}</b> de <b>{{ page_obj.paginator.num_pages }}</b>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -325,7 +351,6 @@
                   const element = document
                     .getElementById("select-nota")
                     .querySelector("[value='{{request.GET.tipo_nota}}']");
-                  console.log(element);
                   if (element) {
                     element.selected = true;
                   }
@@ -337,12 +362,11 @@
                 name="commit"
                 value="Filtrar"
                 data-disable-with="Filtrar" />
-              <a class="clear_filters_btn" href="javascript:void(0)">
+              <a class="clear_filters_btn"
+                href="javascript:void(0)"
+                onclick="resetForm()">
                 Quitar Filtros
-              </a><input type="hidden"
-                name="order"
-                id="hidden_active_admin_order"
-                value="id_desc" />
+              </a>
             </div>
           </form>
         </div>
@@ -352,11 +376,12 @@
 {% endblock %}
 {% block javascript %}
   <script>
-    const dataTable = new simpleDatatables.DataTable(".index_table");
+    function resetForm() {
+      document.querySelector("form.filter_form").reset();
+      document.querySelector("form.filter_form").submit();
+    }
+    // const dataTable = new simpleDatatables.DataTable(".index_table");
 
-    const crsf_token = document.querySelector(
-      "[name=csrfmiddlewaretoken]"
-    ).value;
     async function verificarCompra(id) {
       const element = document.getElementById("verificar-" + id);
       element.classList.replace("pending", "processing");

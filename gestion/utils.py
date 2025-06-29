@@ -1,12 +1,15 @@
 import logging
 import re
-from typing import TypedDict, cast
+from typing import Protocol, TypedDict, cast
 from urllib.parse import urljoin
 
 import requests
 from django.contrib.postgres.aggregates import ArrayAgg  # Import this!
+from django.core.cache import cache
 from django.db import connection
 from django.db.models import Count, Sum
+from django.forms import BaseModelForm
+from django.http import HttpResponse
 
 from gestion.models import Comprobante, Evento, Promocion, StatusChoices
 
@@ -232,7 +235,7 @@ def calcular_tickets_frecuentes(evento_id: int):
         cursor.execute(
             """
             SELECT 
-                subquery.compras AS "count_value",
+                subquery.compras  || ' tickets' AS "count_value",
                 COUNT(*) AS "frequency"
             FROM (
                 SELECT
@@ -248,3 +251,14 @@ def calcular_tickets_frecuentes(evento_id: int):
             [evento_id],
         )
         return cursor.fetchall()
+
+
+class HasFormValid(Protocol):
+    def form_valid(self, form: BaseModelForm) -> HttpResponse: ...
+
+
+class CacheInvalidationMixin:
+    def form_valid(self: HasFormValid, form: BaseModelForm) -> HttpResponse:
+        response = super().form_valid(form)
+        cache.clear()
+        return response

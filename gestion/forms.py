@@ -36,7 +36,7 @@ class FormEvento(forms.ModelForm):
 class RifaForm(forms.ModelForm):
     class Meta:
         model = Evento
-        fields = "__all__"
+        exclude = ["hora_espera"]
 
 
 class ClienteForm(forms.ModelForm):

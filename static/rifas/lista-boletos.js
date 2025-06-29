@@ -80,14 +80,8 @@ function calcularPrecio(boletos, index = promociones.length - 1, total = 0) {
 
 let dolar;
 async function obtenerDolar() {
-  const crsf_token = document.querySelector("[name=csrfmiddlewaretoken]").value;
   const ticketQty = document.querySelector("#ticketQty");
-  const response = await fetch("/obtener_dolar/", {
-    method: "POST",
-    headers: {
-      "X-CSRFToken": crsf_token,
-    },
-  });
+  const response = await fetch("/obtener_dolar/");
   const data = await response.json();
   dolar = data.dolar;
   let total = dolar * calcularPrecio(ticketQty.value);
@@ -287,12 +281,12 @@ function getWhatsappText(boletos) {
   const nombre = document.getElementById("nombre").value;
   const celular = document.getElementById("celular").value;
   const cod_t = document.querySelector("#lista_boletos #country_code").value;
-  const telefono = cod_t + celular;
+  const telefono = (cod_t + celular).replace("+", "%2B");
   const tickets = boletos.join(", ");
   const rifa = document.getElementById("nombre-rifa").innerText;
-  const verificar_url =
-    "https://www.chipibikelifee.com/rifa/comboexclusivo/?phone=" +
-    telefono.replace("+", "%2B");
+  const rifaUrl = document.getElementById("evento-url-js").value;
+  const host = window.location.origin;
+  const verificar_url = `${host}/rifa/${rifaUrl}/?phone=${telefono}`;
   const txt = `Hola, soy ${nombre}. Con mi celular ${telefono} registre estos números ${tickets}. En  ${rifa} ${verificar_url}`;
   return encodeURIComponent(txt);
 }

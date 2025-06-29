@@ -49,32 +49,36 @@
                 <label class="label">Nombre</label>
                 <input type="text"
                   value="{{ form.nombre.value|default_if_none:'' }}"
-                  name="nombre" />
+                  name="nombre"
+                  required />
               </li>
               <li class="string input required stringish">
                 <label class="label">URL Pública</label>
                 <input type="text"
                   name="url"
-                  value="{{ form.url.value|default_if_none:'' }}" />
+                  value="{{ form.url.value|default_if_none:'' }}"
+                  required />
               </li>
               <li class="text input required">
                 <label class="label">Descripción</label>
                 <!-- prettier-ignore -->
-                <textarea rows="20" class="description" name="descripcion">{{  form.descripcion.value|default_if_none:''}}</textarea>
+                <textarea rows="20" class="description" name="descripcion" required>{{  form.descripcion.value|default_if_none:''}}</textarea>
               </li>
               <li class="number input required numeric stringish">
                 <label class="label">Cantidad de boletos</label>
                 <input step="any"
                   type="number"
                   name="total_tickets"
-                  value="{{ form.total_tickets.value|default_if_none:'' }}" />
+                  value="{{ form.total_tickets.value|default_if_none:'' }}"
+                  required />
               </li>
               <li class="number input required numeric stringish">
                 <label class="label">Precio</label>
                 <input step="any"
                   type="number"
                   name="precio_unidad"
-                  value="{{ form.precio_unidad.value|default_if_none:'' }}" />
+                  value="{{ form.precio_unidad.value|default_if_none:'' }}"
+                  required />
               </li>
 
               <li class="select input required">
@@ -90,7 +94,8 @@
                 <input step="any"
                   type="number"
                   name="valor_dolar"
-                  value="{{ form.valor_dolar.value|default_if_none:'' }}" />
+                  value="{{ form.valor_dolar.value|default_if_none:'' }}"
+                  required />
               </li>
 
               <li class="number input required numeric stringish">
@@ -98,7 +103,8 @@
                 <input step="any"
                   type="number"
                   name="minimo"
-                  value="{{ form.minimo.value|default_if_none:'' }}" />
+                  value="{{ form.minimo.value|default_if_none:'' }}"
+                  required />
               </li>
               <li class="string input optional stringish">
                 <label class="label">Promociones</label>
@@ -112,7 +118,7 @@
                   <ol class="fragments-group">
                     <li class="fragment">
                       <!-- prettier-ignore -->
-                      <input type="datetime-local" name="fecha_inicio" value="{{ form.fecha_inicio.value|date:'Y-m-d\TH:i' }}" />
+                      <input type="datetime-local" name="fecha_inicio" value="{{ form.fecha_inicio.value|date:'Y-m-d\TH:i' }}" required />
                     </li>
                   </ol>
                 </fieldset>
@@ -125,7 +131,7 @@
                   <ol class="fragments-group">
                     <li class="fragment">
                       <!-- prettier-ignore -->
-                      <input type="datetime-local" name="fecha_fin" value="{{ form.fecha_fin.value|date:'Y-m-d\TH:i' }}" />
+                      <input type="datetime-local" name="fecha_fin" value="{{ form.fecha_fin.value|date:'Y-m-d\TH:i' }}" required />
                     </li>
                   </ol>
                 </fieldset>
@@ -134,7 +140,8 @@
                 <label class="label">Dirección</label>
                 <input type="text"
                   name="direccion"
-                  value="{{ form.direccion.value|default_if_none:'' }}" />
+                  value="{{ form.direccion.value|default_if_none:'' }}"
+                  required />
               </li>
               <li class="file input required">
                 <label class="label">Banner</label>
@@ -219,7 +226,7 @@
                 <label class="label">Horas de espera de Voucher</label><input step="any"
                   type="number"
                   name="hora_espera"
-                  value="{{ form.hora_espera.value|default_if_none:'' }}" />
+                  value="{{ form.hora_espera.value|default_if_none:'0' }}" />
               </li>
               <li class="boolean input optional">
                 <label>
