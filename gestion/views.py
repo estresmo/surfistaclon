@@ -226,10 +226,10 @@ class ComprasListView(LoginRequiredMixin, ListView):
             )
             .order_by("-id")
         )
-        page = self.request.GET.get("page", "1")
-        paginator = CachedPaginator(comprobantes, 10, f"comprobantes-{evento_id}")
-        page_obj = paginator.page(page)
-        return page_obj
+        # page = self.request.GET.get("page", "1")
+        # paginator = CachedPaginator(comprobantes, 10, f"comprobantes-{evento_id}")
+        # page_obj = paginator.page(page)
+        # return page_obj
 
         return comprobantes
 

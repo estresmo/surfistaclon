@@ -1,13 +1,16 @@
 import logging
 import re
-from typing import TypedDict, cast
+from typing import Protocol, TypedDict, cast
 from urllib.parse import urljoin
 
 import requests
 from django.contrib.postgres.aggregates import ArrayAgg  # Import this!
+from django.core.cache import cache
 from django.db import connection
 from django.db.models import Count, Sum
-
+from django.forms import BaseModelForm
+from django.http import HttpResponse
+from django.core.paginator import Paginator, Page
 from gestion.models import Comprobante, Evento, Promocion, StatusChoices
 
 logger = logging.getLogger(__name__)
@@ -232,7 +235,7 @@ def calcular_tickets_frecuentes(evento_id: int):
         cursor.execute(
             """
             SELECT 
-                subquery.compras AS "count_value",
+                subquery.compras  || ' tickets' AS "count_value",
                 COUNT(*) AS "frequency"
             FROM (
                 SELECT
@@ -248,3 +251,32 @@ def calcular_tickets_frecuentes(evento_id: int):
             [evento_id],
         )
         return cursor.fetchall()
+
+
+class HasFormValid(Protocol):
+    def form_valid(self, form: BaseModelForm) -> HttpResponse: ...
+
+
+class CacheInvalidationMixin:
+    def form_valid(self: HasFormValid, form: BaseModelForm) -> HttpResponse:
+        response = super().form_valid(form)
+        cache.clear()
+        return response
+
+class CachedPaginator(Paginator):
+    def __init__(self, object_list, per_page, cache_key, orphans=0, allow_empty_first_page=True):
+        super().__init__(object_list, per_page, orphans=orphans, allow_empty_first_page=allow_empty_first_page)
+        self.cache_key = cache_key
+
+    @property
+    def count(self):
+        print("hola")
+        cached_count = cache.get(self.cache_key)
+        print(self.cache_key, cached_count)
+        if cached_count is None:
+            actual_count = super().count
+            cache.set(self.cache_key, actual_count)
+            return actual_count
+        
+        return cached_count
+        
