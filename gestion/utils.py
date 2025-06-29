@@ -10,7 +10,7 @@ from django.db import connection
 from django.db.models import Count, Sum
 from django.forms import BaseModelForm
 from django.http import HttpResponse
-
+from django.core.paginator import Paginator, Page
 from gestion.models import Comprobante, Evento, Promocion, StatusChoices
 
 logger = logging.getLogger(__name__)
@@ -262,3 +262,21 @@ class CacheInvalidationMixin:
         response = super().form_valid(form)
         cache.clear()
         return response
+
+class CachedPaginator(Paginator):
+    def __init__(self, object_list, per_page, cache_key, orphans=0, allow_empty_first_page=True):
+        super().__init__(object_list, per_page, orphans=orphans, allow_empty_first_page=allow_empty_first_page)
+        self.cache_key = cache_key
+
+    @property
+    def count(self):
+        print("hola")
+        cached_count = cache.get(self.cache_key)
+        print(self.cache_key, cached_count)
+        if cached_count is None:
+            actual_count = super().count
+            cache.set(self.cache_key, actual_count)
+            return actual_count
+        
+        return cached_count
+        

@@ -41,6 +41,7 @@ from .models import (
 )
 from .utils import (
     CacheInvalidationMixin,
+    CachedPaginator,
     calcular_monto,
     send_whatsapp,
 )
@@ -152,7 +153,16 @@ class ComprasListView(LoginRequiredMixin, ListView):
     template_name = "admin/compras.html"
     model = Comprobante
     context_object_name = "compras"
+    paginator_class = CachedPaginator
     paginate_by = 10
+
+    def get_paginator(self, queryset, per_page, **kwargs):
+        return self.paginator_class(
+            queryset,
+            per_page,
+            cache_key=f"comprobantes-{self.kwargs.get('evento_id','actual')}",
+            **kwargs
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -211,6 +221,11 @@ class ComprasListView(LoginRequiredMixin, ListView):
             )
             .order_by("-id")
         )
+        # page = self.request.GET.get("page", "1")
+        # paginator = CachedPaginator(comprobantes, 10, f"comprobantes-{evento_id}")
+        # page_obj = paginator.page(page)
+        # return page_obj
+
         return comprobantes
 
     def filtros_queryset(self, evento_id: Optional[str]):
