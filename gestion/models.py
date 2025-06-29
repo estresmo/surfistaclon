@@ -68,7 +68,7 @@ class Evento(models.Model):
         cls, evento_id: Optional[str] = None, fields: Optional[List[str]] = None
     ):
         cache_key = f"evento_actual{evento_id}{','.join(fields or [])}"
-        cached_query = cache.get(cache_key)
+        cached_query:Evento|None = cache.get(cache_key)
         if cached_query:
             return cached_query
         evento = Evento.objects.all()

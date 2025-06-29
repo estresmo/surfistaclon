@@ -12,7 +12,7 @@ from gestion.models import (
     MetodoPago,
     NumeroRifa,
 )
-from gestion.utils import calcular_monto
+from gestion.utils import calcular_monto, updateCompraCache
 
 HOURS24 = 60 * 60 * 24
 
@@ -167,4 +167,5 @@ def comprobantes(request: HttpRequest):
         numeros_comprados.append(numeroRifa)
     NumeroRifa.objects.bulk_create(numeros_comprados)
     boletos = [format(int(boleto), evento.digitos) for boleto in boletos]
+    updateCompraCache(evento.id)
     return JsonResponse({"ok": "ok", "boletos": list(boletos)})

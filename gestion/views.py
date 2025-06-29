@@ -1,6 +1,6 @@
 from datetime import timedelta
 from typing import Optional
-
+from urllib.parse import urlencode
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.postgres.aggregates import ArrayAgg
@@ -23,6 +23,7 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
+from django.core.cache import cache
 
 from .forms import (
     ClienteForm,
@@ -44,6 +45,7 @@ from .utils import (
     CachedPaginator,
     calcular_monto,
     send_whatsapp,
+    updateCompraCache,
 )
 
 
@@ -160,19 +162,15 @@ class ComprasListView(LoginRequiredMixin, ListView):
         if self.filtros:
             cache_key = None
         else:
-            cache_key = f"comprobantess-{self.kwargs.get('evento_id','actual')}"
-        return self.paginator_class(
-            queryset,
-            per_page,
-            cache_key=cache_key,
-            **kwargs
-        )
+            cache_key = f"compras-{self.kwargs.get('evento_id', 'actual')}"
+        return self.paginator_class(queryset, per_page, cache_key=cache_key, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["eventos"] = Evento.objects.values("id", "nombre")
         context["statuses"] = StatusChoices.choices
         context["metodos"] = MetodoPago.objects.values("id", "banco")
+        context["filtros"] = urlencode(self.filtros, doseq=True)
         return context
 
     def get_queryset(self) -> QuerySet:
@@ -336,6 +334,7 @@ class ComprasCreateView(LoginRequiredMixin, CreateView):
             NumeroRifa.objects.bulk_create(numeros)
 
         form.instance.save(update_fields=["monto"])
+        updateCompraCache(evento.id)
         return response
 
 

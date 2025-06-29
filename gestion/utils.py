@@ -263,20 +263,43 @@ class CacheInvalidationMixin:
         cache.clear()
         return response
 
+
 class CachedPaginator(Paginator):
-    def __init__(self, object_list, per_page, cache_key, orphans=0, allow_empty_first_page=True):
-        super().__init__(object_list, per_page, orphans=orphans, allow_empty_first_page=allow_empty_first_page)
+    objects_count = None
+    def __init__(
+        self, object_list, per_page, cache_key, orphans=0, allow_empty_first_page=True
+    ):
+        super().__init__(
+            object_list,
+            per_page,
+            orphans=orphans,
+            allow_empty_first_page=allow_empty_first_page,
+        )
         self.cache_key = cache_key
 
     @property
     def count(self):
-        print("hola")
+        if self.objects_count is not None:
+            return self.objects_count
+        if self.cache_key is None:
+            count = super().count
+            self.objects_count = count
+            return self.objects_count
         cached_count = cache.get(self.cache_key)
-        print(self.cache_key, cached_count)
         if cached_count is None:
             actual_count = super().count
             cache.set(self.cache_key, actual_count)
-            return actual_count
-        
-        return cached_count
-        
+            self.objects_count = actual_count
+            return self.objects_count
+        self.objects_count = cached_count
+        return self.objects_count
+
+
+def updateCompraCache(evento_id: str):
+    cache_evento = cache.get(f"compras-{evento_id}")
+    if cache_evento is not None:
+        cache.set(f"compras-{evento_id}", int(cache_evento) + 1)
+    cache_evento = cache.get("compras-actual")
+    if cache_evento is not None:
+        cache.set("compras-actual", int(cache_evento) + 1)
+    
