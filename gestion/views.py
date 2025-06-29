@@ -52,26 +52,30 @@ from .utils import (
 @login_required
 def participantesView(request: HttpRequest):
     evento = Evento.obtener_actual(fields=["id"])
-    monto_query = (
-        Comprobante.objects.filter(telefono=OuterRef("telefono"), evento=evento)
-        .values("telefono")
-        .annotate(total=Sum("monto"))
-        .values("total")[:1]
-    )
+    
     participantes = (
         Comprobante.objects.filter(evento=evento)
         .values("telefono")
         .annotate(
             num_tickets=Count("numerorifa"),
             boletos=ArrayAgg("numerorifa__numero"),
-            nombre=Min("nombre"),
-            total=Subquery(monto_query),
         )
         .order_by("-num_tickets")
-        .values("nombre", "telefono", "num_tickets", "boletos", "total")
+        .values("telefono", "num_tickets", "boletos")
     )
+
     paginator = CachedPaginator(participantes, 10, "participantes")
     page_obj = paginator.page(request.GET.get("page", "1"))
+    telefonos = [p["telefono"] for p in page_obj.object_list]
+    participantes_info = list(
+        Comprobante.objects.filter(telefono__in=telefonos, evento=evento)
+        .values("telefono")
+        .annotate(total=Sum("monto"), nombre=Min("nombre"))
+    )
+    for p in page_obj.object_list:
+        item = list(filter(lambda x: x["telefono"] == p["telefono"], participantes_info))[0]
+        p["total"] = item["total"]
+        p["nombre"] = item["nombre"]
     return render(request, "admin/participantes.html", {"participantes": page_obj})
 
 
