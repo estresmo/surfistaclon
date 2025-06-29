@@ -302,4 +302,5 @@ def updateCompraCache(evento_id: str):
     cache_evento = cache.get("compras-actual")
     if cache_evento is not None:
         cache.set("compras-actual", int(cache_evento) + 1)
+    cache.delete("participantes")
     

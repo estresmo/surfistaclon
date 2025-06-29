@@ -58,7 +58,7 @@ def participantesView(request: HttpRequest):
         .annotate(total=Sum("monto"))
         .values("total")[:1]
     )
-    participantes = list(
+    participantes = (
         Comprobante.objects.filter(evento=evento)
         .values("telefono")
         .annotate(
@@ -70,7 +70,9 @@ def participantesView(request: HttpRequest):
         .order_by("-num_tickets")
         .values("nombre", "telefono", "num_tickets", "boletos", "total")
     )
-    return render(request, "admin/participantes.html", {"participantes": participantes})
+    paginator = CachedPaginator(participantes, 10, "participantes")
+    page_obj = paginator.page(request.GET.get("page", "1"))
+    return render(request, "admin/participantes.html", {"participantes": page_obj})
 
 
 class RifasListView(LoginRequiredMixin, ListView):
