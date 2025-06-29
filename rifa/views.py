@@ -5,7 +5,8 @@ from django.shortcuts import get_object_or_404, render
 from django.views.decorators.cache import cache_page
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_protect
-
+import phonenumbers
+from django.views.decorators.csrf import csrf_exempt
 from gestion.models import (
     Cliente,
     Comprobante,
@@ -13,13 +14,12 @@ from gestion.models import (
     MetodoPago,
     NumeroRifa,
 )
-from gestion.utils import calcular_monto, updateCompraCache
+from gestion.utils import calcular_monto, isValidPhone, updateCompraCache
 
 HOURS24 = 60 * 60 * 24
 
 
 @cache_page(HOURS24)
-@csrf_protect
 def home(request: HttpRequest):
     cliente = Cliente.objects.first()
     evento = Evento.obtener_actual()
@@ -54,7 +54,6 @@ def home(request: HttpRequest):
 
 
 @cache_page(HOURS24)
-@csrf_protect
 def detalle_evento(request: HttpRequest, link: str):
     evento = get_object_or_404(Evento, url=link)
     cliente = Cliente.objects.first()
@@ -76,6 +75,7 @@ def detalle_evento(request: HttpRequest, link: str):
 
 
 @require_POST
+@csrf_exempt
 def verificar(request: HttpRequest):
     celular = request.POST["celular"]
     country_code = request.POST["country_code"]
@@ -124,6 +124,7 @@ def obtener_promociones(request):
 
 
 @require_POST
+@csrf_exempt
 def comprobantes(request: HttpRequest):
     evento = Evento.obtener_actual(fields=["id", "valor_dolar", "total_tickets"])
     if evento is None:
@@ -139,6 +140,8 @@ def comprobantes(request: HttpRequest):
     if country_code == "+58" and celular.startswith("0"):
         celular = celular[1:]
     telefono = country_code + celular
+    if not isValidPhone(telefono):
+        return JsonResponse({"error": "Número de teléfono no válido"})
     dolar = evento.valor_dolar
     if evento.total_tickets > 200:
         tickets = NumeroRifa.get_random_nums(evento, int(cantidad_tickets))

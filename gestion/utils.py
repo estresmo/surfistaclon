@@ -12,6 +12,7 @@ from django.forms import BaseModelForm
 from django.http import HttpResponse
 from django.core.paginator import Paginator, Page
 from gestion.models import Comprobante, Evento, Promocion, StatusChoices
+import phonenumbers
 
 logger = logging.getLogger(__name__)
 
@@ -304,3 +305,13 @@ def updateCompraCache(evento_id: str):
         cache.set("compras-actual", int(cache_evento) + 1)
     cache.delete("participantes")
     
+
+def isValidPhone(phone):
+    try:
+        parsed = phonenumbers.parse(phone, None)
+        if phonenumbers.is_valid_number(parsed):
+            return True
+        else:
+            return False
+    except phonenumbers.phonenumberutil.NumberParseException:
+        return False
