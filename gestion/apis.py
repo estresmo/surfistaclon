@@ -7,6 +7,7 @@ from django.db.models import (
     Min,
     Sum,
     Value,
+    F,
     When,
 )
 from django.db.models.expressions import RawSQL
@@ -128,8 +129,11 @@ def ver_metodos_status_stats(request: HttpRequest, evento_id: int):
         .values("metodo__banco")
         .annotate(
             monto=Concat(Round(Sum("monto"), 2), Value("$"), output_field=CharField()),
+            banco=Concat(
+                F("metodo__banco"), Value(" - "), F("monto"), output_field=CharField()
+            ),
         )
-        .values_list("metodo__banco", "monto")
+        .values_list("banco", "monto")
     )
     metodos_confirmar = list(
         Comprobante.objects.filter(evento=evento_id)
@@ -137,8 +141,11 @@ def ver_metodos_status_stats(request: HttpRequest, evento_id: int):
         .values("metodo__banco")
         .annotate(
             monto=Concat(Round(Sum("monto"), 2), Value("$"), output_field=CharField()),
+            banco=Concat(
+                F("metodo__banco"), Value(" - "), F("monto"), output_field=CharField()
+            ),
         )
-        .values_list("metodo__banco", "monto")
+        .values_list("banco", "monto")
     )
     tickets_metodo = list(
         Comprobante.objects.filter(evento=evento_id)
