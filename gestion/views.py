@@ -152,6 +152,7 @@ class ComprasListView(LoginRequiredMixin, ListView):
     template_name = "admin/compras.html"
     model = Comprobante
     context_object_name = "compras"
+    paginate_by = 10
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
