@@ -3,16 +3,17 @@ import re
 from typing import Protocol, TypedDict, cast
 from urllib.parse import urljoin
 
+import phonenumbers
 import requests
 from django.contrib.postgres.aggregates import ArrayAgg  # Import this!
 from django.core.cache import cache
+from django.core.paginator import Paginator
 from django.db import connection
 from django.db.models import Count, Sum
 from django.forms import BaseModelForm
 from django.http import HttpResponse
-from django.core.paginator import Paginator, Page
+
 from gestion.models import Comprobante, Evento, Promocion, StatusChoices
-import phonenumbers
 
 logger = logging.getLogger(__name__)
 
@@ -267,6 +268,7 @@ class CacheInvalidationMixin:
 
 class CachedPaginator(Paginator):
     objects_count = None
+
     def __init__(
         self, object_list, per_page, cache_key, orphans=0, allow_empty_first_page=True
     ):
@@ -280,6 +282,7 @@ class CachedPaginator(Paginator):
 
     @property
     def count(self):
+        print(self.objects_count, self.cache_key, cache.get(self.cache_key))
         if self.objects_count is not None:
             return self.objects_count
         if self.cache_key is None:
@@ -304,7 +307,7 @@ def updateCompraCache(evento_id: str):
     if cache_evento is not None:
         cache.set("compras-actual", int(cache_evento) + 1)
     cache.delete("participantes")
-    
+
 
 def isValidPhone(phone):
     try:
