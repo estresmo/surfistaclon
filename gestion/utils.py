@@ -10,8 +10,9 @@ from django.db import connection
 from django.db.models import Count, Sum
 from django.forms import BaseModelForm
 from django.http import HttpResponse
-
+from django.core.paginator import Paginator, Page
 from gestion.models import Comprobante, Evento, Promocion, StatusChoices
+import phonenumbers
 
 logger = logging.getLogger(__name__)
 
@@ -262,3 +263,55 @@ class CacheInvalidationMixin:
         response = super().form_valid(form)
         cache.clear()
         return response
+
+
+class CachedPaginator(Paginator):
+    objects_count = None
+    def __init__(
+        self, object_list, per_page, cache_key, orphans=0, allow_empty_first_page=True
+    ):
+        super().__init__(
+            object_list,
+            per_page,
+            orphans=orphans,
+            allow_empty_first_page=allow_empty_first_page,
+        )
+        self.cache_key = cache_key
+
+    @property
+    def count(self):
+        if self.objects_count is not None:
+            return self.objects_count
+        if self.cache_key is None:
+            count = super().count
+            self.objects_count = count
+            return self.objects_count
+        cached_count = cache.get(self.cache_key)
+        if cached_count is None:
+            actual_count = super().count
+            cache.set(self.cache_key, actual_count)
+            self.objects_count = actual_count
+            return self.objects_count
+        self.objects_count = cached_count
+        return self.objects_count
+
+
+def updateCompraCache(evento_id: str):
+    cache_evento = cache.get(f"compras-{evento_id}")
+    if cache_evento is not None:
+        cache.set(f"compras-{evento_id}", int(cache_evento) + 1)
+    cache_evento = cache.get("compras-actual")
+    if cache_evento is not None:
+        cache.set("compras-actual", int(cache_evento) + 1)
+    cache.delete("participantes")
+    
+
+def isValidPhone(phone):
+    try:
+        parsed = phonenumbers.parse(phone, None)
+        if phonenumbers.is_valid_number(parsed):
+            return True
+        else:
+            return False
+    except phonenumbers.phonenumberutil.NumberParseException:
+        return False

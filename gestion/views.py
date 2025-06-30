@@ -1,6 +1,6 @@
 from datetime import timedelta
 from typing import Optional
-
+from urllib.parse import urlencode
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.postgres.aggregates import ArrayAgg
@@ -23,6 +23,7 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
+from django.core.cache import cache
 
 from .forms import (
     ClienteForm,
@@ -41,33 +42,41 @@ from .models import (
 )
 from .utils import (
     CacheInvalidationMixin,
+    CachedPaginator,
     calcular_monto,
     send_whatsapp,
+    updateCompraCache,
 )
 
 
 @login_required
 def participantesView(request: HttpRequest):
     evento = Evento.obtener_actual(fields=["id"])
-    monto_query = (
-        Comprobante.objects.filter(telefono=OuterRef("telefono"), evento=evento)
-        .values("telefono")
-        .annotate(total=Sum("monto"))
-        .values("total")[:1]
-    )
-    participantes = list(
+    
+    participantes = (
         Comprobante.objects.filter(evento=evento)
         .values("telefono")
         .annotate(
             num_tickets=Count("numerorifa"),
             boletos=ArrayAgg("numerorifa__numero"),
-            nombre=Min("nombre"),
-            total=Subquery(monto_query),
         )
         .order_by("-num_tickets")
-        .values("nombre", "telefono", "num_tickets", "boletos", "total")
+        .values("telefono", "num_tickets", "boletos")
     )
-    return render(request, "admin/participantes.html", {"participantes": participantes})
+
+    paginator = CachedPaginator(participantes, 10, "participantes")
+    page_obj = paginator.page(request.GET.get("page", "1"))
+    telefonos = [p["telefono"] for p in page_obj.object_list]
+    participantes_info = list(
+        Comprobante.objects.filter(telefono__in=telefonos, evento=evento)
+        .values("telefono")
+        .annotate(total=Sum("monto"), nombre=Min("nombre"))
+    )
+    for p in page_obj.object_list:
+        item = list(filter(lambda x: x["telefono"] == p["telefono"], participantes_info))[0]
+        p["total"] = item["total"]
+        p["nombre"] = item["nombre"]
+    return render(request, "admin/participantes.html", {"participantes": page_obj})
 
 
 class RifasListView(LoginRequiredMixin, ListView):
@@ -152,12 +161,22 @@ class ComprasListView(LoginRequiredMixin, ListView):
     template_name = "admin/compras.html"
     model = Comprobante
     context_object_name = "compras"
+    paginator_class = CachedPaginator
+    paginate_by = 10
+
+    def get_paginator(self, queryset, per_page, **kwargs):
+        if self.filtros:
+            cache_key = None
+        else:
+            cache_key = f"compras-{self.kwargs.get('evento_id', 'actual')}"
+        return self.paginator_class(queryset, per_page, cache_key=cache_key, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["eventos"] = Evento.objects.values("id", "nombre")
         context["statuses"] = StatusChoices.choices
         context["metodos"] = MetodoPago.objects.values("id", "banco")
+        context["filtros"] = urlencode(self.filtros, doseq=True)
         return context
 
     def get_queryset(self) -> QuerySet:
@@ -176,6 +195,7 @@ class ComprasListView(LoginRequiredMixin, ListView):
         else:
             return Comprobante.objects.filter(evento_id=None)
         filtros = self.filtros_queryset(evento_id)
+        self.filtros = filtros
         comprobantes = (
             comprobantes.filter(**filtros)
             .annotate(
@@ -210,6 +230,11 @@ class ComprasListView(LoginRequiredMixin, ListView):
             )
             .order_by("-id")
         )
+        # page = self.request.GET.get("page", "1")
+        # paginator = CachedPaginator(comprobantes, 10, f"comprobantes-{evento_id}")
+        # page_obj = paginator.page(page)
+        # return page_obj
+
         return comprobantes
 
     def filtros_queryset(self, evento_id: Optional[str]):
@@ -315,6 +340,7 @@ class ComprasCreateView(LoginRequiredMixin, CreateView):
             NumeroRifa.objects.bulk_create(numeros)
 
         form.instance.save(update_fields=["monto"])
+        updateCompraCache(evento.id)
         return response
 
 

@@ -117,4 +117,8 @@ async function renderCharts() {
   ticketsFrecuentesChart(evento_id);
 }
 
-window.addEventListener("chartkick:load", renderCharts, true);
+if ("Chartkick" in window){
+  renderCharts();
+}else{
+  window.addEventListener("chartkick:load", renderCharts, true);
+}

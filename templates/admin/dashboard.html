@@ -294,7 +294,10 @@
       progresoChart();
       metodosStatusChart();
     }
-
-    window.addEventListener("chartkick:load", renderLocalCharts, true);
+    if ("Chartkick" in window){
+      renderLocalCharts();
+    }else{
+      window.addEventListener("chartkick:load", renderLocalCharts, true);
+    }
   </script>
 {% endblock %}

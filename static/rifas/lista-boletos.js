@@ -238,6 +238,8 @@ async function confirmarTickets(form, event) {
   if (response.ok) {
     const result = await response.json();
     if (result.error) {
+      btnConfirm.disabled = false;
+      btnConfirm.innerText = "CONFIRMAR";
       alert(result.error);
       return;
     }
