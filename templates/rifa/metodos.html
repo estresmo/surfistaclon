@@ -36,7 +36,7 @@
                 {% for titulo, contenido in metodo.contenidos %}
                   {% if titulo %}
                     {% if forloop.counter == 1 and metodo.moneda == 'Bs' %}
-                      <a href="javascript:void(0)"
+                      <a href="#sectionAllPayments"
                         id="copiar-todo-btn"
                         class="cuenta-copiable"
                         onclick="copiarTodo(this, '{{ metodo.pk }}')">

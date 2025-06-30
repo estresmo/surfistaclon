@@ -58,6 +58,9 @@ $(document).ready(function () {
       },
     },
   });
+  document
+    .querySelectorAll("#owl-carousel-raffles .owl-dots button")
+    .forEach((btn) => (btn.ariaLabel = "Siguiente"));
 });
 
 function actionButtonAccounts(action_type, elemnt, text) {
