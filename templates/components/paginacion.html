@@ -1,0 +1,29 @@
+<div id="index_footer">
+  <nav class="pagination">
+    {% if page_obj.has_previous %}
+      <span class="last"><a href="?page=1&{{ filtros }}">Inicio</a></span>
+      <span class="next">
+        <a rel="next"
+          href="?page={{ page_obj.previous_page_number }}&{{ filtros }}">
+          &lt; Ant
+        </a>
+      </span>
+    {% endif %}
+    <span class="page current">{{ page_obj.number }}</span>
+
+    {% if page_obj.has_next %}
+      <span class="next">
+        <a rel="next"
+          href="?page={{ page_obj.next_page_number }}&{{ filtros }}">
+          Sig &gt;
+        </a>
+      </span>
+      <span class="last">
+        <a href="?page={{ page_obj.paginator.num_pages }}&{{ filtros }}">Fin</a>
+      </span>
+    {% endif %}
+  </nav>
+  <div class="pagination_information">
+    Página <b>{{ page_obj.number }}</b> de <b>{{ page_obj.paginator.num_pages }}</b>
+  </div>
+</div>

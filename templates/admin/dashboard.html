@@ -88,7 +88,7 @@
                 <h1>${{ por_cofirmar.monto|default_if_none:0 }}</h1>
                 <!-- prettier-ignore -->
                 <span>Total {{ por_cofirmar.cantidad }} compras
-                   con {{ por_cofirmar.tickets }} tickets.</span>
+                   con {{ por_cofirmar.tickets|default_if_none:'0' }} tickets.</span>
               </div>
             </div>
           </div>
@@ -99,7 +99,7 @@
                 <h1>${{ verificados.monto|default_if_none:0 }}</h1>
                 <!-- prettier-ignore -->
                 <span>Total {{ verificados.cantidad }} compras
-                   con {{ verificados.tickets }} tickets.</span>
+                   con {{ verificados.tickets|default_if_none:'0' }} tickets.</span>
               </div>
             </div>
           </div>
@@ -294,9 +294,9 @@
       progresoChart();
       metodosStatusChart();
     }
-    if ("Chartkick" in window){
+    if ("Chartkick" in window) {
       renderLocalCharts();
-    }else{
+    } else {
       window.addEventListener("chartkick:load", renderLocalCharts, true);
     }
   </script>

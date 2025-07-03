@@ -228,19 +228,23 @@ class NumeroRifa(models.Model):
 
     @classmethod
     def get_random_nums(cls, evento: Evento, cantidad: int):
-        agarrados = list(
+        agarrados = set(
             NumeroRifa.objects.filter(evento=evento).values_list("numero", flat=True)
         )
-        if len(agarrados) + cantidad >= evento.total_tickets:
+        if len(agarrados) + cantidad > evento.total_tickets:
             return None
-        seleccionados: list[int] = []
+        porc = (len(agarrados) + cantidad) / evento.total_tickets
+        if porc > 0.9:
+            disponibles = set(range(evento.total_tickets)) - agarrados
+            return random.sample(list(disponibles), cantidad)
+        seleccionados: set[int] = set()
         while True:
             numero = random.randint(0, evento.total_tickets - 1)
             if numero not in agarrados and numero not in seleccionados:
-                seleccionados.append(numero)
+                seleccionados.add(numero)
             if len(seleccionados) >= cantidad:
                 break
-        return seleccionados
+        return list(seleccionados)
 
 
 class Promocion(models.Model):

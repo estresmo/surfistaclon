@@ -92,7 +92,7 @@
                           {{ compra.fecha|date:'h:i A' }}
                           <br />
                           <!-- prettier-ignore -->
-                          <small>{{ compra.fecha|date:'d F Y' }}</small>
+                          <small style="text-wrap: no-wrap;">{{ compra.fecha|date:'d F Y' }}</small>
                         </td>
                         <td class="col col-verify_date">
                           <span id="hora-v-{{ compra.id }}">
@@ -100,7 +100,8 @@
                             {{ compra.fecha_verificacion|date:'h:i A'|default:'Pendiente' }}
                           </span>
                           <br />
-                          <small id="fecha-v-{{ compra.id }}">
+                          <small id="fecha-v-{{ compra.id }}"
+                            style="text-wrap: no-wrap;">
                             <!-- prettier-ignore -->
                             {{ compra.fecha_verificacion|date:'d F Y' }}
                           </small>
@@ -179,32 +180,7 @@
                     {% endfor %}
                   </tbody>
                 </table>
-                <div id="index_footer">
-                  <nav class="pagination">
-                    {% if page_obj.has_previous  %}
-                    <span class="last">
-                      <a href="?page=1&{{ filtros }}">Inicio</a>
-                    </span>
-                    <span class="next">
-                      <a rel="next" href="?page={{ page_obj.previous_page_number  }}&{{ filtros }}">&lt; Ant</a>
-                    </span>
-                    {% endif %}
-                    <span class="page current">{{ page_obj.number }}</span>
-
-                   
-                    {% if page_obj.has_next %}
-                    <span class="next">
-                      <a rel="next" href="?page={{ page_obj.next_page_number }}&{{ filtros }}">Sig &gt;</a>
-                    </span>
-                    <span class="last">
-                      <a href="?page={{ page_obj.paginator.num_pages }}&{{ filtros }}">Fin</a>
-                    </span>
-                    {% endif %}
-                  </nav>
-                  <div class="pagination_information">
-                    Página <b>{{ page_obj.number }}</b> de <b>{{ page_obj.paginator.num_pages }}</b>
-                  </div>
-                </div>
+                {% include 'components/paginacion.html' with filtros=filtros page_obj=page_obj %}
               </div>
             </div>
           </div>
@@ -225,10 +201,14 @@
                 id="q_raffle_id_eq">
                 <option value="todos">Cualquiera</option>
                 {% for evento in eventos %}
-                  {% if request.GET.evento_id == evento.id %}
-                    <option value="{{ evento.id }}">{{ evento.nombre }}</option>
-                  {% else %}
+                  {% if request.GET.evento_id == evento.id|stringformat:'s' %}
                     <option value="{{ evento.id }}" selected>{{ evento.nombre }}</option>
+                  {% else %}
+                  {% if not request.GET.evento_id and forloop.last %}
+                    <option value="{{ evento.id }}" selected>{{ evento.nombre }}</option>
+                    {% else %}
+                    <option value="{{ evento.id }}">{{ evento.nombre }}</option>
+                  {% endif %}
                   {% endif %}
                 {% endfor %}
               </select>

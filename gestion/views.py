@@ -1,6 +1,7 @@
 from datetime import timedelta
 from typing import Optional
 from urllib.parse import urlencode
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.postgres.aggregates import ArrayAgg
@@ -10,8 +11,6 @@ from django.db.models import (
     Count,
     F,
     Min,
-    OuterRef,
-    Subquery,
     Sum,
     Value,
     When,
@@ -23,7 +22,6 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
-from django.core.cache import cache
 
 from .forms import (
     ClienteForm,
@@ -41,8 +39,8 @@ from .models import (
     StatusChoices,
 )
 from .utils import (
-    CacheInvalidationMixin,
     CachedPaginator,
+    CacheInvalidationMixin,
     calcular_monto,
     send_whatsapp,
     updateCompraCache,
@@ -52,7 +50,7 @@ from .utils import (
 @login_required
 def participantesView(request: HttpRequest):
     evento = Evento.obtener_actual(fields=["id"])
-    
+
     participantes = (
         Comprobante.objects.filter(evento=evento)
         .values("telefono")
@@ -73,7 +71,9 @@ def participantesView(request: HttpRequest):
         .annotate(total=Sum("monto"), nombre=Min("nombre"))
     )
     for p in page_obj.object_list:
-        item = list(filter(lambda x: x["telefono"] == p["telefono"], participantes_info))[0]
+        item = list(
+            filter(lambda x: x["telefono"] == p["telefono"], participantes_info)
+        )[0]
         p["total"] = item["total"]
         p["nombre"] = item["nombre"]
     return render(request, "admin/participantes.html", {"participantes": page_obj})
@@ -164,12 +164,21 @@ class ComprasListView(LoginRequiredMixin, ListView):
     paginator_class = CachedPaginator
     paginate_by = 10
 
-    def get_paginator(self, queryset, per_page, **kwargs):
+    def get_paginator(
+        self, queryset, per_page, orphans=0, allow_empty_first_page=True, **kwargs
+    ):
         if self.filtros:
             cache_key = None
         else:
-            cache_key = f"compras-{self.kwargs.get('evento_id', 'actual')}"
-        return self.paginator_class(queryset, per_page, cache_key=cache_key, **kwargs)
+            cache_key = f"compras-{self.request.GET.get('evento_id', 'actual')}"
+        return self.paginator_class(
+            queryset,
+            per_page,
+            cache_key=cache_key,
+            orphans=orphans,
+            allow_empty_first_page=allow_empty_first_page,
+            **kwargs,
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -230,16 +239,10 @@ class ComprasListView(LoginRequiredMixin, ListView):
             )
             .order_by("-id")
         )
-        # page = self.request.GET.get("page", "1")
-        # paginator = CachedPaginator(comprobantes, 10, f"comprobantes-{evento_id}")
-        # page_obj = paginator.page(page)
-        # return page_obj
-
         return comprobantes
 
     def filtros_queryset(self, evento_id: Optional[str]):
         filtros = {}
-        # filtro
         ticket = self.request.GET.get("ticket")
         nombre = self.request.GET.get("nombre")
         telefono = self.request.GET.get("telefono")
@@ -251,7 +254,9 @@ class ComprasListView(LoginRequiredMixin, ListView):
         metodo_pago = self.request.GET.get("metodo")
         nota = self.request.GET.get("nota")
         tipo_nota = self.request.GET.get("tipo_nota")
-
+        evento_id = self.request.GET.get("evento_id", "")
+        if evento_id.isdigit():
+            filtros["evento_id"] = evento_id
         if ticket:
             numero = NumeroRifa.objects.filter(numero=ticket)
             if evento_id:
