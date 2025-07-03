@@ -19,7 +19,6 @@ from gestion.utils import calcular_monto, isValidPhone, updateCompraCache
 HOURS24 = 60 * 60 * 24
 
 
-@cache_page(HOURS24)
 def home(request: HttpRequest):
     cliente = Cliente.objects.first()
     evento = Evento.obtener_actual()
@@ -53,7 +52,6 @@ def home(request: HttpRequest):
     return render(request, "rifa/home.html", context)
 
 
-@cache_page(HOURS24)
 def detalle_evento(request: HttpRequest, link: str):
     evento = get_object_or_404(Evento, url=link)
     cliente = Cliente.objects.first()
@@ -100,7 +98,6 @@ def verificar(request: HttpRequest):
     return JsonResponse({"result": comprobantes})
 
 
-@cache_page(HOURS24)
 def obtener_dolar(request):
     evento = Evento.obtener_actual(fields=["valor_dolar"])
     if evento is None:
@@ -110,7 +107,6 @@ def obtener_dolar(request):
     return JsonResponse({"dolar": dolar})
 
 
-@cache_page(HOURS24)
 def obtener_promociones(request):
     evento = Evento.obtener_actual(fields=["id"])
     if evento is None:

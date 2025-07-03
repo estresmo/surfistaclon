@@ -289,7 +289,7 @@ function getWhatsappText(boletos) {
   const rifaUrl = document.getElementById("evento-url-js").value;
   const host = window.location.origin;
   const verificar_url = `${host}/rifa/${rifaUrl}/?phone=${telefono}`;
-  const txt = `Hola, soy ${nombre}. Con mi celular ${telefono} registre estos números ${tickets}. En  ${rifa} ${verificar_url}`;
+  const txt = `Hola, soy ${nombre}. Con mi celular ${cod_t + celular} registre estos números ${tickets}. En  ${rifa} ${verificar_url}`;
   return encodeURIComponent(txt);
 }
 
