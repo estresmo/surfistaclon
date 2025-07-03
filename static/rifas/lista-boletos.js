@@ -256,15 +256,30 @@ async function confirmarTickets(form, event) {
     modal.show();
     form.reset();
   } else if (response.status == 403) {
+    logError(`${response.status} ${response.statusText} `);
     alert("Error al ordenar los boletos. Por favor intente nuevamente");
     location.reload();
   } else {
+    logError(
+      `${response.status} ${response.statusText} ${JSON.stringify(
+        Object.fromEntries(formData)
+      )}`
+    );
     alert("Error al ordenar los boletos. Por favor intente nuevamente");
     location.reload();
   }
 
   btnConfirm.disabled = false;
   btnConfirm.innerText = "Confirmar";
+}
+
+function logError(msg) {
+  const data = new FormData();
+  data.append("msg", msg);
+  fetch("log-errors", {
+    method: "POST",
+    body: data,
+  });
 }
 
 function whatsappTimer(url, countdown) {
@@ -289,7 +304,9 @@ function getWhatsappText(boletos) {
   const rifaUrl = document.getElementById("evento-url-js").value;
   const host = window.location.origin;
   const verificar_url = `${host}/rifa/${rifaUrl}/?phone=${telefono}`;
-  const txt = `Hola, soy ${nombre}. Con mi celular ${cod_t + celular} registre estos números ${tickets}. En  ${rifa} ${verificar_url}`;
+  const txt = `Hola, soy ${nombre}. Con mi celular ${
+    cod_t + celular
+  } registre estos números ${tickets}. En  ${rifa} ${verificar_url}`;
   return encodeURIComponent(txt);
 }
 

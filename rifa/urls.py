@@ -8,4 +8,5 @@ urlpatterns = [
     path("comprobantes/", views.comprobantes, name="comprobantes"),
     path("verificar/", views.verificar, name="verificar"),
     path("obtener_promociones/", views.obtener_promociones, name="obtener_promociones"),
+    path("log-errors", views.log_errors, name="log_errors"),
 ]

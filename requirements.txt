@@ -9,3 +9,5 @@ pyBCV
 requests
 django-redis
 phonenumbers
+pytz
+django-debug-toolbar
