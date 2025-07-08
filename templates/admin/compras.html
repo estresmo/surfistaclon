@@ -80,6 +80,13 @@
                     </tr>
                   </thead>
                   <tbody>
+                    {% if not compras %}
+                      <tr>
+                        <td colspan="10" class="text-center">
+                          <h3>No se encontraron resultados</h3>
+                        </td>
+                      </tr>
+                    {% endif %}
                     {% for compra in compras %}
                       <tr class="odd" id="row-{{ compra.id }}">
                         <td class="col col-buyer">
