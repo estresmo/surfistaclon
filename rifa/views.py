@@ -1,12 +1,12 @@
+import logging
+
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db.models import Q
-from django.http import HttpRequest, JsonResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render
-from django.views.decorators.cache import cache_page
-from django.views.decorators.http import require_POST
-from django.views.decorators.csrf import csrf_protect
-import phonenumbers
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+
 from gestion.models import (
     Cliente,
     Comprobante,
@@ -16,6 +16,7 @@ from gestion.models import (
 )
 from gestion.utils import calcular_monto, isValidPhone, updateCompraCache
 
+logger = logging.getLogger(__name__)
 HOURS24 = 60 * 60 * 24
 
 
@@ -169,5 +170,13 @@ def comprobantes(request: HttpRequest):
         numeros_comprados.append(numeroRifa)
     NumeroRifa.objects.bulk_create(numeros_comprados)
     boletos = [format(int(boleto), evento.digitos) for boleto in boletos]
-    updateCompraCache(evento.id)
+    updateCompraCache(evento.pk)
     return JsonResponse({"ok": "ok", "boletos": list(boletos)})
+
+
+@require_POST
+@csrf_exempt
+def log_errors(request):
+    msg = request.POST["msg"]
+    logger.error(msg)
+    return HttpResponse(204)

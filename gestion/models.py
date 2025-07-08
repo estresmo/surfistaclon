@@ -1,7 +1,6 @@
 import random
 from typing import List, Optional
 
-from django.core.cache import cache
 from django.db import models
 from django.http import HttpRequest
 from django.utils import timezone
@@ -67,10 +66,6 @@ class Evento(models.Model):
     def obtener_actual(
         cls, evento_id: Optional[str] = None, fields: Optional[List[str]] = None
     ):
-        cache_key = f"evento_actual{evento_id}{','.join(fields or [])}"
-        cached_query: Evento | None = cache.get(cache_key)
-        if cached_query:
-            return cached_query
         evento = Evento.objects.all()
         if fields:
             evento = evento.only(*fields)
@@ -79,7 +74,6 @@ class Evento(models.Model):
         else:
             hoy = timezone.now()
             instance = evento.filter(fecha_inicio__lte=hoy, fecha_fin__gte=hoy).first()
-        cache.set(cache_key, instance)
         return instance
 
     @property
