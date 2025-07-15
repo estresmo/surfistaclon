@@ -28,12 +28,12 @@
       background-color: #4a489f;
       background-image: none;
     }
-    .ticket-opcion:disabled {
+    .ticket-opcion:disabled, .ticket-opcion.disabled {
       background-color: #333333;
       background-image: none !important;
       cursor: not-allowed !important;
     }
-    .ticket-opcion:disabled:hover {
+    .ticket-opcion:disabled:hover, .ticket-opcion.disabled:hover {
       background-color: #333333;
       background-image: none !important;
       cursor: not-allowed !important;
@@ -330,7 +330,7 @@
                   data-disable-with="Guardar Compra" />
               </li>
               <li class="cancel">
-                <a href="/admin/clientes">Cancelar</a>
+                <a href="/admin/compras">Cancelar</a>
               </li>
             </ol>
           </fieldset>
@@ -377,17 +377,23 @@
     import VirtualizedList from "https://cdn.jsdelivr.net/npm/virtualized-list@2.2.0/+esm";
     const list = document.querySelector("#lista");
     const total = parseInt("{{ evento.total_tickets }}");
-    const rows = "{{ disponibles|join:',' }}".split(",");
+    const rows = "{{ tickets|join:',' }}".split(",");
+    const agarrados = "{{ agarrados|join:',' }}".split(",");
     const container = document.querySelector("#lista");
 
     let virtual_list = new VirtualizedList(container, {
       height: 5000, // The height of the container
       rowCount: rows.length,
       renderRow: (index) => {
+        const num = rows[index];
         const element = document.createElement("button");
         element.classList.add("ticket-opcion");
-        const value = String(rows[index]).padStart(4, "0");
-        element.addEventListener("click", () => addTicket(value));
+        const value = String(num).padStart(4, "0");
+        if (agarrados.includes(num)){
+          element.classList.add("disabled");
+        }else{
+          element.addEventListener("click", () => addTicket(value));
+        }
         element.innerHTML = value;
         element.type = "button";
         return element;
