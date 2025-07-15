@@ -246,6 +246,7 @@ class ComprasListView(LoginRequiredMixin, ListView):
         ticket = self.request.GET.get("ticket")
         nombre = self.request.GET.get("nombre")
         telefono = self.request.GET.get("telefono")
+
         referencia = self.request.GET.get("referencia")
         fecha_desde = self.request.GET.get("fecha_desde")
         fecha_hasta = self.request.GET.get("fecha_desde")
@@ -265,6 +266,8 @@ class ComprasListView(LoginRequiredMixin, ListView):
         if nombre:
             filtros["nombre__icontains"] = nombre
         if telefono:
+            if telefono.startswith("0"):
+                telefono = telefono[1:]
             filtros["telefono__icontains"] = telefono
         if referencia:
             filtros["referencia__icontains"] = referencia
