@@ -259,17 +259,21 @@ class ComprasListView(LoginRequiredMixin, ListView):
         if evento_id.isdigit():
             filtros["evento_id"] = evento_id
         if ticket:
+            ticket = ticket.strip()
             numero = NumeroRifa.objects.filter(numero=ticket)
             if evento_id:
                 numero = numero.filter(evento_id=evento_id)
             filtros["id__in"] = numero.values_list("comprobante_id", flat=True)
         if nombre:
+            nombre = nombre.strip()
             filtros["nombre__icontains"] = nombre
         if telefono:
+            telefono = telefono.strip()
             if telefono.startswith("0"):
                 telefono = telefono[1:]
             filtros["telefono__icontains"] = telefono
         if referencia:
+            referencia = referencia.strip()
             filtros["referencia__icontains"] = referencia
         if fecha_desde and fecha_hasta:
             filtros["fecha_creado__range"] = (fecha_desde, fecha_hasta)
@@ -283,6 +287,7 @@ class ComprasListView(LoginRequiredMixin, ListView):
         if metodo_pago:
             filtros["metodo"] = metodo_pago
         if nota and tipo_nota:
+            nota = nota.strip()
             filtros[tipo_nota] = nota
         return filtros
 
@@ -355,9 +360,12 @@ class ComprasCreateView(LoginRequiredMixin, CreateView):
 class ComprasUpdateView(LoginRequiredMixin, UpdateView):
     template_name = "admin/compra_form.html"
     form_class = CompraForm
-    success_url = "/admin/compras"
     model = Comprobante
     object: model
+
+    def get_success_url(self) -> str:
+        query_params = self.request.GET.urlencode()
+        return f"/admin/compras/?{query_params}"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

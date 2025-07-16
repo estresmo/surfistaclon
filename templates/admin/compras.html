@@ -185,7 +185,7 @@
                         <td class="col">{{ compra.notas }}</td>
                         <td class="col col-actions">
                           <div class="table_actions">
-                            <a href="/admin/compras/{{ compra.id }}">
+                            <a href="/admin/compras/{{ compra.id }}{% querystring %}">
                               <i class="fas fa-pen"></i>
                             </a><a class="trash"
                               onclick="eliminarCompra('{{ compra.id }}')"
