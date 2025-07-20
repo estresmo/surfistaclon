@@ -3,7 +3,7 @@ from typing import Optional
 from urllib.parse import urlencode
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db.models import (
     BooleanField,
@@ -90,10 +90,11 @@ class RifasListView(LoginRequiredMixin, ListView):
         return queryset
 
 
-class RifasCreateView(LoginRequiredMixin, CacheInvalidationMixin, CreateView):
+class RifasCreateView(LoginRequiredMixin, PermissionRequiredMixin, CacheInvalidationMixin, CreateView):
     template_name = "admin/rifa_form.html"
     form_class = RifaForm
     success_url = "/admin/rifas"
+    permission_required = "gestion.add_evento"
 
 
 class ClienteCreateView(LoginRequiredMixin, CacheInvalidationMixin, CreateView):
