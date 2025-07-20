@@ -100,7 +100,7 @@ class RifasCreateView(LoginRequiredMixin, PermissionRequiredMixin, CacheInvalida
 class ClienteCreateView(LoginRequiredMixin, CacheInvalidationMixin, CreateView):
     template_name = "admin/cliente_form.html"
     form_class = ClienteForm
-    success_url = "/admin/cliente"
+    success_url = "/admin/clientes"
 
 
 class RifasUpdateView(LoginRequiredMixin, CacheInvalidationMixin, UpdateView):
@@ -164,6 +164,7 @@ class ComprasListView(LoginRequiredMixin, ListView):
     context_object_name = "compras"
     paginator_class = CachedPaginator
     paginate_by = 10
+    filtros = {}
 
     def get_paginator(
         self, queryset, per_page, orphans=0, allow_empty_first_page=True, **kwargs

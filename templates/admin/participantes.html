@@ -39,6 +39,13 @@
                     </tr>
                   </thead>
                   <tbody>
+                     {% if not participantes %}
+                      <tr>
+                        <td colspan="10" class="text-center">
+                          <h3>No se encontraron resultados</h3>
+                        </td>
+                      </tr>
+                    {% endif %}
                     {% for participante in participantes %}
                       <tr class="odd">
                         <td class="col col-name">{{ participante.nombre }}</td>
