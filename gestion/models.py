@@ -185,26 +185,6 @@ class Comprobante(models.Model):
     def __str__(self):
         return self.nombre
 
-    @property
-    def whatsapp_url(self):
-        telefono = quote_plus(self.telefono)
-        nombre = quote_plus(self.nombre)
-        evento = quote_plus(self.evento.nombre)
-        url = quote_plus(self.evento.url)
-        if self.verificado:
-            return f"https://api.whatsapp.com/send?phone=\
-            {telefono}&amp;text=Hola+{nombre}+%2C+tus+boletos\
-            +han+sido+verificados+con+tus+n%C3%BAmeros+elegidos+en+\
-            {evento}%2C+puedes+consultar+tus+numeros+en+el+siguiente+enlace.\
-            +https%3A%2F%2Fwww.chipibikelifee.com%2Frifa%2F{url}%3Fphone%3D\
-            {telefono}"
-        else:
-            return f"https://api.whatsapp.com/send?phone=\
-            {telefono}&amp;text=Hola+{nombre}+%2C+no+pierdas\
-            +tu+oportunidad+de+ganar+con+tus+n%C3%BAmeros+elegidos+en+\
-            {evento}%2C+completa+el+pago+por+favor%2C+no+dejes+ir+tu+suerte.\
-            +https%3A%2F%2Fwww.chipibikelifee.com%2Frifa%2F{url}%3Fphone%3D\
-            {telefono}"
 
     class Meta:
         indexes = [
