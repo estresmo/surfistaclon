@@ -108,7 +108,7 @@ function cambiarPago(elemento) {
     .querySelector(".type.option-payment.selected")
     .classList.remove("selected");
   elemento.classList.add("selected");
-  if (elemento.dataset.id != 4 && elemento.dataset.id != 5) {
+  if (elemento.dataset.id != 3) {
     document.querySelector("#referencia-div").style.display = "none";
     document.querySelector("#referencia").required = false;
   } else {
