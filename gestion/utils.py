@@ -17,7 +17,7 @@ from gestion.models import Comprobante, Evento, Promocion, StatusChoices
 
 logger = logging.getLogger(__name__)
 
-WHATSAPP_URL = "http://localhost:3005/"
+WHATSAPP_URL = "http://localhost:2999/"
 
 
 def send_whatsapp(num: str, msg: str):
