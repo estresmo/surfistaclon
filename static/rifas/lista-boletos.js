@@ -107,7 +107,7 @@ function actualizarCOP(cantidad){
   const calculo = parseFloat(cop * dolares, 2).toFixed(2);
   document
     .querySelectorAll(".precio-cop")
-    .forEach((element) => (element.innerHTML = calculo + "pesos"));
+    .forEach((element) => (element.innerHTML = calculo + " pesos"));
 }
 obtenerDolar();
 
