@@ -1,5 +1,6 @@
 const ticketQty = document.querySelector("#ticketQty");
 const btnMinus = document.querySelector("#btnMinus");
+const cop = parseInt(document.querySelector("#valor-cop").value);
 let tickets_seleccionados = [];
 const minimo = parseInt(document.getElementById("minimo-tickets-js").value);
 let promociones = [];
@@ -51,6 +52,7 @@ function actualizarPrecios() {
   });
 
   actualizarBs(ticketQty.value);
+  actualizarCOP(ticketQty.value);
 }
 
 function calcularPrecio(boletos, index = promociones.length - 1, total = 0) {
@@ -98,6 +100,14 @@ function actualizarBs(cantidad) {
   document
     .querySelectorAll(".precio-bs")
     .forEach((element) => (element.innerHTML = calculo + "bs"));
+}
+
+function actualizarCOP(cantidad){
+  const dolares = calcularPrecio(cantidad);
+  const calculo = parseFloat(cop * dolares, 2).toFixed(2);
+  document
+    .querySelectorAll(".precio-cop")
+    .forEach((element) => (element.innerHTML = calculo + "pesos"));
 }
 obtenerDolar();
 

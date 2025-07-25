@@ -24,6 +24,7 @@ class MonedasChoices(models.TextChoices):
     DOLAR = "$"
     EURO = "€"
     BOLIVAR = "Bs"
+    PESO_COLOMBIANO = "COP"
 
 
 class Evento(models.Model):
@@ -38,6 +39,7 @@ class Evento(models.Model):
     total_tickets = models.IntegerField()
     minimo = models.IntegerField(default=0)
     valor_dolar = models.FloatField()
+    valor_peso = models.FloatField()
     color_principal = models.CharField(max_length=50)
     color_secundario = models.CharField(max_length=50)
     color_oscuro = models.CharField(max_length=50)

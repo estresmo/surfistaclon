@@ -90,6 +90,16 @@
                       <i class="fa fa-file"></i>
                     </button>
                   {% endif %}
+                  {% if metodo.moneda == 'COP' %}
+                    <strong class="precio-cop monto-metodo"></strong>
+                    <button style="box-shadow: 0 0 2px 1px #5b101080;"
+                      title="Copiar"
+                      onclick="actionButtonAccounts('copy', this, document.querySelector('.precio-cop').innerText)"
+                      class="magic_button"
+                      type="button">
+                      <i class="fa fa-file"></i>
+                    </button>
+                  {% endif %}
 
                   <br />
                   <div class="mt-2">

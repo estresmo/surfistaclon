@@ -97,6 +97,14 @@
                   value="{{ form.valor_dolar.value|default_if_none:'' }}"
                   required />
               </li>
+              <li class="number input required numeric stringish">
+                <label class="label">Cambio dolar a Pesos Colombianos</label>
+                <input step="any"
+                  type="number"
+                  name="valor_peso"
+                  value="{{ form.valor_peso.value|default_if_none:'' }}"
+                  required />
+              </li>
 
               <li class="number input required numeric stringish">
                 <label class="label">Mínimo tickets por participante</label>
