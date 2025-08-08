@@ -254,7 +254,7 @@ async function confirmarTickets(form, event) {
       return;
     }
     const txt = getWhatsappText(result.boletos);
-    const url = "https://wa.me/584249726468?text=" + txt;
+    const url = "https://wa.me/584167295536?text=" + txt;
     document.getElementById("whatsapp-link").href = url;
     document.getElementById("countdown").innerText = "5";
     whatsappTimer(url, 5);
