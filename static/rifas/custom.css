@@ -105,7 +105,7 @@ button.magic_button,
 
 .learn-more-btn:hover,
 button:hover {
-  background-color: #000000;
+  background-color: #5b1010;
 }
 
 .learn-more-btn:hover,
@@ -327,7 +327,7 @@ textarea.materialize-textarea.valid:focus,
 .btn:hover,
 .btn-large:hover,
 .btn-small:hover {
-  background-color: #000000;
+  background-color: #5b1010;
 }
 
 .chip.misticketsson {
@@ -411,7 +411,7 @@ body widget[type="ticket"] .rip {
 }
 
 .switch label input[type="checkbox"]:checked + .lever:after {
-  background-color: #000000;
+  background-color: #5b1010;
 }
 
 .footer-section {
@@ -615,7 +615,7 @@ button.magic_button,
 
 .learn-more-btn:hover,
 button:hover {
-  background-color: #000000;
+  background-color: #5b1010;
 }
 
 .learn-more-btn:hover,
@@ -837,7 +837,7 @@ textarea.materialize-textarea.valid:focus,
 .btn:hover,
 .btn-large:hover,
 .btn-small:hover {
-  background-color: #000000;
+  background-color: #5b1010;
 }
 
 .chip.misticketsson {
@@ -921,7 +921,7 @@ body widget[type="ticket"] .rip {
 }
 
 .switch label input[type="checkbox"]:checked + .lever:after {
-  background-color: #000000;
+  background-color: #5b1010;
 }
 
 .footer-section {
