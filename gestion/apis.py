@@ -24,8 +24,8 @@ from .models import (
     NumeroRifa,
     StatusChoices,
 )
-from .utils import calcular_tickets_frecuentes, send_whatsapp
-
+from .utils import calcular_tickets_frecuentes
+from .tasks import send_whatsapp
 
 @require_POST
 @login_required
@@ -38,7 +38,7 @@ def verificar_comprobante(request: HttpRequest, pk: int):
         comprobante.save(update_fields=("status", "fecha_verificacion"))
         url = comprobante.get_full_url(request)
         msg = f"Hola {comprobante.nombre}, gracias por completar tu pago de tus números de {comprobante.evento.nombre} y los puedes verificar en {url}"
-        send_whatsapp(comprobante.telefono, msg)
+        send_whatsapp.delay(comprobante.telefono, msg)
         hora = fecha_actual.strftime("%I:%M %p")
         fecha = fecha_actual.strftime("%d %B %Y")
         return JsonResponse({"result": "ok", "fecha": fecha, "hora": hora})

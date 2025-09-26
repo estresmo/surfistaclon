@@ -160,3 +160,27 @@ MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
 LOGIN_URL = "/accounts/login/"
 ADMIN_PHONE = "584263145652"
+
+# Celery Configuration Options
+CELERY_BROKER_URL = 'redis://localhost:6379/0?surfista_tasks'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0?surfista_results'
+
+# FIFO Queue Configuration
+CELERY_TASK_DEFAULT_QUEUE = 'surfista' 
+CELERY_TASK_DEFAULT_QUEUE = 'surfista_queue'
+CELERY_TASK_QUEUES = {
+    'surfista_queue': {
+        'exchange': 'surfista',
+        'exchange_type': 'direct',
+        'routing_key': 'surfista',
+        'queue_arguments': {'x-max-priority': 10},  # Optional priority support
+    },
+}
+CELERY_TASK_DEFAULT_EXCHANGE = 'surfista'
+CELERY_TASK_DEFAULT_ROUTING_KEY = 'surfista'
+CELERY_WORKER_CONCURRENCY = 1
+CELERY_WORKER_PREFETCH_MULTIPLIER = 1
+CELERY_TASK_ACKS_LATE = True 
+
+WHATSAPP_URL = ""
+WHATSAPP_APIKEY = ""

@@ -11,3 +11,4 @@ django-redis
 phonenumbers
 pytz
 django-debug-toolbar
+celery[redis]
