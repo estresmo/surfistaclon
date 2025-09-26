@@ -166,7 +166,6 @@ CELERY_BROKER_URL = 'redis://localhost:6379/0?surfista_tasks'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0?surfista_results'
 
 # FIFO Queue Configuration
-CELERY_TASK_DEFAULT_QUEUE = 'surfista' 
 CELERY_TASK_DEFAULT_QUEUE = 'surfista_queue'
 CELERY_TASK_QUEUES = {
     'surfista_queue': {
@@ -175,6 +174,9 @@ CELERY_TASK_QUEUES = {
         'routing_key': 'surfista',
         'queue_arguments': {'x-max-priority': 10},  # Optional priority support
     },
+}
+CELERY_RESULT_BACKEND_OPTIONS = {
+    'keyprefix': 'surfista_results_',  # Prefix para resultados
 }
 CELERY_TASK_DEFAULT_EXCHANGE = 'surfista'
 CELERY_TASK_DEFAULT_ROUTING_KEY = 'surfista'
