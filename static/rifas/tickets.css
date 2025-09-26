@@ -12,7 +12,7 @@
 }
 
 .ticket-opcion {
-  color: #5b1010;
+  color: #ab1015;
   border: 1px solid #f4f4fa;
   background-color: transparent;
   font-size: 16px;
@@ -54,7 +54,7 @@ button::-moz-focus-inner {
 .cuenta-copiable {
   font-size: 12px;
   display: block;
-  color: #5b1010;
+  color: #ab1015;
   font-weight: bold;
   text-decoration: underline;
 }
