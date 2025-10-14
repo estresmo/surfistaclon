@@ -42,9 +42,11 @@ from .utils import (
     CachedPaginator,
     CacheInvalidationMixin,
     calcular_monto,
-    send_whatsapp,
     updateCompraCache,
 )
+
+from .tasks import send_whatsapp
+
 
 
 @login_required
@@ -412,7 +414,7 @@ class ComprasUpdateView(LoginRequiredMixin, UpdateView):
                 + ". Los boletos verificados son "
                 + " ,".join(boletos)
             )
-            send_whatsapp(form.instance.telefono, msg)
+            send_whatsapp.delay(form.instance.telefono, msg)
         form.instance.monto = calcular_monto(evento, len(boletos))
         response = super().form_valid(form)
         eliminados = self.request.POST.getlist("eliminados")

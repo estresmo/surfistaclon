@@ -17,38 +17,6 @@ from gestion.models import Comprobante, Evento, Promocion, StatusChoices
 
 logger = logging.getLogger(__name__)
 
-WHATSAPP_URL = "http://localhost:2999/"
-
-
-def send_whatsapp(num: str, msg: str):
-    number = "".join(re.findall(r"\d+", num))
-    try:
-        link = urljoin(WHATSAPP_URL, "api/sendText")
-        data = {
-            "chatId": number,
-            "reply_to": None,
-            "text": msg,
-            "linkPreview": False,
-            "linkPreviewHighQuality": False,
-            "session": "default",
-        }
-        response = requests.post(link, json=data)
-        if response.status_code == 422:
-            activate_session()
-            response = requests.post(link, json=data)
-        if response.status_code != 201:
-            print(f"{response.status_code} Error al enviar whatsapp")
-    except Exception:
-        print("ERROR al enviar whatsapp")
-
-
-def activate_session():
-    link = urljoin(WHATSAPP_URL, "api/sessions/default/restart")
-    requests.post(link)
-    link = urljoin(WHATSAPP_URL, "api/default/presence")
-    data = {"presence": "offline"}
-    requests.post(link, json=data)
-
 
 class PromocionDict(TypedDict):
     """Representa una promoción de boletos con cantidad y precio en descuento.
