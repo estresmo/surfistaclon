@@ -105,7 +105,7 @@ button.magic_button,
 
 .learn-more-btn:hover,
 button:hover {
-  background-color: #5b1010;
+  background-color: #03055b;
 }
 
 .learn-more-btn:hover,
@@ -132,11 +132,11 @@ button.magic_button:hover,
 .accordion:active,
 .accordion:hover {
   color: #dfb4cb;
-  background-color: #5b1010 !important;
+  background-color: #03055b !important;
 }
 
 .btn-invert:hover {
-  background-color: #5b1010 !important;
+  background-color: #03055b !important;
   color: #f0cce6;
 }
 
@@ -327,7 +327,7 @@ textarea.materialize-textarea.valid:focus,
 .btn:hover,
 .btn-large:hover,
 .btn-small:hover {
-  background-color: #5b1010;
+  background-color: #03055b;
 }
 
 .chip.misticketsson {
@@ -411,7 +411,7 @@ body widget[type="ticket"] .rip {
 }
 
 .switch label input[type="checkbox"]:checked + .lever:after {
-  background-color: #5b1010;
+  background-color: #03055b;
 }
 
 .footer-section {
@@ -615,7 +615,7 @@ button.magic_button,
 
 .learn-more-btn:hover,
 button:hover {
-  background-color: #5b1010;
+  background-color: #03055b;
 }
 
 .learn-more-btn:hover,
@@ -642,11 +642,11 @@ button.magic_button:hover,
 .accordion:active,
 .accordion:hover {
   color: #dfb4cb;
-  background-color: #5b1010 !important;
+  background-color: #03055b !important;
 }
 
 .btn-invert:hover {
-  background-color: #5b1010 !important;
+  background-color: #03055b !important;
   color: #f0cce6;
 }
 
@@ -837,7 +837,7 @@ textarea.materialize-textarea.valid:focus,
 .btn:hover,
 .btn-large:hover,
 .btn-small:hover {
-  background-color: #5b1010;
+  background-color: #03055b;
 }
 
 .chip.misticketsson {
@@ -921,7 +921,7 @@ body widget[type="ticket"] .rip {
 }
 
 .switch label input[type="checkbox"]:checked + .lever:after {
-  background-color: #5b1010;
+  background-color: #03055b;
 }
 
 .footer-section {
