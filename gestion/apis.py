@@ -37,7 +37,7 @@ def verificar_comprobante(request: HttpRequest, pk: int):
         comprobante.fecha_verificacion = fecha_actual
         comprobante.save(update_fields=("status", "fecha_verificacion"))
         url = comprobante.get_full_url(request)
-        msg = f"Hola {comprobante.nombre}, gracias por completar tu pago de tus números de {comprobante.evento.nombre} y los puedes verificar en {url}"
+        msg = f"Hola {comprobante.nombre}, gracias por completar tu pago de tus números {comprobante.boletos_str} de {comprobante.evento.nombre} y los puedes verificar en {url}"
         send_whatsapp.delay(comprobante.telefono, msg)
         hora = fecha_actual.strftime("%I:%M %p")
         fecha = fecha_actual.strftime("%d %B %Y")

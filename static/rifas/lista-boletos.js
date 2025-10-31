@@ -304,6 +304,7 @@ function whatsappTimer(url, countdown) {
   }, 1000);
 }
 
+/** @param {Array} boletos */
 function getWhatsappText(boletos) {
   const nombre = document.getElementById("nombre").value;
   const celular = document.getElementById("celular").value;
@@ -316,7 +317,7 @@ function getWhatsappText(boletos) {
   const verificar_url = `${host}/rifa/${rifaUrl}/?phone=${telefono}`;
   const txt = `Hola, soy ${nombre}. Con mi celular ${
     cod_t + celular
-  } registre estos números ${tickets}. En  ${rifa} ${verificar_url}`;
+  } registre  ${boletos.length} boletos. Quedo a la espera de la verificación de mis boletos`;
   return encodeURIComponent(txt);
 }
 

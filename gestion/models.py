@@ -174,6 +174,14 @@ class Comprobante(models.Model):
     @property
     def boletos(self):
         return NumeroRifa.objects.filter(comprobante=self)
+    
+    @property
+    def boletos_str(self):
+        digitos = self.evento.digitos
+        boletos = []
+        for boleto in self.boletos.values_list("numero", flat=True):
+            boletos.append(format(boleto, digitos))
+        return ",".join(boletos)
 
     @property
     def verificado(self):
