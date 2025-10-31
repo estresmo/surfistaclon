@@ -28,7 +28,7 @@
 }
 
 .header {
-  background: 0622b1;
+  background: #0b1d9b;
 }
 
 .header .header-title,
@@ -36,22 +36,22 @@
 .header pre,
 .header p,
 .progress-percent {
-  color: #fff9f9;
+  color: 0b1d9b;
 }
 
 .navbar {
-  border-top: 8px solid 0622b1;
-  border-bottom: 8px solid 0622b1;
+  border-top: 8px solid #0b1d9b;
+  border-bottom: 8px solid #0b1d9b;
 }
 
 .header-scrolled {
-  -webkit-box-shadow: 0 5px 6px 0 0622b1;
-  box-shadow: 0 5px 6px 0 0622b1;
+  -webkit-box-shadow: 0 5px 6px 0 #0b1d9b;
+  box-shadow: 0 5px 6px 0 #0b1d9b;
   background: #0b1d9b1a;
 }
 
 a.link {
-  color: 0622b1;
+  color: #0b1d9b;
 }
 
 .footer-subsection-title {
@@ -60,11 +60,11 @@ a.link {
 }
 
 button.magic_button {
-  color: 0622b1;
+  color: #0b1d9b;
 }
 
 .progress-actual {
-  background: 0622b1;
+  background: #0b1d9b;
 }
 
 .progress-total {
@@ -78,20 +78,20 @@ button.waves-effect.prev:active {
 }
 
 .nav-item .nav-link:hover .nav-link-number {
-  color: 0622b1 !important;
+  color: #0b1d9b !important;
 }
 
 .nav-item .nav-link:hover .nav-link-menu {
-  color: 0622b1 !important;
+  color: #0b1d9b !important;
 }
 
 .navbar-toggler:not(:disabled):not(.disabled) {
-  color: 0622b1;
+  color: #0b1d9b;
 }
 
 .learn-more-btn,
 button {
-  background-color: 0622b1;
+  background-color: #0b1d9b;
 }
 
 .learn-more-btn,
@@ -100,7 +100,7 @@ button {
 button.magic_button,
 #buttfixed,
 #containerSearch {
-  box-shadow: 0 0 18px 0622b1;
+  box-shadow: 0 0 18px #0b1d9b;
 }
 
 .learn-more-btn:hover,
@@ -117,16 +117,16 @@ button.magic_button:hover,
 }
 
 .card .card-body .payment-type .types .type.selected::after {
-  color: 0622b1;
-  border: 2px solid 0622b1;
+  color: #0b1d9b;
+  border: 2px solid #0b1d9b;
 }
 
 .btn-invert {
-  background-color: 0622b1 !important;
+  background-color: #0b1d9b !important;
 }
 
 .services-accordion .accordion {
-  background-color: 0622b1;
+  background-color: #0b1d9b;
 }
 
 .accordion:active,
@@ -154,7 +154,7 @@ button.magic_button:hover,
 .contact-subtitle,
 strong#textSeleccionados,
 strong#total_amount {
-  color: 0622b1;
+  color: #0b1d9b;
 }
 
 input[type="range"] + .thumb,
@@ -166,7 +166,7 @@ input[type="range"] + .thumb,
 .btn-small:focus,
 .btn-floating:focus,
 .btn_view_selected:hover {
-  background-color: 0622b1;
+  background-color: #0b1d9b;
 }
 
 input[type="range"] + .thumb .value,
@@ -184,11 +184,11 @@ a.btn-small {
 }
 
 .featured_award {
-  background: 0622b1;
+  background: #0b1d9b;
 }
 
 .poppuler .btn {
-  color: 0622b1;
+  color: #0b1d9b;
 }
 
 .plusminus button:active,
@@ -222,22 +222,22 @@ button.btn-large:hover {
 }
 
 strong#textSeleccionados {
-  color: 0622b1;
+  color: #0b1d9b;
   background: #d2c8d0;
 }
 
 .teal,
 .teal.lighten-1 {
-  background-color: 0622b1 !important;
+  background-color: #0b1d9b !important;
 }
 
 .teal.lighten-2 {
-  background-color: 0622b1 !important;
+  background-color: #0b1d9b !important;
 }
 
 .sidenav-trigger,
 .teal-text.text-lighten-2 {
-  color: 0622b1 !important;
+  color: #0b1d9b !important;
 }
 
 input:not([type]):focus:not([readonly]) + label,
@@ -254,7 +254,7 @@ input[type="tel"]:not(.browser-default):focus:not([readonly]) + label,
 input[type="number"]:not(.browser-default):focus:not([readonly]) + label,
 input[type="search"]:not(.browser-default):focus:not([readonly]) + label,
 textarea.materialize-textarea:focus:not([readonly]) + label {
-  color: 0622b1 !important;
+  color: #0b1d9b !important;
 }
 
 input:not([type]):focus:not([readonly]),
@@ -270,9 +270,9 @@ input[type="tel"]:not(.browser-default):focus:not([readonly]),
 input[type="number"]:not(.browser-default):focus:not([readonly]),
 input[type="search"]:not(.browser-default):focus:not([readonly]),
 textarea.materialize-textarea:focus:not([readonly]) {
-  border-bottom: 1px solid 0622b1;
-  -webkit-box-shadow: 0 1px 0 0 0622b1;
-  box-shadow: 0 0 6px 0 0622b1;
+  border-bottom: 1px solid #0b1d9b;
+  -webkit-box-shadow: 0 1px 0 0 #0b1d9b;
+  box-shadow: 0 0 6px 0 #0b1d9b;
 }
 
 input.valid:not([type]),
@@ -302,8 +302,8 @@ input[type="search"].valid:not(.browser-default):focus,
 textarea.materialize-textarea.valid,
 textarea.materialize-textarea.valid:focus,
 .select-wrapper.valid > input.select-dropdown {
-  border-bottom: 1px solid 0622b1;
-  -webkit-box-shadow: 0 1px 0 0 0622b1;
+  border-bottom: 1px solid #0b1d9b;
+  -webkit-box-shadow: 0 1px 0 0 #0b1d9b;
   box-shadow: 0 0 2px 0 #7d7d7d;
 }
 
@@ -317,11 +317,11 @@ textarea.materialize-textarea.valid:focus,
 
 .chip.selected_number,
 #pagingBox div.chip.selected {
-  background: 0622b1;
+  background: #0b1d9b;
 }
 
 .container_selected_number small > span {
-  color: 0622b1;
+  color: #0b1d9b;
 }
 
 .btn:hover,
@@ -331,20 +331,20 @@ textarea.materialize-textarea.valid:focus,
 }
 
 .chip.misticketsson {
-  background: 0622b1;
+  background: #0b1d9b;
 }
 
 @media screen and (min-width: 992px) {
   body widget {
-    -webkit-filter: drop-shadow(1px 1px 6px 0622b1);
-    filter: drop-shadow(1px 1px 6px 0622b1);
+    -webkit-filter: drop-shadow(1px 1px 6px #0b1d9b);
+    filter: drop-shadow(1px 1px 6px #0b1d9b);
   }
 }
 
 body widget[type="ticket"] .top,
 body widget[type="ticket"] .bottom,
 body widget[type="ticket"] .rip {
-  background-color: 0622b1;
+  background-color: #0b1d9b;
 }
 
 body widget[type="ticket"] .rip:before,
@@ -375,39 +375,39 @@ body {
 
 body widget[type="ticket"] .buy,
 body widget[type="ticket"] .bottom > strong {
-  color: 0622b1;
+  color: #0b1d9b;
 }
 
 body widget[type="ticket"] .top {
-  border-left: 2px solid 0622b1;
-  border-right: 2px solid 0622b1;
+  border-left: 2px solid #0b1d9b;
+  border-right: 2px solid #0b1d9b;
 }
 
 body widget[type="ticket"] .bottom > strong {
-  border: 2px dashed 0622b1;
+  border: 2px dashed #0b1d9b;
 }
 
 body widget[type="ticket"] .mode,
 body widget[type="ticket"] .status {
-  color: 0622b1;
+  color: #0b1d9b;
 }
 
 body widget .container_banner > div.tourname {
-  background: 0622b1;
-  background: linear-gradient(180deg, 0622b1 0%, 0622b1 100%);
+  background: #0b1d9b;
+  background: linear-gradient(180deg, #0b1d9b 0%, #0b1d9b 100%);
 }
 
 body widget[type="ticket"] .rip {
-  box-shadow: 0 1px 0 0 0622b1, 0 -1px 0 0 0622b1;
+  box-shadow: 0 1px 0 0 #0b1d9b, 0 -1px 0 0 #0b1d9b;
 }
 
 .bandname.-bold {
   border-top: 4px solid #000000;
-  color: 0622b1;
+  color: #0b1d9b;
 }
 
 .switch label input[type="checkbox"]:checked + .lever {
-  background-color: 0622b1;
+  background-color: #0b1d9b;
 }
 
 .switch label input[type="checkbox"]:checked + .lever:after {
@@ -415,11 +415,11 @@ body widget[type="ticket"] .rip {
 }
 
 .footer-section {
-  background-color: 0622b1;
+  background-color: #0b1d9b;
 }
 
 .modal i {
-  color: 0622b1;
+  color: #0b1d9b;
 }
 
 #randomShuffleNumber {
@@ -427,16 +427,16 @@ body widget[type="ticket"] .rip {
 }
 
 .generate.number.winner {
-  color: 0622b1;
+  color: #0b1d9b;
   text-shadow: 0 0 22px #0000004a;
 }
 
 .generate.number {
-  color: 0622b1;
+  color: #0b1d9b;
 }
 
 #buttfixed {
-  background: 0622b1;
+  background: #0b1d9b;
 }
 
 #buttfixed:hover {
@@ -469,7 +469,7 @@ body widget[type="ticket"] .rip {
 }
 
 .ticket-opcion:hover {
-  background-color: 0622b1;
+  background-color: #0b1d9b;
   /* Color de fondo al pasar el mouse */
 }
 
@@ -481,11 +481,11 @@ body widget[type="ticket"] .rip {
 }
 
 #buttfixed > span {
-  color: 0622b1;
+  color: #0b1d9b;
 }
 
 .modal-overlay {
-  background: 0622b1;
+  background: #0b1d9b;
 }
 
 img.loading {
@@ -536,7 +536,7 @@ body .chip {
 }
 
 .header {
-  background: 0622b1;
+  background: #0b1d9b;
 }
 
 .header .header-title,
@@ -544,22 +544,22 @@ body .chip {
 .header pre,
 .header p,
 .progress-percent {
-  color: #fff9f9;
+  color: 0b1d9b;
 }
 
 .navbar {
-  border-top: 8px solid 0622b1;
-  border-bottom: 8px solid 0622b1;
+  border-top: 8px solid #0b1d9b;
+  border-bottom: 8px solid #0b1d9b;
 }
 
 .header-scrolled {
-  -webkit-box-shadow: 0 5px 6px 0 0622b1;
-  box-shadow: 0 5px 6px 0 0622b1;
+  -webkit-box-shadow: 0 5px 6px 0 #0b1d9b;
+  box-shadow: 0 5px 6px 0 #0b1d9b;
   background: #0b1d9b1a;
 }
 
 a.link {
-  color: 0622b1;
+  color: #0b1d9b;
 }
 
 .footer-subsection-title {
@@ -570,11 +570,11 @@ a.link {
 }
 
 button.magic_button {
-  color: 0622b1;
+  color: #0b1d9b;
 }
 
 .progress-actual {
-  background: 0622b1;
+  background: #0b1d9b;
 }
 
 .progress-total {
@@ -588,20 +588,20 @@ button.waves-effect.prev:active {
 }
 
 .nav-item .nav-link:hover .nav-link-number {
-  color: 0622b1 !important;
+  color: #0b1d9b !important;
 }
 
 .nav-item .nav-link:hover .nav-link-menu {
-  color: 0622b1 !important;
+  color: #0b1d9b !important;
 }
 
 .navbar-toggler:not(:disabled):not(.disabled) {
-  color: 0622b1;
+  color: #0b1d9b;
 }
 
 .learn-more-btn,
 button {
-  background-color: 0622b1;
+  background-color: #0b1d9b;
 }
 
 .learn-more-btn,
@@ -610,7 +610,7 @@ button {
 button.magic_button,
 #buttfixed,
 #containerSearch {
-  box-shadow: 0 0 18px 0622b1;
+  box-shadow: 0 0 18px #0b1d9b;
 }
 
 .learn-more-btn:hover,
@@ -627,16 +627,16 @@ button.magic_button:hover,
 }
 
 .card .card-body .payment-type .types .type.selected::after {
-  color: 0622b1;
-  border: 2px solid 0622b1;
+  color: #0b1d9b;
+  border: 2px solid #0b1d9b;
 }
 
 .btn-invert {
-  background-color: 0622b1 !important;
+  background-color: #0b1d9b !important;
 }
 
 .services-accordion .accordion {
-  background-color: 0622b1;
+  background-color: #0b1d9b;
 }
 
 .accordion:active,
@@ -664,7 +664,7 @@ button.magic_button:hover,
 .contact-subtitle,
 strong#textSeleccionados,
 strong#total_amount {
-  color: 0622b1;
+  color: #0b1d9b;
 }
 
 input[type="range"] + .thumb,
@@ -676,7 +676,7 @@ input[type="range"] + .thumb,
 .btn-small:focus,
 .btn-floating:focus,
 .btn_view_selected:hover {
-  background-color: 0622b1;
+  background-color: #0b1d9b;
 }
 
 input[type="range"] + .thumb .value,
@@ -694,11 +694,11 @@ a.btn-small {
 }
 
 .featured_award {
-  background: 0622b1;
+  background: #0b1d9b;
 }
 
 .poppuler .btn {
-  color: 0622b1;
+  color: #0b1d9b;
 }
 
 .plusminus button:active,
@@ -732,22 +732,22 @@ button.btn-large:hover {
 }
 
 strong#textSeleccionados {
-  color: 0622b1;
+  color: #0b1d9b;
   background: #d2c8d0;
 }
 
 .teal,
 .teal.lighten-1 {
-  background-color: 0622b1 !important;
+  background-color: #0b1d9b !important;
 }
 
 .teal.lighten-2 {
-  background-color: 0622b1 !important;
+  background-color: #0b1d9b !important;
 }
 
 .sidenav-trigger,
 .teal-text.text-lighten-2 {
-  color: 0622b1 !important;
+  color: #0b1d9b !important;
 }
 
 input:not([type]):focus:not([readonly]) + label,
@@ -764,7 +764,7 @@ input[type="tel"]:not(.browser-default):focus:not([readonly]) + label,
 input[type="number"]:not(.browser-default):focus:not([readonly]) + label,
 input[type="search"]:not(.browser-default):focus:not([readonly]) + label,
 textarea.materialize-textarea:focus:not([readonly]) + label {
-  color: 0622b1 !important;
+  color: #0b1d9b !important;
 }
 
 input:not([type]):focus:not([readonly]),
@@ -780,9 +780,9 @@ input[type="tel"]:not(.browser-default):focus:not([readonly]),
 input[type="number"]:not(.browser-default):focus:not([readonly]),
 input[type="search"]:not(.browser-default):focus:not([readonly]),
 textarea.materialize-textarea:focus:not([readonly]) {
-  border-bottom: 1px solid 0622b1;
-  -webkit-box-shadow: 0 1px 0 0 0622b1;
-  box-shadow: 0 0 6px 0 0622b1;
+  border-bottom: 1px solid #0b1d9b;
+  -webkit-box-shadow: 0 1px 0 0 #0b1d9b;
+  box-shadow: 0 0 6px 0 #0b1d9b;
 }
 
 input.valid:not([type]),
@@ -812,8 +812,8 @@ input[type="search"].valid:not(.browser-default):focus,
 textarea.materialize-textarea.valid,
 textarea.materialize-textarea.valid:focus,
 .select-wrapper.valid > input.select-dropdown {
-  border-bottom: 1px solid 0622b1;
-  -webkit-box-shadow: 0 1px 0 0 0622b1;
+  border-bottom: 1px solid #0b1d9b;
+  -webkit-box-shadow: 0 1px 0 0 #0b1d9b;
   box-shadow: 0 0 2px 0 #7d7d7d;
 }
 
@@ -827,11 +827,11 @@ textarea.materialize-textarea.valid:focus,
 
 .chip.selected_number,
 #pagingBox div.chip.selected {
-  background: 0622b1;
+  background: #0b1d9b;
 }
 
 .container_selected_number small > span {
-  color: 0622b1;
+  color: #0b1d9b;
 }
 
 .btn:hover,
@@ -841,20 +841,20 @@ textarea.materialize-textarea.valid:focus,
 }
 
 .chip.misticketsson {
-  background: 0622b1;
+  background: #0b1d9b;
 }
 
 @media screen and (min-width: 992px) {
   body widget {
-    -webkit-filter: drop-shadow(1px 1px 6px 0622b1);
-    filter: drop-shadow(1px 1px 6px 0622b1);
+    -webkit-filter: drop-shadow(1px 1px 6px #0b1d9b);
+    filter: drop-shadow(1px 1px 6px #0b1d9b);
   }
 }
 
 body widget[type="ticket"] .top,
 body widget[type="ticket"] .bottom,
 body widget[type="ticket"] .rip {
-  background-color: 0622b1;
+  background-color: #0b1d9b;
 }
 
 body widget[type="ticket"] .rip:before,
@@ -885,39 +885,39 @@ body {
 
 body widget[type="ticket"] .buy,
 body widget[type="ticket"] .bottom > strong {
-  color: 0622b1;
+  color: #0b1d9b;
 }
 
 body widget[type="ticket"] .top {
-  border-left: 2px solid 0622b1;
-  border-right: 2px solid 0622b1;
+  border-left: 2px solid #0b1d9b;
+  border-right: 2px solid #0b1d9b;
 }
 
 body widget[type="ticket"] .bottom > strong {
-  border: 2px dashed 0622b1;
+  border: 2px dashed #0b1d9b;
 }
 
 body widget[type="ticket"] .mode,
 body widget[type="ticket"] .status {
-  color: 0622b1;
+  color: #0b1d9b;
 }
 
 body widget .container_banner > div.tourname {
-  background: 0622b1;
-  background: linear-gradient(180deg, 0622b1 0%, 0622b1 100%);
+  background: #0b1d9b;
+  background: linear-gradient(180deg, #0b1d9b 0%, #0b1d9b 100%);
 }
 
 body widget[type="ticket"] .rip {
-  box-shadow: 0 1px 0 0 0622b1, 0 -1px 0 0 0622b1;
+  box-shadow: 0 1px 0 0 #0b1d9b, 0 -1px 0 0 #0b1d9b;
 }
 
 .bandname.-bold {
   border-top: 4px solid #000000;
-  color: 0622b1;
+  color: #0b1d9b;
 }
 
 .switch label input[type="checkbox"]:checked + .lever {
-  background-color: 0622b1;
+  background-color: #0b1d9b;
 }
 
 .switch label input[type="checkbox"]:checked + .lever:after {
@@ -925,11 +925,11 @@ body widget[type="ticket"] .rip {
 }
 
 .footer-section {
-  background-color: 0622b1;
+  background-color: #0b1d9b;
 }
 
 .modal i {
-  color: 0622b1;
+  color: #0b1d9b;
 }
 
 #randomShuffleNumber {
@@ -937,16 +937,16 @@ body widget[type="ticket"] .rip {
 }
 
 .generate.number.winner {
-  color: 0622b1;
+  color: #0b1d9b;
   text-shadow: 0 0 22px #0000004a;
 }
 
 .generate.number {
-  color: 0622b1;
+  color: #0b1d9b;
 }
 
 #buttfixed {
-  background: 0622b1;
+  background: #0b1d9b;
 }
 
 #buttfixed:hover {
@@ -968,7 +968,7 @@ body widget[type="ticket"] .rip {
 }
 
 .ticket-opcion:hover {
-  background-color: 0622b1;
+  background-color: #0b1d9b;
   /* Color de fondo al pasar el mouse */
 }
 
@@ -980,11 +980,11 @@ body widget[type="ticket"] .rip {
 }
 
 #buttfixed > span {
-  color: 0622b1;
+  color: #0b1d9b;
 }
 
 .modal-overlay {
-  background: 0622b1;
+  background: #0b1d9b;
 }
 
 img.loading {
