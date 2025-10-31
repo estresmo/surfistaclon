@@ -74,7 +74,7 @@ function calcularPrecio(boletos, index = promociones.length - 1, total = 0) {
   }
 
   if (boletos == 0) {
-    return total;
+    return total.toFixed(2);
   } else {
     return calcularPrecio(boletos, index, total);
   }
