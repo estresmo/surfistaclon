@@ -121,11 +121,11 @@
                           <a rel="modal:open"
                             onclick="loadImageModal('/media/{{ compra.foto }}')"
                             href="#containerDivVoucher">
-                            <strong>${{ compra.monto }}</strong>
+                            <strong>${{ compra.monto|floatformat:2 }}</strong>
                           </a>
                           <span style="display: block;margin-top: 5px;">
                             {% if compra.metodo__moneda == 'Bs' %}
-                              ({{ compra.monto_bs }}Bs)
+                              ({{ compra.monto_bs|floatformat:2 }}Bs)
                             {% endif %}
                           </span>
                         </td>
@@ -147,7 +147,7 @@
                               <a target="_blank"
                                 title="Contactar"
                                 class="orange verificado"
-                                href="https://api.whatsapp.com/send?phone={{compra.telefono|urlencode}}&amp;text=Hola+{{ compra.nombre|urlencode }}+%2C+tus+boletos+han+sido+verificados+con+tus+n%C3%BAmeros+elegidos+en+{{ compra.evento__nombre|urlencode}}%2F+puedes+consultar+tus+numeros+en+el+siguiente+enlace.+https%3A%2F%2Fwww.rifasurfistadeasfalto.com%2Frifa%2F{{ compra.evento__url|urlencode}}%3Fphone%3D{{compra.telefono|urlencode }}">
+                                href="https://api.whatsapp.com/send?phone={{compra.telefono|urlencode}}&amp;text=Hola+{{ compra.nombre|urlencode }}+%2C+tus+boletos+han+sido+verificados+con+tus+n%C3%BAmeros+{{boletos_str}}+en+{{ compra.evento__nombre|urlencode}}%2F+puedes+consultar+tus+numeros+en+el+siguiente+enlace.+https%3A%2F%2Fwww.rifasurfistadeasfalto.com%2Frifa%2F{{ compra.evento__url|urlencode}}%3Fphone%3D{{compra.telefono|urlencode }}">
                                 <i class="fab fa-whatsapp fa-2x"></i>
                               </a>
                               {% else %}
