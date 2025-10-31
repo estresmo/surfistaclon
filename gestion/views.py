@@ -14,6 +14,7 @@ from django.db.models import (
     Sum,
     Value,
     When,
+    CharField
 )
 from django.db.models.functions import Round
 from django.db.models.query import QuerySet
@@ -22,7 +23,8 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
-
+from django.db.models.functions import Cast
+from django.db.models.functions import LPad
 from .forms import (
     ClienteForm,
     CompraForm,
@@ -212,7 +214,13 @@ class ComprasListView(LoginRequiredMixin, ListView):
         comprobantes = (
             comprobantes.filter(**filtros)
             .annotate(
-                boletos=ArrayAgg("numerorifa__numero"),
+                boletos=ArrayAgg(
+                    LPad(
+                        Cast("numerorifa__numero", CharField()),
+                        4,  # total length
+                        Value('0')  # padding character
+                    )
+                ),
                 cantidad=Count("numerorifa"),
                 verificado=Case(
                     When(status=StatusChoices.VERIFICADO, then=Value(True)),
@@ -243,6 +251,7 @@ class ComprasListView(LoginRequiredMixin, ListView):
             )
             .order_by("-id")
         )
+        print(comprobantes)
         return comprobantes
 
     def filtros_queryset(self, evento_id: Optional[str]):
