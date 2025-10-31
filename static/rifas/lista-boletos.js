@@ -60,7 +60,7 @@ function calcularPrecio(boletos, index = promociones.length - 1, total = 0) {
     document.getElementById("precio-unidad-js").value
   );
   if (index < 0) {
-    return total + boletos * precio_unidad;
+    return (total + boletos * precio_unidad).toFixed(2);
   }
   const promocion = promociones[index];
   if (promocion.cantidad_tickets <= boletos) {
