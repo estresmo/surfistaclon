@@ -8,11 +8,11 @@
 .pricing-title h2,
 .blog-title,
 .services-title {
-  color: 0622b1;
+  color: #ab1015;
 }
 
 .ticket-opcion {
-  color: 0622b1;
+  color: #ab1015;
   border: 1px solid #f4f4fa;
   background-color: transparent;
   font-size: 16px;
@@ -54,7 +54,7 @@ button::-moz-focus-inner {
 .cuenta-copiable {
   font-size: 12px;
   display: block;
-  color: 0622b1;
+  color: #ab1015;
   font-weight: bold;
   text-decoration: underline;
 }
