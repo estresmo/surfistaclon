@@ -171,7 +171,7 @@
     }
 	@media screen and (max-width: 991.98px){
 	.navbar{
-        background-color: #0b1d9b;
+        background-color: #FFFFFF;
         -webkit-box-shadow: 0 4px 6px 0 rgba(12,0,46,.05);
         box-shadow: 0 4px 6px 0 rgba(12,0,46,.05);
 	}
@@ -612,7 +612,7 @@
         margin: 12px auto 2px;
     }
     .blog-post-text{
-        color: #0b1d9b;
+        color: #193b61;
         font-family: 'Poppins', sans-serif;
         line-height: 1.5;
         text-align: center;
@@ -781,8 +781,8 @@
         padding-bottom: 55px;
         margin-bottom: 0px!important;
         position: relative;
-        background-color: #0b1d9b;
-        color: #0b1d9b;
+        background-color: #193b61;
+        color: #FFFFFF;
     }
     .footer-section a{
         color: #dbdbdb;
@@ -825,7 +825,7 @@
         font-family: 'Poppins', sans-serif;
         font-weight: 800;
         text-transform: uppercase;
-        color: #0b1d9b;
+        color: #FFFFFF;
         margin-bottom: 10px;
     }
     .footer-subsection-text{
@@ -846,7 +846,7 @@
     }
     .footer-subsection-list li{
         font-size: 16px;
-        color: #0b1d9b;
+        color: #FFFFFF;
         font-family: 'Poppins', sans-serif;
         font-weight: 400;
         line-height: 1.5;
@@ -890,10 +890,10 @@
 		color: #b9b9b9;
     }
     .footer-subsection-list-call{
-        color: #0b1d9b;
+        color: #FFFFFF;
     }
     .footer-subsection-list-email{
-        color: #0b1d9b;
+        color: #FFFFFF;
     }
     .footer-subsection-list-call:hover{
         color: #2C435D;
@@ -912,7 +912,7 @@
         padding-right: 25px;    
     }
     .footer-social-media-icon .fa{
-        color: #0b1d9b;
+        color: #FFFFFF;
         font-size: 29px;
         text-decoration: none!important;
     }
