@@ -87,7 +87,7 @@ async function obtenerDolar() {
   const data = await response.json();
   dolar = data.dolar;
   let total = dolar * calcularPrecio(ticketQty.value);
-  total = total.toFixed(2);
+  total = parseInt(total);
   document
     .querySelectorAll(".precio-bs")
     .forEach((element) => (element.innerHTML = total + "bs"));
@@ -96,7 +96,7 @@ async function obtenerDolar() {
 
 function actualizarBs(cantidad) {
   const dolares = calcularPrecio(cantidad);
-  const calculo = parseFloat(dolar * dolares, 2).toFixed(2);
+  const calculo = parseInt(dolar * dolares);
   document
     .querySelectorAll(".precio-bs")
     .forEach((element) => (element.innerHTML = calculo + "bs"));
@@ -104,7 +104,7 @@ function actualizarBs(cantidad) {
 
 function actualizarCOP(cantidad){
   const dolares = calcularPrecio(cantidad);
-  const calculo = parseFloat(cop * dolares, 2).toFixed(2);
+  const calculo = parseInt(cop * dolares);
   document
     .querySelectorAll(".precio-cop")
     .forEach((element) => (element.innerHTML = calculo + " pesos"));
