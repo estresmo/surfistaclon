@@ -29327,7 +29327,7 @@
     Qe: "40e0d0",
     viTet: "ee82ee",
     JHt: "f5deb3",
-    wEte: "ffffff",
+    wEte: "0b1d9b",
     wEtesmoke: "f5f5f5",
     Lw: "ffff00",
     LwgYF: "9acd32",
