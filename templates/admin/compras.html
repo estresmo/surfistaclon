@@ -121,11 +121,11 @@
                           <a rel="modal:open"
                             onclick="loadImageModal('/media/{{ compra.foto }}')"
                             href="#containerDivVoucher">
-                            <strong>${{ compra.monto }}</strong>
+                            <strong>${{ compra.monto|floatformat:2 }}</strong>
                           </a>
                           <span style="display: block;margin-top: 5px;">
                             {% if compra.metodo__moneda == 'Bs' %}
-                              ({{ compra.monto_bs }}Bs)
+                              ({{ compra.monto_bs|floatformat:2 }}Bs)
                             {% endif %}
                           </span>
                         </td>
@@ -147,15 +147,18 @@
                               <a target="_blank"
                                 title="Contactar"
                                 class="orange verificado"
-                                href="https://api.whatsapp.com/send?phone={{compra.telefono|urlencode}}&amp;text=Hola+{{ compra.nombre|urlencode }}+%2C+tus+boletos+han+sido+verificados+con+tus+n%C3%BAmeros+elegidos+en+{{ compra.evento__nombre|urlencode}}%2F+puedes+consultar+tus+numeros+en+el+siguiente+enlace.+https%3A%2F%2Fwww.rifasurfistadeasfalto.com%2Frifa%2F{{ compra.evento__url|urlencode}}%3Fphone%3D{{compra.telefono|urlencode }}">
+                                href="https://api.whatsapp.com/send?phone={{compra.telefono|urlencode}}&amp;text=Hola+{{ compra.nombre|urlencode }}+%2C+tus+boletos+han+sido+verificados+con+tus+n%C3%BAmeros+{{compra.boletos|join:",+"}}+en+{{ compra.evento__nombre|urlencode}}%2F+puedes+consultar+tus+numeros+en+el+siguiente+enlace.+https%3A%2F%2Fwww.rifasurfistadeasfalto.com%2Frifa%2F{{ compra.evento__url|urlencode}}%3Fphone%3D{{compra.telefono|urlencode }}">
                                 <i class="fab fa-whatsapp fa-2x"></i>
                               </a>
                               {% else %}
                               <!-- prettier-ignore -->
                               <a target="_blank"
+                                id="whatsapp-{{ compra.id }}"
                                 title="Recordar Pago"
                                 class="orange"
-                                href="https://api.whatsapp.com/send?phone={{compra.telefono|urlencode}}&amp;text=Hola+{{ compra.nombre|urlencode }}+%2C+no+pierdas+tu+oportunidad+de+ganar+con+tus+n%C3%BAmeros+elegidos+en+{{ compra.evento__nombre|urlencode}}%2C+completa+el+pago+por+favor%2C+no+dejes+ir+tu+suerte.+https%3A%2F%2Fwww.rifasurfistadeasfalto.com%2Frifa%2F{{ compra.evento__url|urlencode}}%3Fphone%3D{{compra.telefono|urlencode }}">
+                                href="https://api.whatsapp.com/send?phone={{compra.telefono|urlencode}}&amp;text=Hola+{{ compra.nombre|urlencode }}+%2C+no+pierdas+tu+oportunidad+de+ganar+con+tus+n%C3%BAmeros+elegidos+en+{{ compra.evento__nombre|urlencode}}%2C+completa+el+pago+por+favor%2C+no+dejes+ir+tu+suerte.+https%3A%2F%2Fwww.rifasurfistadeasfalto.com%2Frifa%2F{{ compra.evento__url|urlencode}}%3Fphone%3D{{compra.telefono|urlencode }}"
+                                data-verified-url="https://api.whatsapp.com/send?phone={{compra.telefono|urlencode}}&amp;text=Hola+{{ compra.nombre|urlencode }}+%2C+tus+boletos+han+sido+verificados+con+tus+n%C3%BAmeros+{{compra.boletos|join:",+"}}+en+{{ compra.evento__nombre|urlencode}}%2F+puedes+consultar+tus+numeros+en+el+siguiente+enlace.+https%3A%2F%2Fwww.rifasurfistadeasfalto.com%2Frifa%2F{{ compra.evento__url|urlencode}}%3Fphone%3D{{compra.telefono|urlencode }}"
+                                >
                                 <i class="fab fa-whatsapp fa-2x"></i>
                               </a>
                               {% endif %}
@@ -174,13 +177,7 @@
                         </td>
                         <td class="col col-tickets">
                           <!-- prettier-ignore -->
-                          {% for boleto in compra.boletos %}
-                            {{ boleto|stringformat:"04d" }}
-                            {% if not forloop.last %}
-                              ,
-                            {% endif %}
-                            
-                           {% endfor %}
+                           {{compra.boletos|join:", "}}
                         </td>
                         <td class="col">{{ compra.notas }}</td>
                         <td class="col col-actions">
@@ -382,6 +379,7 @@
 
     async function verificarCompra(id) {
       const element = document.getElementById("verificar-" + id);
+      const whatsappElement = document.getElementById("whatsapp-" + id);
       element.classList.replace("pending", "processing");
       const crsf_token = document.querySelector(
         "[name=csrfmiddlewaretoken]"
@@ -398,6 +396,8 @@
           element.classList.replace("processing", "verified");
           document.getElementById(`fecha-v-${id}`).innerText = result.fecha;
           document.getElementById(`hora-v-${id}`).innerText = result.hora;
+          whatsappElement.href = whatsappElement.dataset.verifiedUrl;
+          whatsappElement.title = "Contactar";
         } else {
           alert("Ya ha sido verificado anteriormente");
         }
