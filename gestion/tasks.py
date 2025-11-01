@@ -16,7 +16,7 @@ def send_whatsapp(num: str, msg: str):
         data = {"chatId": number, "session": "default"}
         whatsapp_request("/api/sendSeen", data)
         whatsapp_request("/api/startTyping", data)
-        time.sleep(random.uniform(0.5, 1))
+        time.sleep(random.uniform(3, 7))
         whatsapp_request("/api/stopTyping", data)
         data = {
             "chatId": number,
