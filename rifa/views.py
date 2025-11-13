@@ -32,7 +32,7 @@ def home(request: HttpRequest):
     if evento:
         eventos = eventos.exclude(pk=evento.pk)
         dolar = evento.valor_dolar
-    metodos = MetodoPago.objects.all().order_by("posicion")
+    metodos = MetodoPago.objects.filter(activo=True).order_by("posicion")
     context = {
         "dolar": dolar,
         "evento": evento,
@@ -61,7 +61,7 @@ def detalle_evento(request: HttpRequest, link: str):
         "cliente": cliente,
     }
     if evento.es_actual:
-        context["metodos"] = MetodoPago.objects.all().order_by("posicion")
+        context["metodos"] = MetodoPago.objects.filter(activo=True).order_by("posicion")
         context["dolar"] = evento.valor_dolar
         if evento.total_tickets <= 200:
             agarrados = NumeroRifa.objects.filter(evento=evento).values_list(
