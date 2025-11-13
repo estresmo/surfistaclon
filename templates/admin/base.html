@@ -3,37 +3,47 @@
 <html lang="es" data-lt-installed="true">
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <title>
-      {% block title %}
-
-      {% endblock %}| J&J
-    </title>
-    <link rel="stylesheet"
+    <title>{% block title %} {% endblock %}| J&J</title>
+    <link
+      rel="stylesheet"
       media="all"
-      href="/static/admin/active_admin-67d2515b05452af71f7cd6bc4b8676d0f8262f836defd71.css" />
-    <link rel="stylesheet"
+      href="/static/admin/active_admin-67d2515b05452af71f7cd6bc4b8676d0f8262f836defd71.css"
+    />
+    <link
+      rel="stylesheet"
       media="screen"
-      href="/static/admin/toast-944c564c38891e42a37c019bb8167f0ccf95fb17d81aa387ed2364.css" />
-    <link rel="stylesheet"
+      href="/static/admin/toast-944c564c38891e42a37c019bb8167f0ccf95fb17d81aa387ed2364.css"
+    />
+    <link
+      rel="stylesheet"
       media="screen"
-      href="/static/admin/modal-bb9dc5f270c6a47d33bc71a7b072bd3524de54e8f57e8cbb7fb03b.css" />
-    <link rel="stylesheet"
+      href="/static/admin/modal-bb9dc5f270c6a47d33bc71a7b072bd3524de54e8f57e8cbb7fb03b.css"
+    />
+    <link
+      rel="stylesheet"
       media="screen"
-      href="/static/admin/coloris-ea0c0f30cba1dea088e71225d9b9df1593e6e99749ca67f70803.css" />
-    <link rel="stylesheet"
+      href="/static/admin/coloris-ea0c0f30cba1dea088e71225d9b9df1593e6e99749ca67f70803.css"
+    />
+    <link
+      rel="stylesheet"
       media="screen"
-      href="/static/admin/admin-9983b8967faf2cb8dde0eba7e58f8c43d426e6f175922d7faebe92.css" />
+      href="/static/admin/admin-9983b8967faf2cb8dde0eba7e58f8c43d426e6f175922d7faebe92.css"
+    />
     <script src="/static/admin/active_admin-b550586ef271a1200a2ff148427efb7ee88bebad4068502d.js"></script>
     <script src="/static/admin/admins-48d98eec6e3ea9c2c238eb8bb696e73e329319117f46c1a7a338de.js"></script>
-    <meta name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=5"
+    />
     <script src="/static/admin/toast-35a19cf853a394e8a1c4b330f694793c55f34f2a8669f6f6e452575.js"></script>
     <script src="/static/admin/modal-fde6df0d09a4d957047f4268039e42109dd83c040f3b4228792d250.js"></script>
     <script src="/static/admin/coloris-bcfbc6a6ac557a151c1f5d91ce62beeabd6db1797783b1b494482.js"></script>
     <link rel="shortcut icon" href="/static/img/logo.jpg" type="image/x-icon" />
-    <link href="/static/admin/simple-datatables.min.css"
+    <link
+      href="/static/admin/simple-datatables.min.css"
       rel="stylesheet"
-      type="text/css" />
+      type="text/css"
+    />
 
     <style>
       .logito {
@@ -120,57 +130,57 @@
         content: "CONTACTAR";
       }
     </style>
-    {% block head %}
-
-    {% endblock %}
+    {% block head %} {% endblock %}
   </head>
-  <body class="index admin_purchases active_admin logged_in admin_namespace"
-    cz-shortcut-listen="true">
+  <body
+    class="index admin_purchases active_admin logged_in admin_namespace"
+    cz-shortcut-listen="true"
+  >
     <div id="wrapper">
       <div class="header" id="header">
         <ul class="header-item tabs" id="tabs">
           {% with url_name=request.resolver_match.url_name %}
-            <!-- prettier-ignore -->
-            <li class="menu_item" >
+          <!-- prettier-ignore -->
+          <li class="menu_item" >
             <img src="/static/img/logo.jpg" class="logito" />
           </li>
-            <!-- prettier-ignore -->
-            <li class="menu_item {% if url_name == 'dashboard_admin' %}current{% endif %}" id="dashboard">
+          <!-- prettier-ignore -->
+          <li class="menu_item {% if url_name == 'dashboard_admin' %}current{% endif %}" id="dashboard">
             <a href="/admin/dashboard">Dashboard</a>
           </li>
-            <!-- prettier-ignore -->
-            <li class="menu_item {% if url_name == 'rifas_admin' %}current{% endif %}" id="raffles">
+          <!-- prettier-ignore -->
+          <li class="menu_item {% if url_name == 'rifas_admin' %}current{% endif %}" id="raffles">
             <a href="/admin/rifas">Rifas</a>
           </li>
-            <!-- prettier-ignore -->
-            <li class="menu_item {% if url_name == 'participantes_admin' %}current{% endif %}" id="buyers">
+          <!-- prettier-ignore -->
+          <li class="menu_item {% if url_name == 'participantes_admin' %}current{% endif %}" id="buyers">
             <a href="/admin/participantes">Participantes</a>
           </li>
-            <!-- prettier-ignore -->
-            <li class="menu_item {% if url_name == 'compras_admin' %}current{% endif %}" id="purchases">
+          <!-- prettier-ignore -->
+          <li class="menu_item {% if url_name == 'compras_admin' %}current{% endif %}" id="purchases">
             <a href="/admin/compras">Tickets</a>
           </li>
-            <!-- prettier-ignore -->
-            <!-- <li class="menu_item {% if url_name == 'premios_admin' %}current{% endif %}" id="awards">
+          <!-- prettier-ignore -->
+          <!-- <li class="menu_item {% if url_name == 'premios_admin' %}current{% endif %}" id="awards">
             <a href="/admin/premios">Premios</a>
           </li> -->
-            <!-- prettier-ignore -->
-            <li class="menu_item {% if url_name == 'clientes_admin' %}current{% endif %}" id="clients">
+          <!-- prettier-ignore -->
+          <li class="menu_item {% if url_name == 'clientes_admin' %}current{% endif %}" id="clients">
             <a href="/admin/clientes">Clientes</a>
           </li>
-            <!-- prettier-ignore -->
-            <li class="menu_item {% if url_name == 'metodos_admin' %}current{% endif %}" id="payment_types">
+          <!-- prettier-ignore -->
+          <li class="menu_item {% if url_name == 'metodos_admin' %}current{% endif %}" id="payment_types">
             <a href="/admin/metodos">Metodos de Pago</a>
           </li>
-            <!-- prettier-ignore -->
-            <li class="menu_item {% if url_name == 'usuarios_admin' %}current{% endif %}" id="users">
+          <!-- prettier-ignore -->
+          <li class="menu_item {% if url_name == 'usuarios_admin' %}current{% endif %}" id="users">
             <a href="/admin/usuarios">Usuarios</a>
           </li>
           {% endwith %}
         </ul>
         <ul class="header-item tabs" id="utility_nav">
           <li class="menu_item" id="current_user">
-            <a href="/admin/users/2812">Eris</a>
+            <a href="/admin/users/2812">Ruben</a>
           </li>
           <li class="menu_item">
             <a href="#" onclick="logout()">Salir</a>
@@ -183,11 +193,7 @@
             <a href="/admin">Admin</a>
             <span class="breadcrumb_sep">/</span>
           </span>
-          <h2 id="page_title">
-            {% block subtitle %}
-
-            {% endblock %}
-          </h2>
+          <h2 id="page_title">{% block subtitle %} {% endblock %}</h2>
         </div>
         <div id="titlebar_right">
           <div class="action_items">
@@ -196,11 +202,7 @@
         </div>
       </div>
       <div class="flashes"></div>
-      {% localize off %}
-      {% block content %}
-
-      {% endblock %}
-      {% endlocalize %}
+      {% localize off %} {% block content %} {% endblock %} {% endlocalize %}
       <div class="footer" id="footer">
         <p>J & J PRODUCTIONS</p>
       </div>
@@ -220,8 +222,6 @@
     </script>
     <script src="/static/admin/simple-datatables.js"></script>
 
-    {% block javascript %}
-
-    {% endblock %}
+    {% block javascript %} {% endblock %}
   </body>
 </html>
