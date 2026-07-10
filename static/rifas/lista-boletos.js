@@ -317,7 +317,7 @@ function getWhatsappText(boletos) {
   const verificar_url = `${host}/rifa/${rifaUrl}/?phone=${telefono}`;
   const txt = `Hola, soy ${nombre}. Con mi celular ${
     cod_t + celular
-  } registre  ${boletos.length} boletos. Quedo a la espera de la verificación de mis boletos`;
+  } registre   estos números ${tickets}. En  ${rifa} ${verificar_url}`;
   return encodeURIComponent(txt);
 }
 
