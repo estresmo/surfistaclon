@@ -75,9 +75,8 @@
                       data-original-title="Dólares Americanos">
                       Total:
                       <span>
-                        USD&nbsp;
-                        <span class="total-boleto">
-                          {{ evento.precio_unidad }}$
+                        <span class="total-boleto precio-bs">
+                          {{ evento.precio_unidad }}bs
                         </span>
                       </span>
                     </h3>
@@ -223,9 +222,7 @@
             <strong data-toggle="tooltip"
               data-placement="bottom"
               data-original-title="Dólares Americanos">
-              Total: <span class="total-boleto">
-                {{ evento.precio_unidad }}$
-              </span> USD
+              Total: <strong class="precio-bs">150bs</strong>
             </strong>
             <small>
               (<span class="cantidad-boleto">{{ evento.minimo }}</span> boleto)
@@ -278,10 +275,6 @@
                     onchange="fileChange(this)" />
                 </div>
                 <h6 id="montoCorrecto">
-                  <strong class="total-boleto">
-                    {{ evento.precio_unidad }}$
-                  </strong>
-                  o
                   <strong class="precio-bs">150bs</strong>
                   (
                   <span class="cantidad-boleto">1</span>
